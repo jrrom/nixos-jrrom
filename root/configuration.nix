@@ -12,6 +12,7 @@
       ./services/bluetooth.nix
       ./services/sync.nix
       ./services/protonmail.nix
+      ./services/tmpfs.nix
     ];
 
   nixpkgs.config.allowUnfree = true;
