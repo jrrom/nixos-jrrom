@@ -11,8 +11,10 @@
     jq
     mg
 
-    # NixOS
+    # NixOS Helpers
     nix-output-monitor
     nix-tree
+    nh
+    nvd
   ];
 }
