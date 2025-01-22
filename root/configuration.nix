@@ -73,6 +73,11 @@
     options = "--delete-older-than 7d";
   };
   nix.optimise.automatic = true;
+
+  # Trusting cachix and devenv
+  nix.extraOptions = ''
+    trusted-users = root jrrom
+  '';
   
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

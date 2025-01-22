@@ -39,11 +39,14 @@
   (setq-default header-line-format mode-line-format)
   (setq-default mode-line-format nil)
   ;; Transparency
-  (add-to-list 'default-frame-alist '(alpha-background . 90))
+  ;; (add-to-list 'default-frame-alist '(alpha-background . 90))
   ;; Auto-Completions
   (setq completion-prefix-min-length 1)
   ;; Cursor
   (setq-default cursor-type 'bar)
+  ;; Better errors
+  ;;(setq debug-on-error t)
+  ;; Currently disabled because eglot is whiny
 
   ;; Corfu settings
   :custom
@@ -63,14 +66,10 @@
 (add-to-list 'package-archives
 	     '("melpa" . "https://melpa.org/packages/") t)
 
-
-
 ;; Initialise use-package
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
-
-
 
 ;; Quelpa
 (use-package quelpa
@@ -82,20 +81,14 @@
    :url "https://github.com/quelpa/quelpa-use-package.git"))
 (require 'quelpa-use-package)
 
-
-
 ;; which-key
 (use-package which-key
   :init (which-key-mode)
   :config (which-key-setup-side-window-right))
 
-
-
 ;; Gruvbox Theme
 (use-package gruvbox-theme
   :init (load-theme 'gruvbox-dark-medium t nil))
-
-
 
 ;; Ligature Support
 (use-package ligature
@@ -132,17 +125,18 @@
   :bind ("M-g w" . avy-goto-word-0)
         ("M-g c" . avy-goto-char))
 
+;; Repeat commands, for example: C-x o o o to keep changing window
+(use-package repeat
+  :config
+  (repeat-mode))
+
 ;; =================================
 ;; Vemco Stack
 ;; =================================
 
-
-
 ;; Autocompletions in minibuffer
 (use-package vertico
   :init (vertico-mode))
-
-
 
 (use-package embark
   :bind
@@ -168,16 +162,12 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
-
-
 ;; Enable rich annotations
 (use-package marginalia
   :bind (:map minibuffer-local-map
          ("M-A" . marginalia-cycle))
 
   :init (marginalia-mode))
-
-
 
 ;; Consult
 (use-package consult
@@ -260,8 +250,6 @@
    ;; :preview-key "M-."
    :preview-key '(:debounce 0.4 any)))
 
-
-
 ;; Smart completion to search with space separated patterns
 (use-package orderless
   :ensure t
@@ -277,7 +265,6 @@
 ;; Programming Language Support
 ;; =================================
 
-
 ;; Treesitter
 (require 'treesit)
 (use-package treesit-auto
@@ -286,7 +273,6 @@
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
-
 
 ;; Company
 (use-package corfu
@@ -327,6 +313,29 @@
   :init
   (setq eglot-stay-out-of '(flymake)))
 
+;; Direnv
+(use-package envrc
+  :hook (after-init . envrc-global-mode))
+
+;; Editorconfig
+(use-package editorconfig
+  :hook (prog-mode . editorconfig-mode))
+
+;; Magit
+(use-package magit
+  :bind
+  (:map magit-map
+   ("C-x g" . magit-status)
+   ("C-c g" . magit-dispatch)
+   ("C-c f" . magit-file-dispatch)))
+
+;; DAPE debugger
+(use-package dape
+  :config
+  (dape-breakpoint-global-mode)
+  (setq dape-buffer-window-arrangement 'right)
+  (setq dape-inlay-hints t)
+  (add-hook 'dape-compile-hook 'kill-buffer))
 
 ;; =================================
 ;; Languages

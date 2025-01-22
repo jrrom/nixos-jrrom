@@ -12,6 +12,6 @@ in
   services.emacs = {
     enable = true;
     package = emacs;
-    defaultEditor = true;
+    # defaultEditor = true;
   };
 }
