@@ -6,7 +6,7 @@
   };
 
   services.udev.packages = with pkgs; [
-    libmtp.out
+    libmtp
   ];
 
   services.gvfs.enable = true;
