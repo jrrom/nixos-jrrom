@@ -13,6 +13,7 @@
       ./services/sync.nix
       ./services/protonmail.nix
       ./services/tmpfs.nix
+      ./services/android.nix
     ];
 
   nixpkgs.config.allowUnfree = true;
@@ -23,7 +24,8 @@
 
   networking.hostName = "jrrom"; # Define your hostname.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
-  networking.networkmanager.wifi.backend = "iwd";
+  networking.networkmanager.wifi.backend = "wpa_supplicant";
+  # Doesn't work for me
 
   # Set your time zone.
   time.timeZone = "Asia/Calcutta";
@@ -61,7 +63,7 @@
     isNormalUser = true;
     shell = pkgs.fish;
     
-    extraGroups = [ "wheel" "input" "network-manager" "light" "audio" "video" ];
+    extraGroups = [ "wheel" "input" "network-manager" "light" "audio" "video" "adbusers" ];
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" "pipe-operators" ];

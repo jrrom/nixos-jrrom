@@ -122,8 +122,10 @@
   (global-eldoc-mode))
 
 (use-package avy
-  :bind ("M-g w" . avy-goto-word-0)
-        ("M-g c" . avy-goto-char))
+  :bind
+  ("M-g w" . avy-goto-word-0)
+  ("M-g l" . avy-goto-line)
+  ("M-g c" . avy-goto-char))
 
 ;; Repeat commands, for example: C-x o o o to keep changing window
 (use-package repeat

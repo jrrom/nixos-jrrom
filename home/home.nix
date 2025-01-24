@@ -59,6 +59,8 @@
     keepassxc
     pavucontrol
     thunderbird
+    nicotine-plus
+    xfce.thunar
 
     # JetBrains
     jetbrains.idea-ultimate
