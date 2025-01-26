@@ -17,6 +17,7 @@
     tldr
     ripgrep
     steam-run
+    usbutils
 
     # Wayland
     clipman

@@ -32,6 +32,7 @@
     ./programs/music.nix
     ./programs/bluetooth.nix
     ./programs/emacs.nix
+    ./programs/obs.nix
 
     # Development
     ./development.nix
@@ -56,6 +57,8 @@
     thunderbird
     nicotine-plus
     xfce.thunar
+    vlc
+    reco
     
     # IDES
     jetbrains.idea-ultimate
