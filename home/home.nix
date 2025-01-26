@@ -15,6 +15,7 @@
      # WM
     ./programs/sway.nix
     ./programs/waybar.nix
+    ./programs/styles.nix
 
     # Terminal
     ./programs/fish.nix
