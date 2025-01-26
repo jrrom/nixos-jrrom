@@ -6,7 +6,6 @@
     clang
     go
     luajit
-    python313
 
     # Development Kits
     clang-tools

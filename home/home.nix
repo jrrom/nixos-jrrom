@@ -20,6 +20,7 @@
     # Terminal
     ./programs/fish.nix
     ./programs/fastfetch.nix
+    ./programs/direnv.nix
 
     # Programs
     ./programs/firefox.nix

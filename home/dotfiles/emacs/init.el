@@ -319,6 +319,11 @@
 (use-package envrc
   :hook (after-init . envrc-global-mode))
 
+;; .venv support
+(use-package pet
+  :config
+  (add-hook 'python-ts-mode 'pet-mode -10))
+
 ;; Editorconfig
 (use-package editorconfig
   :hook (prog-mode . editorconfig-mode))

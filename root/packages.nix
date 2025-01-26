@@ -17,7 +17,6 @@
     tldr
     ripgrep
     steam-run
-    nix-ld
 
     # Wayland
     clipman
