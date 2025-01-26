@@ -26,7 +26,6 @@
     ./programs/wezterm.nix
     ./programs/fuzzel.nix
     ./programs/gammastep.nix
-    ./programs/flameshot.nix
     ./programs/networkmanagerapplet.nix
     ./programs/zathura.nix
     ./programs/music.nix
@@ -39,18 +38,12 @@
 
   home.packages = with pkgs; [
     mako
-    clipman
     grim
     slurp
     swappy
     
     # Commandline
-    yazi
-    tree
     pandoc
-    tldr
-    glow
-    ripgrep
     gh
     xorg.xeyes
 
@@ -62,8 +55,8 @@
     thunderbird
     nicotine-plus
     xfce.thunar
-
-    # JetBrains
+    
+    # IDES
     jetbrains.idea-ultimate
     jetbrains.ruby-mine
     jetbrains.datagrip

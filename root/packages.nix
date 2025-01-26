@@ -10,6 +10,17 @@
     fzf
     jq
     mg
+    trash-cli
+    tree
+    yazi
+    glow
+    tldr
+    ripgrep
+    steam-run
+    nix-ld
+
+    # Wayland
+    clipman
 
     # NixOS Helpers
     nix-output-monitor

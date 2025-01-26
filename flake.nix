@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     
     disko = {
       url = "github:nix-community/disko";
@@ -19,18 +20,28 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, disko, stylix, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, disko, stylix, ... }@inputs:
     let
       system = "x86_64-linux";
+      pkgs-unstable = import nixpkgs-unstable {
+        inherit system;
+        config.allowUnfree = true;
+      };
     in
     {
       nixosConfigurations.jrrom = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit inputs; };
+        specialArgs = {
+          inherit inputs;
+          inherit pkgs-unstable;
+        };
         modules = [
           ./root/configuration.nix
           disko.nixosModules.disko
           home-manager.nixosModules.home-manager {
+            home-manager.extraSpecialArgs = {
+              inherit pkgs-unstable;
+            };
             home-manager.useGlobalPkgs = true;
             home-manager.users.jrrom = import ./home/home.nix;
           }

@@ -14,9 +14,15 @@
       ./services/protonmail.nix
       ./services/tmpfs.nix
       ./services/android.nix
+      ./services/virtualisation.nix
+      ./services/compliance.nix
     ];
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+    };
+  };
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -48,6 +54,9 @@
   # Let there be
   programs.light.enable = true;
 
+  # Required?
+  programs.dconf.enable = true;
+  
   # Audio 'n' more.
   services.pipewire = {
     enable = true;

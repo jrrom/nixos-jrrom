@@ -1,12 +1,12 @@
-{ pkgs, ... }:
+{ pkgs, pkgs-unstable, ... }:
 
 {
-  home.packages = with pkgs; [
+  home.packages = with pkgs-unstable; [
     # Programming Languages
     clang
-    libgcc
     go
     luajit
+    python313
 
     # Development Kits
     clang-tools
@@ -17,7 +17,9 @@
     shellcheck
     
     # Developer Environments
-    devenv    
+    devenv
+    podman-tui
+    distrobox
 
     # LSPS
     vscode-langservers-extracted

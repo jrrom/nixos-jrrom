@@ -6,6 +6,7 @@
     settings = {
       main = {
         terminal = "wezterm -e";
+        icon-theme = "Papirus-Dark";
       };
     };
   };
