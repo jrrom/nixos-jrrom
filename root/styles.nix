@@ -1,4 +1,4 @@
-{ config, pkgs, stylix, builtins, ... }:
+{ config, pkgs, stylix, ... }:
 
 { 
   fonts.packages = with pkgs; [
@@ -10,7 +10,7 @@
   stylix.image  = ./nixos.png;
   stylix.polarity = "dark";
   
-  stylix.base16Scheme = builtins.readFile ./gruvbox-material-dark.yaml;
+  stylix.base16Scheme = ./gruvbox-dark-medium.yaml;
 
   stylix.fonts = {
     serif = {
