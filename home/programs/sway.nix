@@ -32,6 +32,8 @@
       # Run launcher
       unbindsym Mod4+d
       unbindsym Mod4+r
+      unbindsym Shift+minus
+      unbindsym Shift+plus
       bindsym Mod4+r exec fuzzel
 
       for_window [shell="xwayland"] title format "[XWayland] %title"

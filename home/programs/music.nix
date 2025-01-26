@@ -50,6 +50,7 @@
       { key = "l"; command = "next_column"; }
       { key = "ctrl-l"; command = "show_lyrics"; }
       { key = "shift-+"; command = "volume_up"; }
+      { key = "shift--"; command = "volume_down";}
     ];
   };
 }
