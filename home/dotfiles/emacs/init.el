@@ -71,16 +71,6 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
-;; Quelpa
-(use-package quelpa
-  :config (setq quelpa-update-melpa-p nil))
-
-(quelpa
- '(quelpa-use-package
-   :fetcher git
-   :url "https://github.com/quelpa/quelpa-use-package.git"))
-(require 'quelpa-use-package)
-
 ;; which-key
 (use-package which-key
   :init (which-key-mode)
@@ -345,6 +335,12 @@
   (add-hook 'dape-compile-hook 'kill-buffer))
 
 ;; =================================
+;; Jupyter Notebooks
+;; =================================
+
+(use-package jupyter)
+
+;; =================================
 ;; Languages
 ;; =================================
 
@@ -368,6 +364,27 @@
 
 (use-package nix-mode
   :mode "\\.nix\\'")
+
+;; =================================
+;; Not Programming
+;; =================================
+
+
+
+;; Org Mode
+(use-package org
+  :defer t
+  :config
+  (setq org-adapt-indentation t
+        org-pretty-entities t
+        org-src-fontify-natively t)
+  (custom-set-faces
+   '(org-document-title ((t (:inherit outline-1 :height 1.75))))
+   '(org-level-1 ((t (:inherit outline-1 :height 1.5))))
+   '(org-level-2 ((t (:inherit outline-2 :height 1.25))))
+   '(org-level-3 ((t (:inherit outline-3 :height 1.125))))
+   '(org-level-4 ((t (:inherit outline-4 :height 1.0625))))
+   '(org-level-5 ((t (:inherit outline-5 :height 1.03125))))))
 
 ;; =================================
 ;; Keybindings

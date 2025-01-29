@@ -19,6 +19,10 @@
     steam-run
     usbutils
 
+    # Yeah
+    gcc
+    clang
+    
     # Wayland
     clipman
 

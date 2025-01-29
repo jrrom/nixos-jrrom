@@ -3,7 +3,6 @@
 {
   home.packages = with pkgs-unstable; [
     # Programming Languages
-    clang
     go
     luajit
 
@@ -15,11 +14,6 @@
     gnumake
     shellcheck
     
-    # Developer Environments
-    devenv
-    podman-tui
-    distrobox
-
     # LSPS
     vscode-langservers-extracted
     gopls
