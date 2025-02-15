@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, stylix, ... }:
 
 {
   programs.fuzzel = {
@@ -10,4 +10,6 @@
       };
     };
   };
+
+  stylix.targets.fuzzel.enable = true;
 }
