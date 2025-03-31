@@ -6,7 +6,7 @@
         ./hardware-configuration.nix
         ./disk-config.nix
         ./packages.nix
-      ] ++ (jrromlib.importDir ./services);
+      ] ++ (jrromlib.importDir ./root);
 
   nixpkgs.config.allowUnfree = true;
 

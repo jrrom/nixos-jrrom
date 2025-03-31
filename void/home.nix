@@ -18,26 +18,40 @@
   };
 
   home.packages = with pkgs-unstable; [
+    # Fonts for Daily Use
+    libre-baskerville
+    iosevka-comfy.comfy-wide
+    noto-fonts-color-emoji
+    
     # LSPs
     nixd
     basedpyright
   ];
 
-  # Dotfiles
-  home.file.".config/emacs/init.el".source = config.lib.file.mkOutOfStoreSymlink "/home/${information.hostName}/nixos-jrrom/dotfiles/emacs/init.el";
-  home.file.".config/fish".source = config.lib.file.mkOutOfStoreSymlink "/home/${information.hostName}/nixos-jrrom/dotfiles/fish";
+# =================================
+# Terminal
+# =================================
+
+  home.file.".config/fish".source = (
+    config.lib.file.mkOutOfStoreSymlink "/home/${information.hostName}/nixos-jrrom/dotfiles/fish"
+  );
   home.file.".config/nix" = {
     source = ../dotfiles/nix;
     recursive = true;
   };
-  home.file.".config/swaylock" = {
-    source = ../dotfiles/swaylock;
-    recursive = true;
-  };
+
   home.file.".config/python" = {
     source = ../dotfiles/python;
     recursive = true;
   };
+
+# =================================
+# Applications
+# =================================
+
+  home.file.".config/emacs/init.el".source = (
+    config.lib.file.mkOutOfStoreSymlink "/home/${information.hostName}/nixos-jrrom/dotfiles/emacs/init.el"
+  );
   home.file.".config/zathura" = {
     source = ../dotfiles/zathura;
     recursive = true;
@@ -50,8 +64,34 @@
     source = ../dotfiles/wezterm;
     recursive = true;
   };
+  
+# =================================
+# WM
+# =================================
+
+  home.file.".config/swaylock" = {
+    source = ../dotfiles/swaylock;
+    recursive = true;
+  };
   home.file.".config/sway" = {
     source = ../dotfiles/sway;
+    recursive = true;
+  };
+  home.file.".config/waybar" = {
+    source = ../dotfiles/waybar;
+    recursive = true;
+  };
+
+# =================================
+# GTK
+# =================================
+  
+  home.file.".config/gtk-3.0" = {
+    source = ../dotfiles/gtk-3.0;
+    recursive = true;
+  };
+  home.file.".config/gtk-4.0" = {
+    source = ../dotfiles/gtk-4.0;
     recursive = true;
   };
   home.file.".themes" = {
@@ -62,19 +102,8 @@
     source = ../dotfiles/.icons;
     recursive = true;
   };
-  home.file.".config/waybar" = {
-    source = ../dotfiles/waybar;
-    recursive = true;
-  };
-  home.file.".config/gtk-3.0" = {
-    source = ../dotfiles/gtk-3.0;
-    recursive = true;
-  };
-  home.file.".config/gtk-4.0" = {
-    source = ../dotfiles/gtk-4.0;
-    recursive = true;
-  };
   
+# =================================
   
   # Enable home-manager and git
   programs.home-manager.enable = true;
