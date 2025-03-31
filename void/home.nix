@@ -102,7 +102,7 @@
     source = ../dotfiles/.icons;
     recursive = true;
   };
-  
+
 # =================================
   
   # Enable home-manager and git
