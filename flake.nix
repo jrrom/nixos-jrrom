@@ -1,7 +1,8 @@
 {
   description = "jrrom";
 
-  inputs = {
+  inputs =
+    {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     
@@ -22,41 +23,48 @@
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, disko, stylix, ... }@inputs:
     let
-      system = "x86_64-linux";
       information = {
+        system = "x86_64-linux";
         hostName = "jrrom";
       };
-      pkgs-unstable = import nixpkgs-unstable {
-        inherit system;
-        config.allowUnfree = true;
+
+      args = {
+        inherit inputs;
+        pkgs-unstable = import nixpkgs-unstable {
+          system = information.system;
+          config.allowUnfree = true;
+        };
+        inherit information;
+        jrromlib = import ./common/jrromlib.nix;
       };
-      jrromlib = import ./common/jrromlib.nix;
     in
     {
       nixosConfigurations.jrrom = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          inherit pkgs-unstable;
-          inherit information;
-          inherit jrromlib;
-        };
+        system = information.system;
+        specialArgs = args;
         modules = [
           ./nixos/configuration.nix
           disko.nixosModules.disko
           home-manager.nixosModules.home-manager {
-            home-manager.extraSpecialArgs = {
-              inherit inputs;
-              inherit pkgs-unstable;
-              inherit information;
-              inherit jrromlib;
-            };
+            home-manager.extraSpecialArgs = args;
             home-manager.useGlobalPkgs = true;
-            home-manager.users."${information.hostName}" = import ./home/home.nix;
+            home-manager.users."${information.hostName}" = import ./nixos/home/home.nix;
           }
-          ./common/styles.nix
+          ./nixos/stylix/styles.nix
           stylix.nixosModules.stylix
+        ];
+      };
+
+      homeConfigurations.void = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          system = information.system;
+          config.allowUnfree = true;
+        };
+        extraSpecialArgs = args;
+        modules = [
+          ./void/home.nix
         ];
       };
     };
 }
+
