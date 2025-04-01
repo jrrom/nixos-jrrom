@@ -77,10 +77,9 @@
     source = ../dotfiles/sway;
     recursive = true;
   };
-  home.file.".config/waybar" = {
-    source = ../dotfiles/waybar;
-    recursive = true;
-  };
+  home.file.".config/waybar".source = (
+    config.lib.file.mkOutOfStoreSymlink "/home/${information.hostName}/nixos-jrrom/dotfiles/waybar"
+  );
 
 # =================================
 # GTK

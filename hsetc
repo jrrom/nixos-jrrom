@@ -9,6 +9,8 @@ function help
     echo (set_color yellow)"hswitch"(set_color normal)" - home-manager switch --flake .#void"
     echo (set_color yellow)"pushetc"(set_color normal)" - "(set_color red)"(sudo) "(set_color normal)"pushes void/etc files to /etc"
     echo (set_color yellow)"grubber"(set_color normal)" - "(set_color red)"(sudo) "(set_color normal)"pushes grub config to /etc/default, also mkconfig"
+    echo (set_color yellow)"dracuts"(set_color normal)" - "(set_color red)"(sudo) "(set_color normal)"adds gruvbox modules and rebuilds"
+    echo (set_color yellow)"runitsc"(set_color normal)" - "(set_color red)"(sudo) "(set_color normal)"pushes to /etc/runit/core-services"
     echo
 end
 
@@ -47,10 +49,36 @@ function grubber
     end
 end
 
+function dracuts
+    set -l local_dracuts "$(getDir)/void/usr/lib/dracut/modules.d"
+    sudo cp -r $local_dracuts/* /usr/lib/dracut/modules.d/
+    if test $status -ne 0
+        echo "Error: Failed to copy modules!" >&2
+        return 1
+    end
+
+    sudo dracut --force
+    if test $status -ne 0
+        echo "Error: Failed to dracut --force"
+        return 1
+    end
+end
+
+function runitsc
+    set -l local_runitsc "$(getDir)/void/etc/runit/core-services"
+    sudo cp -r $local_runitsc/* /etc/runit/core-services/
+    if test $status -ne 0
+        echo "Error: Failed to copy core services!" >&2
+        return 1
+    end
+end
+
 function try
     echo "$(getDir)/void/etc/default/grub"
     echo "$(getDir)/void/etc/greetd"
     echo "$(getDir)/void/etc/zzz.d"
+    echo "$(getDir)/void/usr/lib/dracut/modules.d"
+    echo "$(getDir)/void/etc/runit/core-services"
 end
 
 function main -d "Controls Home Manager and ETC files"
@@ -71,6 +99,10 @@ function main -d "Controls Home Manager and ETC files"
             pushetc
         case grubber
             grubber
+        case dracuts
+            dracuts
+        case runitsc
+            runitsc
         case try
             try
         case "*"
