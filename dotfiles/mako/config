@@ -1,0 +1,7 @@
+font=Iosevka Comfy Wide 10
+background-color=#282828CC
+text-color=#FBF1C7FF
+progress-color=over #FE8019FF
+icon-path=/home/jrrom/.icons
+default-timeout=5000
+ignore-timeout=1

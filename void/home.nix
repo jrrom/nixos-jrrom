@@ -45,6 +45,15 @@
     recursive = true;
   };
 
+  home.file.".config/ncmpcpp" = {
+    source = ../dotfiles/ncmpcpp;
+    recursive = true;
+  };
+
+  home.file.".config/mpd".source = (
+    config.lib.file.mkOutOfStoreSymlink "/home/${information.hostName}/nixos-jrrom/dotfiles/mpd"
+  );
+
 # =================================
 # Applications
 # =================================
@@ -80,6 +89,10 @@
   home.file.".config/waybar".source = (
     config.lib.file.mkOutOfStoreSymlink "/home/${information.hostName}/nixos-jrrom/dotfiles/waybar"
   );
+  home.file.".config/mako" = {
+    source = ../dotfiles/mako;
+    recursive = true;
+  };
 
 # =================================
 # GTK
@@ -92,6 +105,9 @@
   home.file.".config/gtk-4.0" = {
     source = ../dotfiles/gtk-4.0;
     recursive = true;
+  };
+  home.file.".gtkrc-2.0" = {
+    source = ../dotfiles/.gtkrc-2.0;
   };
   home.file.".themes" = {
     source = ../dotfiles/.themes;
