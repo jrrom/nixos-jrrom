@@ -1,0 +1,3 @@
+[Context]
+sockets=wayland
+filesystems=/nix/store:ro

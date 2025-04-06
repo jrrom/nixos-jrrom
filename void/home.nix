@@ -22,12 +22,15 @@
     libre-baskerville
     iosevka-comfy.comfy-wide
     noto-fonts-color-emoji
+
+    # Programs
+    rsync
     
     # LSPs
     nixd
     basedpyright
   ];
-
+  
 # =================================
 # Terminal
 # =================================
@@ -117,6 +120,9 @@
     source = ../dotfiles/.icons;
     recursive = true;
   };
+  home.file.".local/share/flatpak/overrides/global".source = (
+    config.lib.file.mkOutOfStoreSymlink "/home/${information.hostName}/nixos-jrrom/dotfiles/flatpak/overrides/global"
+  );
 
 # =================================
   

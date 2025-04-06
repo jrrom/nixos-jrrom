@@ -95,6 +95,15 @@ function main -d "Controls Home Manager and ETC files"
             help
         case hswitch
             home-manager switch --flake .#void
+            echo
+            echo "Copying fonts..."
+            echo
+            rsync -r --verbose --no-perms --no-owner --no-group ~/.nix-profile/share/fonts/ ~/.fonts/
+            if test $status -ne 0
+               echo "Failed to copy fonts."
+               return 1
+            end
+            echo (set_color green)"Success"(set_color normal)
         case pushetc
             pushetc
         case grubber

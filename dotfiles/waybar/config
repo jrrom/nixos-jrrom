@@ -35,8 +35,9 @@
       "tooltip": false
     },
     "custom/void": {
-      "format": " {} 󰇚",
+      "format": " {}",
       "exec": "xbps-install -nuM | wc -l",
+      "on-click": "xbps-install -nuM | wc -l",
       "tooltip-format": "{} packages from xbps to be updated",
       "interval": 3600
     },
