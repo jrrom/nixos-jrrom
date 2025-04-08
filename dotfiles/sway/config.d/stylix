@@ -27,6 +27,18 @@ seat "*" {
   xcursor_theme "Breeze_Snow" 16
 }
 
+# Themes
+set $gnome-schema org.gnome.desktop.interface
+
+exec_always {
+    gsettings set $gnome-schema gtk-theme 'Gruvbox-Material-Dark'
+    gsettings set $gnome-schema icon-theme 'Papirus-Dark'
+    gsettings set $gnome-schema cursor-theme 'Breeze_Snow'
+    gsettings set $gnome-schema font-name 'IBM Plex Sans 13'
+}
+
+exec_always import-gsettings
+
 for_window [window_type="dialog"] floating enable
 for_window [window_role="dialog"] floating enable
 

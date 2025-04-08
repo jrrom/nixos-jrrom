@@ -116,13 +116,14 @@
     source = ../dotfiles/.themes;
     recursive = true;
   };
-  home.file.".icons" = {
-    source = ../dotfiles/.icons;
+  home.file.".config/xsettingsd" = {
+    source = ../dotfiles/xsettingsd;
     recursive = true;
   };
   home.file.".local/share/flatpak/overrides/global".source = (
     config.lib.file.mkOutOfStoreSymlink "/home/${information.hostName}/nixos-jrrom/dotfiles/flatpak/overrides/global"
   );
+  
 
 # =================================
   
