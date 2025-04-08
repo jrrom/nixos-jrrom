@@ -2,9 +2,9 @@
 # Any customization should be done in ~/.gtkrc-2.0.mine instead.
 
 include "/home/jrrom/.gtkrc-2.0.mine"
-gtk-theme-name="adw-gtk3-dark"
-gtk-icon-theme-name="Papirus-Dark"
-gtk-font-name="Iosevka Comfy Wide 11"
+gtk-theme-name="oomox-jrrombox"
+gtk-icon-theme-name="oomox-jrrombox"
+gtk-font-name="IBM Plex Sans"
 gtk-cursor-theme-name="Breeze_Snow"
 gtk-cursor-theme-size=24
 gtk-toolbar-style=GTK_TOOLBAR_BOTH_HORIZ

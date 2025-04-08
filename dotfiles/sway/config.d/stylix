@@ -50,3 +50,6 @@ exec dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CUR
 exec sleep 3 && flameshot
 exec brightnessctl -r &
 exec mpd /home/jrrom/.config/mpd/mpd.conf &
+
+# Muzik
+exec nicotine -s &

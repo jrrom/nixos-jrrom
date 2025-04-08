@@ -271,16 +271,17 @@
 (use-package corfu
   :custom
   (corfu-cycle t)
-  :bind
-  (:map corfu-map
-        ("C-j" . corfu-next)
-        ("C-k" . corfu-previous))
+  ;; :bind
+  ;; (:map corfu-map
+  ;;       ("C-j" . corfu-next)
+  ;;       ("C-k" . corfu-previous)
+  ;;      )
   :init
   (global-corfu-mode)
   :config
-  (keymap-unset corfu-map "RET")
-  (define-key corfu-map [remap next-line] nil)
-  (define-key corfu-map [remap previous-line] nil)
+  ;; (keymap-unset corfu-map "RET")
+  ;; (define-key corfu-map [remap next-line] nil)
+  ;; (define-key corfu-map [remap previous-line] nil)
   (setq corfu-auto t
         auto-delay 0
         corfu-auto-prefix 3))

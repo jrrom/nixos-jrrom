@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=oomox-jrrombox
+Comment=Yeah
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+Name=oomox-jrrombox
+GtkTheme=oomox-jrrombox
+IconTheme=oomox-jrrombox
+MetacityTheme=oomox-jrrombox
