@@ -1500,3 +1500,27 @@ Apr 08 12:14 : player: played "Alvvays - 2017 - Antisocialities/01. In Undertow.
 Apr 08 12:15 : exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused
 Apr 08 12:22 : player: played "Alvvays - 2017 - Antisocialities/01. In Undertow.mp3"
 Apr 08 12:23 : exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused
+Apr 08 12:30 : player: played "Alvvays - 2017 - Antisocialities/01. In Undertow.mp3"
+Apr 08 17:20 : exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused
+Apr 08 18:00 : player: played "Alvvays - 2017 - Antisocialities/01. In Undertow.mp3"
+Apr 08 18:17 : exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused
+Apr 08 18:26 : player: played "Alvvays - 2017 - Antisocialities/01. In Undertow.mp3"
+Apr 08 18:27 : exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused
+Apr 08 18:42 : player: played "Alvvays - 2017 - Antisocialities/01. In Undertow.mp3"
+Apr 08 18:43 : exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused
+Apr 08 18:54 : player: played "Alvvays - 2017 - Antisocialities/01. In Undertow.mp3"
+Apr 08 18:55 : exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused
+Apr 08 19:09 : player: played "Alvvays - 2017 - Antisocialities/01. In Undertow.mp3"
+Apr 08 19:10 : exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused
+Apr 08 19:25 : player: played "Alvvays - 2017 - Antisocialities/01. In Undertow.mp3"
+Apr 08 19:25 : exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused
+Apr 08 20:14 : player: played "Alvvays - 2017 - Antisocialities/01. In Undertow.mp3"
+Apr 08 20:14 : exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused
+Apr 08 20:16 : player: played "Alvvays - 2017 - Antisocialities/01. In Undertow.mp3"
+Apr 08 20:17 : exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused
+Apr 08 20:46 : player: played "Alvvays - 2017 - Antisocialities/01. In Undertow.mp3"
+Apr 08 20:52 : exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused
+Apr 08 22:37 : player: played "Alvvays - 2017 - Antisocialities/01. In Undertow.mp3"
+Apr 09 07:32 : exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused
+Apr 09 08:05 : player: played "Alvvays - 2017 - Antisocialities/01. In Undertow.mp3"
+Apr 09 08:10 : exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused

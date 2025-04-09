@@ -384,6 +384,14 @@
    '(org-level-5 ((t (:inherit outline-5 :height 1.03125))))))
 
 ;; =================================
+;; Dired
+;; =================================
+
+(use-package nerd-icons-dired
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
+
+;; =================================
 ;; Keybindings
 ;; =================================
 
