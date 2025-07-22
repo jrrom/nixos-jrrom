@@ -1,4 +1,4 @@
-{ inputs, outputs, lib, config, pkgs, pkgs-unstable, information, jrromlib, ... }:
+{ inputs, outputs, lib, config, pkgs, pkgs-unstable, information, ... }:
 
 {
   targets.genericLinux.enable = true;
