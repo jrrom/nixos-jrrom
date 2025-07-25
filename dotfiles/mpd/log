@@ -3500,3 +3500,8 @@ Jul 03 20:24 : player: played "Sunflower/03 The Beach Boys - 1970 - Sunflower - 
 2025-07-22T00:07:18 player: played "Ghost Stories/05 - Midnight.mp3"
 2025-07-22T13:46:12 player: played "Ghost Stories/05 - Midnight.mp3"
 2025-07-22T18:59:39 exception: Failed to enable output "MPD" (pulse); pa_context_connect() has failed: Connection refused
+2025-07-23T00:45:53 player: played "Ghost Stories/05 - Midnight.mp3"
+2025-07-23T12:07:57 player: played "Ghost Stories/05 - Midnight.mp3"
+2025-07-23T19:52:27 player: played "Ghost Stories/05 - Midnight.mp3"
+2025-07-23T20:27:24 player: played "Ghost Stories/04 - True Love.mp3"
+2025-07-23T20:32:18 player: played "Ghost Stories/05 - Midnight.mp3"

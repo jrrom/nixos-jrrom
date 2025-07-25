@@ -25,6 +25,9 @@
 
     # Programs
     rsync
+
+    # Languages
+    smlnj
     
     # LSPs
     nixd
@@ -120,9 +123,9 @@
     source = ../dotfiles/xsettingsd;
     recursive = true;
   };
-  home.file.".local/share/flatpak/overrides/global".source = (
-    config.lib.file.mkOutOfStoreSymlink "/home/${information.hostName}/nixos-jrrom/dotfiles/flatpak/overrides/global"
-  );
+  # home.file.".local/share/flatpak/overrides/global".source = (
+  #   config.lib.file.mkOutOfStoreSymlink "/home/${information.hostName}/nixos-jrrom/dotfiles/flatpak/overrides/global"
+  # );
   
 
 # =================================

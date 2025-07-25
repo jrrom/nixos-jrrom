@@ -348,6 +348,11 @@
 (use-package fish-mode
   :mode "\\.fish\\'")
 
+;; Fixing C Indent
+(use-package c-ts-mode
+  :config
+  (setq c-ts-mode-indent-offset 4))
+
 ;; Web Mode
 (use-package web-mode
   :ensure t
@@ -363,6 +368,9 @@
   :config
   (setq web-mode-markup-indent-offser 2
         web-mode-code-indent-offset 2))
+
+;; SML Mode
+(use-package sml-mode)
 
 ;; =================================
 ;; Not Programming
