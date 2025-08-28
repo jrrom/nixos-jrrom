@@ -118,6 +118,9 @@ exec env XDG_RUNTIME_DIR=$HOME/.config/waybar brightnessctl -r
     # Move focus to the parent container
     bindsym $mod+a focus parent
 
+    # Toggling the titlebar
+    bindsym $mod+T border toggle
+
 # Resizing containers:
 
 mode "resize" {

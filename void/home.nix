@@ -64,9 +64,6 @@
 # Applications
 # =================================
 
-  home.file.".config/emacs/init.el".source = (
-    config.lib.file.mkOutOfStoreSymlink "/home/${information.hostName}/nixos-jrrom/dotfiles/emacs/init.el"
-  );
   home.file.".config/zathura" = {
     source = ../dotfiles/zathura;
     recursive = true;

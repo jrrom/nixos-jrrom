@@ -26,3 +26,7 @@ set -Ux PYTHONSTARTUP "$XDG_CONFIG_HOME"/python/pythonrc
 
 # Nix
 alias man='/usr/bin/man' # I don't know...
+
+# Mise
+mise activate fish | source
+

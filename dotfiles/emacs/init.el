@@ -1,19 +1,40 @@
+
+;; =================================
+;; ======== jrrom's config =========
+;; =================================
+
+;; Performance settings
+
+;; Emacs is an Elisp interpreter, and when running programs or packages,
+;; it can occasionally experience pauses due to garbage collection.
+;; By increasing the garbage collection threshold, we reduce these pauses
+;; during heavy operations, leading to smoother performance.
+(setq gc-cons-threshold #x40000000)
+
+;; Set the maximum output size for reading process output, allowing for larger data transfers.
+(setq read-process-output-max (* 1024 1024 4))
+
+;; =================================
+;; ============= main ==============
+;; =================================
+
 (require 'use-package)
+
 (setq use-package-always-ensure t)
 
 (use-package emacs
   :init
   ;; Enable PLISTS for speed
   (setenv "LSP_USE_PLISTS" "true")
-  ;; Weird Wayland magic
-  (setq pgtk-wait-for-event-timeout nil)
+  (setq pgtk-wait-for-event-timeout nil)   ; Weird Wayland magic
   (scroll-bar-mode -1) ; Disable visible scrollbar
   (tool-bar-mode -1)   ; Disable visible toolbar
   (tooltip-mode -1)    ; Disable tooltips
   (set-fringe-mode 10) ; "Give some breathing room"
   (menu-bar-mode -1)   ; Disable menubar
   (electric-pair-mode) ; Electric pairs!
-  
+
+  ;; Setting the font
   (when (find-font (font-spec :family "Iosevka Comfy Wide"))
     (set-face-attribute 'default nil :font "Iosevka Comfy Wide-14"))
   
@@ -55,9 +76,7 @@
   :custom
   (tab-always-indent 'complete)
   (text-mode-ispell-word-completion nil)
-  ;; Hide commands in M-x which do not apply to the current mode.  Corfu
-  ;; commands are hidden, since they are not used via M-x. This setting is
-  ;; useful beyond Corfu.
+  ;; Hide commands in M-x which do not apply to the current mode
   (read-extended-command-predicate #'command-completion-default-include-p))
 
 ;; =================================
@@ -151,7 +170,6 @@
 
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult
-  :ensure t ; only need to install it, embark loads it after consult if found
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
@@ -245,7 +263,6 @@
 
 ;; Smart completion to search with space separated patterns
 (use-package orderless
-  :ensure t
   :custom
   (completion-styles '(orderless basic))
   (completion-category-defaults nil)
@@ -298,6 +315,7 @@
 
 ;; LSP
 (use-package eglot
+  :custom (eglot-ignored-server-capabilities '(:documentOnTypeFormattingProvider))
   :hook
   (prog-mode . eglot-ensure))
 
@@ -348,14 +366,8 @@
 (use-package fish-mode
   :mode "\\.fish\\'")
 
-;; Fixing C Indent
-(use-package c-ts-mode
-  :config
-  (setq c-ts-mode-indent-offset 4))
-
 ;; Web Mode
 (use-package web-mode
-  :ensure t
   :mode "\\.html?\\'"
   :mode "\\.css\\'"
   :mode "\\.phtml\\'"
@@ -370,7 +382,14 @@
         web-mode-code-indent-offset 2))
 
 ;; SML Mode
-(use-package sml-mode)
+(use-package sml-mode
+  :hook (sml-mode . (lambda() (electric-indent-local-mode -1))))
+
+;; Markdown Mode
+(use-package markdown-mode)
+
+;; R Mode
+(use-package ess)
 
 ;; =================================
 ;; Not Programming
@@ -413,6 +432,7 @@
    (end-of-line)
    (newline-and-indent)))
 
+
 ;; Move cursor to previous line
 ;; Go to end of the line
 ;; Insert new line below current line (So it actually insert new line above with indentation)
@@ -424,6 +444,7 @@
    (previous-line)
    (end-of-line)
    (newline-and-indent)))
+
 
 ;; Duplicate line
 (global-set-key
