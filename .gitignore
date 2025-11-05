@@ -1,3 +1,0 @@
-common/dotfiles/emacs/*
-!common/dotfiles/emacs/init.el
-# root/hardware-configuration.nix

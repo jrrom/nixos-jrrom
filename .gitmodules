@@ -1,3 +1,0 @@
-[submodule "common/tartarus-grub"]
-	path = common/tartarus-grub
-	url = https://github.com/AllJavi/tartarus-grub

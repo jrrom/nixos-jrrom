@@ -1,6 +1,0 @@
-[Context]
-sockets=fallback-x11;wayland
-filesystems=/nix/store:ro;~/.themes:ro;~/.icons:ro;~/.fonts:ro
-
-[Environment]
-GTK_THEME=Gruvbox-Yellow-Dark-Medium
