@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
-read -P "Enter your disk\t:\t" disk
+sudo nix \
+  --experimental-features "nix-command flakes" \
+  run github:nix-community/disko -- \
+  --mode disko ./disko-config.nix
 
-sudo nix run 'github:nix-community/disko/latest#disko-install' -- \
-     --write-efi-boot-entries \
-     --flake '.#nixos' \
-     --disk main "$disk"
+sudo nixos-generate-config --no-filesystems --root /mnt
+
+sudo nixos-install --root /mnt --flake '.#nixos'
+
+# sudo reboot

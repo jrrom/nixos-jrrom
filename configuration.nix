@@ -34,6 +34,23 @@
     defaultLocale = "en_IN";
     extraLocales = "en_US.UTF-8";
   };
+  users.users.jrrom = {
+    isNormalUser = true;
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "floppy"
+      "audio"
+      "cdrom"
+      "video"
+      "usb"
+      "users"
+      "plugdev"
+      "pipewire"
+      "libvirt"
+    ];
+    # packages = with pkgs; [];
+  };
   
   # Networking
   networking.hostName = "jrrom"; # Define your hostname.
@@ -52,22 +69,18 @@
   };
 
   # Input
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "us";
+    useXkbConfig = true; # use xkb.options in tty.
+  };
   services.libinput.enable = true; # Touchpad
+  services.xserver  = {
+    xkb.layout = "us";
+    xkbOptions = "ctrl:swapcaps";
+  };
   
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
-  # };
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.alice = {
-  #   isNormalUser = true;
-  #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-  #   packages = with pkgs; [
-  #     tree
-  #   ];
-  # };
 
   # programs.firefox.enable = true;
 
