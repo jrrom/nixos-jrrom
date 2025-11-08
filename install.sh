@@ -2,27 +2,25 @@
 
 # First cd into /tmp and git clone the repo
 
-sudo -i
-
 echo -e "\n======\nRunning Disko\n======\n\n"
 
-nix \
+sudo nix \
   --experimental-features "nix-command flakes" \
   run github:nix-community/disko -- \
   --mode disko ./disko-config.nix
 
 echo -e "\n======\nGenerating Config\n======\n\n"
 
-nixos-generate-config --no-filesystems --root /mnt
+sudo nixos-generate-config --no-filesystems --root /mnt
 
 echo -e "\n======\nPopulating /mnt/etc/nixos \n======\n\n"
 
-mv * /mnt/etc/nixos
+sudo mv * /mnt/etc/nixos
 cd /mnt/etc/nixos
 
 echo -e "\n======\nInstalling NixOS\n======\n\n"
 
-mkdir /mnt/tmp
-TMPDIR=/mnt/tmp nixos-install --root /mnt --flake '.#nixos'
+sudo mkdir /mnt/tmp
+sudo TMPDIR=/mnt/tmp nixos-install --root /mnt --flake '.#nixos'
 
 # sudo reboot
