@@ -2,7 +2,7 @@
 
 # First cd into /tmp and git clone the repo
 
-su -
+sudo -i
 
 echo -e "\n======\nRunning Disko\n======\n\n"
 
