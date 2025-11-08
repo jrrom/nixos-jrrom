@@ -25,7 +25,7 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
   };
-  outputs = inputs@{ self, nixpkgs, impermanence, home-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, impermanence, cosmic-manager, home-manager, ... }:
     let
       system = "x86_64-linux";
     in
@@ -42,9 +42,12 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = {
+                inherit cosmic-manager; # So much pain to find this...
+              };
               home-manager.users.jrrom = {
                 imports = [
-                  inputs.cosmic-manager.homeManagerModules.cosmic-manager
+                  cosmic-manager.homeManagerModules.cosmic-manager
                   ./home.nix
                 ];
               };
