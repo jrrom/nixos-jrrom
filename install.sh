@@ -4,23 +4,23 @@
 
 su -
 
-echo "\n======\nRunning Disko\n======\n\n"
+echo -e "\n======\nRunning Disko\n======\n\n"
 
 nix \
   --experimental-features "nix-command flakes" \
   run github:nix-community/disko -- \
   --mode disko ./disko-config.nix
 
-echo "\n======\nGenerating Config\n======\n\n"
+echo -e "\n======\nGenerating Config\n======\n\n"
 
 nixos-generate-config --no-filesystems --root /mnt
 
-echo "\n======\nPopulating /mnt/etc/nixos \n======\n\n"
+echo -e "\n======\nPopulating /mnt/etc/nixos \n======\n\n"
 
 mv * /mnt/etc/nixos
 cd /mnt/etc/nixos
 
-echo "\n======\nInstalling NixOS\n======\n\n"
+echo -e "\n======\nInstalling NixOS\n======\n\n"
 
 mkdir /mnt/tmp
 TMPDIR=/mnt/tmp nixos-install --root /mnt --flake '.#nixos'
