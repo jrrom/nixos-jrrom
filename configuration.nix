@@ -11,10 +11,6 @@
   # Nix
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" "pipe-operators"];
-    cores = 2;
-    # Determinate Systems
-    trusted-substituters = [ "https://install.determinate.systems" ];
-    trusted-public-keys  = [ "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM=" ];
   };
   nixpkgs.config.allowUnfree = true;
   nix.gc = {
@@ -27,12 +23,15 @@
   # Boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs.requestEncryptionCredentials = true;
   
   # System
   time.timeZone = "Asia/Kolkata";
   i18n = {
     defaultLocale = "en_IN";
-    extraLocales = "en_US.UTF-8";
+    # See wiki.nixos.org/wiki/Locales
+    extraLocales = [ "en_US.UTF-8/UTF-8" ];
   };
   users.users.jrrom = {
     isNormalUser = true;
@@ -71,13 +70,12 @@
   # Input
   console = {
     font = "Lat2-Terminus16";
-    keyMap = "us";
     useXkbConfig = true; # use xkb.options in tty.
   };
   services.libinput.enable = true; # Touchpad
   services.xserver  = {
     xkb.layout = "us";
-    xkbOptions = "ctrl:swapcaps";
+    xkb.options = "ctrl:swapcaps";
   };
   
   # Define a user account. Don't forget to set a password with ‘passwd’.
