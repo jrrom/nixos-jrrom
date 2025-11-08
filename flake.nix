@@ -11,6 +11,15 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Cosmic Manager
+    cosmic-manager = {
+      url = "github:HeitorAugustoLN/cosmic-manager";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
+      };
+    };
       
     # Disko
     disko.url = "github:nix-community/disko";
@@ -33,7 +42,12 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-#              home-manager.users.jrrom = ./home.nix;
+              home-manager.users.jrrom = {
+                imports = [
+                  ./home.nix
+                  inputs.cosmic-manager.homeManagerModules.cosmic-manager
+                ];
+              }
             }
           ];
         };

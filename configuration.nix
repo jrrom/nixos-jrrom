@@ -105,6 +105,7 @@
 
   # Development
   programs.git.enable = true;
+  programs.firefox.enable = true;
 
   # Programs
   # environment.systemPackages = with pkgs; [
