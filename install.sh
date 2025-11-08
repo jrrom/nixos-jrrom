@@ -21,6 +21,6 @@ cd /mnt/etc/nixos
 echo -e "\n======\nInstalling NixOS\n======\n\n"
 
 sudo mkdir /mnt/tmp
-sudo TMPDIR=/mnt/tmp nixos-install --root /mnt --flake '.#nixos'
+TMPDIR=/mnt/tmp nixos-install --root /mnt --flake '.#nixos'
 
 # sudo reboot
