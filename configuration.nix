@@ -1,4 +1,4 @@
-{ config, lib, pkgs, pkgs-unstable, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports =
@@ -8,6 +8,7 @@
       ./disko-config.nix
     ];
 
+  
   # Nix
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" "pipe-operators"];
@@ -20,14 +21,30 @@
   };
   nix.optimise.automatic = true;
 
+  
   # Boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   #  boot.zfs.devNodes = "/dev/"; uncomment for VirtIO disk
   boot.zfs.requestEncryptionCredentials = true;
 
-  # Impermanence
   
+  # Impermanence
+  environment.persistence."/persistent" = {
+    enable = true; 
+    hideMounts = true;
+    directories = [
+      "/var/log"
+      "/var/lib/bluetooth"
+      "/var/lib/nixos"
+      "/var/lib/systemd/coredump"
+      "/etc/NetworkManager/system-connections"
+    ];
+    files = [
+      "/etc/machine-id"
+    ];
+  };
+
   
   # System
   time.timeZone = "Asia/Kolkata";
@@ -39,27 +56,24 @@
   users.users.jrrom = {
     isNormalUser = true;
     extraGroups = [
-      "wheel"
-      "networkmanager"
-      "floppy"
-      "audio"
-      "cdrom"
-      "video"
-      "usb"
-      "users"
-      "plugdev"
-      "pipewire"
+      "wheel"   "networkmanager"
+      "floppy"  "audio"
+      "cdrom"   "video"
+      "usb"     "users"
+      "plugdev" "pipewire"
       "libvirt"
     ];
     # packages = with pkgs; [];
   };
-  
+
+
   # Networking
   networking.hostName = "jrrom"; # Define your hostname.
   networking.hostId = "ede53986";
   networking.networkmanager.enable = true;
   networking.networkmanager.wifi.powersave = true;
   networking.firewall.enable = true;
+
 
   # Pipewire
   security.rtkit.enable = true; # Realtime scheduler
@@ -70,6 +84,7 @@
     pulse.enable = true;
   };
 
+  
   # Input
   console = {
     font = "Lat2-Terminus16";
@@ -81,30 +96,23 @@
     xkb.options = "ctrl:swapcaps";
   };
 
+
   # Desktop
   services.displayManager.cosmic-greeter.enable = true;
   services.desktopManager.cosmic.enable = true;
   services.desktopManager.cosmic.xwayland.enable = true;
-  
-  # Define a user account. Don't forget to set a password with ‘passwd’.
 
-  # programs.firefox.enable = true;
 
-  # List packages installed in system profile.
-  # You can use https://search.nixos.org/ to find more packages (and options).
+  # Development
+  programs.git.enable = true;
+
+  # Programs
   # environment.systemPackages = with pkgs; [
   #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #   wget
   # ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
+  
   # see https://nixos.org/manual/nixos/stable/#sec-upgrading
   # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
   # and migrated your data accordingly.
