@@ -24,7 +24,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.extraPools = [ "zroot" ];
+  #  boot.zfs.devNodes = "/dev/"; uncomment for Virtio
   boot.zfs.requestEncryptionCredentials = true;
   
   # System

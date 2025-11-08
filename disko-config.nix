@@ -55,6 +55,7 @@
           "root" = {
             type = "zfs_fs";
             mountpoint = "/";
+            options.mountpoint = "legacy";
             postCreateHook = ''
               zfs snapshot zroot/root@blank
             '';
@@ -62,6 +63,7 @@
           "nix" = {
             type = "zfs_fs";
             mountpoint = "/nix";
+            options.mountpoint = "legacy";
           };
           "encrypted" = {
             type = "zfs_fs";
@@ -75,10 +77,12 @@
           "encrypted/persistence" = {
             type = "zfs_fs";
             mountpoint = "/persistence";
+            options.mountpoint = "legacy";
           };
           "encrypted/home" = {
             type = "zfs_fs";
             mountpoint = "/home";
+            options.mountpoint = "legacy";
           };
         };
       };
