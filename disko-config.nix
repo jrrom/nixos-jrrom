@@ -3,7 +3,7 @@
     disk = {
       root = {
         type = "disk";
-        device = "/dev/nvme0n1";
+        device = "/dev/nvme0n1"; # Edit for different drive
         content = {
           type = "gpt";
           partitions = {

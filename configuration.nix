@@ -1,4 +1,4 @@
-{ config, lib, pkgs, user, ... }:
+{ config, lib, pkgs, pkgs-unstable, ... }:
 
 {
   imports =
@@ -19,13 +19,15 @@
     options = "--delete-older-than 14d";
   };
   nix.optimise.automatic = true;
-  
+
   # Boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.supportedFilesystems = [ "zfs" ];
-  #  boot.zfs.devNodes = "/dev/"; uncomment for Virtio
+  #  boot.zfs.devNodes = "/dev/"; uncomment for VirtIO disk
   boot.zfs.requestEncryptionCredentials = true;
+
+  # Impermanence
+  
   
   # System
   time.timeZone = "Asia/Kolkata";
@@ -78,6 +80,11 @@
     xkb.layout = "us";
     xkb.options = "ctrl:swapcaps";
   };
+
+  # Desktop
+  services.displayManager.cosmic-greeter.enable = true;
+  services.desktopManager.cosmic.enable = true;
+  services.desktopManager.cosmic.xwayland.enable = true;
   
   # Define a user account. Don't forget to set a password with ‘passwd’.
 
