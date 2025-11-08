@@ -30,6 +30,9 @@
 
   
   # Impermanence
+  boot.initrd.postDeviceCommands = lib.mkAfter ''
+    zfs rollback -r zroot/root@blank
+  '';
   environment.persistence."/persistent" = {
     enable = true; 
     hideMounts = true;
