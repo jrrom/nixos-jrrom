@@ -44,10 +44,10 @@
               home-manager.useUserPackages = true;
               home-manager.users.jrrom = {
                 imports = [
-                  ./home.nix
                   inputs.cosmic-manager.homeManagerModules.cosmic-manager
+                  ./home.nix
                 ];
-              }
+              };
             }
           ];
         };
