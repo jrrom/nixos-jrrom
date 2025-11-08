@@ -24,6 +24,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs.extraPools = [ "zroot" ];
   boot.zfs.requestEncryptionCredentials = true;
   
   # System
