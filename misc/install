@@ -6,6 +6,8 @@ if [ "$(id -u)" -ne 0 ]; then
    exit 1
 fi
 
+cd ~/nixos-jrrom
+
 # First cd into /tmp and git clone the repo
 
 echo -e "\n======\nRunning Disko\n======\n\n"
@@ -29,7 +31,11 @@ echo -e "\n======\nInstalling NixOS\n======\n\n"
 mkdir -p /mnt/tmp
 TMPDIR=/mnt/tmp nixos-install --flake '.#nixos'
 
-echo -e "\n======\n Enter password for jrrom \n======\n\n"
+echo -e "\n======\n Enter password for jrrom and root \n======\n\n"
 
 # sudo reboot
+mkdir -p /mnt/persistance/passwords
 nixos-enter --root /mnt --command "passwd jrrom"
+nixos-enter --root /mnt --command "passwd"
+
+echo -e "\n\n===\nComplete!===\n"

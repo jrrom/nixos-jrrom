@@ -276,7 +276,7 @@
     warning: None,
     destructive: None,
     is_frosted: false,
-    gaps: (0, 8),
+    gaps: (0, 20),
     active_hint: 3,
     window_hint: Some((
         red: 0.99607843,
