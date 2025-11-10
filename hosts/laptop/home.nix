@@ -8,18 +8,35 @@
 {
   home.username = "jrrom";
   home.homeDirectory = "/home/jrrom";
+
+  # Programs
+  programs.fish = {
+    enable = true;
+    shellInit = "function fish_greeting\n\nend";
+  };
+
+  # Cursor
+  home.pointerCursor = {
+    enable = true;
+    package = pkgs.bibata-cursors;
+    size = 32;
+    name = "Bibata-Modern-Ice";
+  };
   
   # GTK
   gtk = {
     enable = true;
     gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
     gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
+    cursorTheme = {
+      package = pkgs.bibata-cursors;
+      size = 32;
+      name = "Bibata-Modern-Ice";
+    };
   };
   
   # Files
-  home.file.".config/cosmic/com.system76.CosmicComp/v1/autotile".text = "true";
-  home.file.".config/cosmic/com.system76.CosmicPanel.Panel/v1/margin".text = "0";
-  home.file.".config/cosmic/com.system76.CosmicPanel.Panel/v1/corner-radius".text = "0";
+#  home.file.".config/cosmic/com.system76.CosmicComp/v1/autotile".text = "true";
   
   # Emacs
   home.file.".config/emacs/init.el".source = config.lib.file.mkOutOfStoreSymlink ./init.el;
@@ -53,7 +70,7 @@
 
     appearance = {
       theme = {
-        dark = cosmicLib.cosmic.importRON ../../misc/GruvboxDark.ron;
+        dark = cosmicLib.cosmic.importRON ../../misc/GruvboxMatDark.ron;
         mode = "dark";
       };
 
@@ -73,7 +90,6 @@
           style = cosmicLib.cosmic.mkRON "enum" "Normal";
           weight = cosmicLib.cosmic.mkRON "enum" "Normal";
         };
-
       };
     };
 
@@ -82,6 +98,7 @@
         anchor_gap = false;
         anchor = cosmicLib.cosmic.mkRON "enum" "Top";
         name = "Panel";
+        margin = 0;
         opacity = 1.0;
         expand_to_edges = true;
         plugins_center = cosmicLib.cosmic.mkRON "optional" [

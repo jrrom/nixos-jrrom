@@ -9,10 +9,7 @@ Doing auto-tangle on saving the config file.
 
 #+begin_src emacs-lisp
 (defun jrrom/org-babel-tangle-config ()
-  (when (or (string-equal (buffer-file-name) (expand-file-name "~/dotfiles/Emacs.org"))
-			(string-equal (buffer-file-name) (expand-file-name "~/dotfiles/Programs.org"))
-            (string-equal (buffer-file-name) (expand-file-name "~/dotfiles/Sway.org"))
-            (string-equal (buffer-file-name) (expand-file-name "~/dotfiles/EWW.org")))
+  (when (string-equal (file-name-nondirectory (buffer-file-name)) "emacs.org")
     (org-element-cache-reset)
     (let ((org-confirm-babel-evaluate nil))
       (org-babel-tangle))))
@@ -42,17 +39,6 @@ Some other performance settings that I forgot where they came from or if they ev
 (setq pgtk-wait-for-event-timeout nil)   ;; Don't wait for events to complete?
 #+end_src
 * Emacs
-** MELPA
-Adding MELPA.
-#+begin_src emacs-lisp
-(require 'package)
-(add-to-list
- 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
-#+end_src
 ** Custom
 #+begin_src emacs-lisp
 (use-package emacs
@@ -140,7 +126,7 @@ My Emacs theme!
   :ensure t
   :config (load-theme 'gruvbox-dark-medium t nil))
 #+end_src
-** Wrapping
+** Wrapping & Guide
 #+begin_src emacs-lisp
 (use-package text-mode
   :custom
@@ -151,25 +137,32 @@ My Emacs theme!
 (use-package prog-mode
   :custom
   (visual-line-fringe-indicators '(nil right-triangle)))
+
+(use-package indent-bars
+  :ensure t
+  :config
+  (setq
+   indent-bars-pattern "."
+   indent-bars-width-frac 0.1
+   indent-bars-pad-frac 0.1
+   indent-bars-highlight-current-depth '(:face default :blend 0.4))
+  :hook ((nix-mode) . indent-bars-mode))
 #+end_src
-** Nerd Icons
-Installing the main package.
+** Fonts & Icons
+Some basic font setup.
+
 #+begin_src emacs-lisp
 (use-package nerd-icons
   :ensure t
   :custom
   (nerd-icons-font-family "Symbols Nerd Font Mono"))
-#+end_src
-** Fonts
-Some basic font setup.
 
-#+begin_src emacs-lisp
 (when (member "Maple Mono" (font-family-list))
   (set-face-attribute 'default nil :font "Maple Mono-15")
   (set-face-attribute 'fixed-pitch nil :family "Maple Mono"))
 
-(when (member "Noto Sans" (font-family-list))
-  (set-face-attribute 'variable-pitch nil :font "Noto Sans-16"))
+(when (member "Fira Sans" (font-family-list))
+  (set-face-attribute 'variable-pitch nil :font "Fira Sans-16"))
 
 ;; Nerd Icons Setup
 (set-fontset-font t nil (font-spec :family "Symbols Nerd Font Mono") nil 'append)
@@ -207,7 +200,6 @@ Some basic font setup.
      "tt"    "+++"   ":=:"       "all"       ";;"     "=:="       "ell"      ";;;"
      "\\\\"  "\\'"   "\\."       "ill"       ".."     "--"        "ull"      "..."
      "---"   "ll"    ".?"        "<!--"
-     ;; Not using : "}}" "{{", or any text ligatures - "TODO", etc
      ))
   (global-ligature-mode t))
 #+end_src
@@ -216,20 +208,8 @@ Some basic font setup.
 (use-package visual-fill-column
   :ensure t
   :custom
-  (visual-fill-column-width 80)       ;; max width
+  (visual-fill-column-width 180)       ;; max width
   (visual-fill-column-center-text t)) ;; center text
-#+end_src
-** Indent Guide
-#+begin_src emacs-lisp
-(use-package indent-bars
-  :ensure t
-  :config
-  (setq
-   indent-bars-pattern "."
-   indent-bars-width-frac 0.1
-   indent-bars-pad-frac 0.1
-   indent-bars-highlight-current-depth '(:face default :blend 0.4))
-  :hook ((nix-mode) . indent-bars-mode))
 #+end_src
 * Org
 ** Org
@@ -253,6 +233,7 @@ Making Org look a bit nice. Also making the title large. I set the face sizes an
                       (visual-line-mode 1)
                       (modify-syntax-entry ?< "." org-mode-syntax-table) ;; Please don't match < and )
                       (modify-syntax-entry ?> "." org-mode-syntax-table)
+                      (visual-fill-column-mode)
                       (setq-local electric-pair-inhibit-predicate
                                   (lambda (c) (when (char-equal c ?<) t)))
                       (when (org-before-first-heading-p)
@@ -263,7 +244,6 @@ Making Org look a bit nice. Also making the title large. I set the face sizes an
   (org-src-preserve-indentation t)
   (org-startup-indented t)               ; Needed for org-modern-indent
   (org-edit-src-content-indentation 0)
-  (org-modern-checkbox nil)              ; No fancy unicode checkboxes please
   :config
   (jrrom/org-face-sizes))
 #+end_src
@@ -286,15 +266,7 @@ Huge thanks to [[https://github.com/kwpav/dotfiles/blob/master/emacs.org#org-bab
 	 (emacs-lisp . t)
 	 (shell . t))))
 #+end_src
-* QoL
-** Repeat
-Repeat commands by spamming the last key of the command
-#+begin_src emacs-lisp
-(use-package repeat
-  :ensure nil
-  :config
-  (repeat-mode))
-#+end_src
+* Extra
 ** Which Key
 Shows keybindings!
 #+begin_src emacs-lisp
@@ -302,6 +274,14 @@ Shows keybindings!
   :config
   (which-key-setup-side-window-right-bottom)
   (which-key-mode))
+#+end_src
+** Repeat
+Repeat commands by spamming the last key of the command
+#+begin_src emacs-lisp
+(use-package repeat
+  :ensure nil
+  :config
+  (repeat-mode))
 #+end_src
 ** Eldoc
 Integrates amazingly with Eglot
@@ -314,6 +294,16 @@ Integrates amazingly with Eglot
   :ensure t
   :bind
   ("C-h ." . eldoc-box-help-at-point))
+#+end_src
+** Corfu
+#+begin_src emacs-lisp
+(use-package corfu
+  :ensure t
+  :custom
+  (corfu-cycle t)
+  :init
+  (global-corfu-mode)
+  )
 #+end_src
 ** Avy
 Somewhat useful
@@ -494,29 +484,23 @@ Regexp and literal matches for things.
    '((file (styles basic partial-completion))))
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
 #+end_src
-* Development
-** Corfu
-#+begin_src emacs-lisp
-(use-package corfu
-  :ensure t
-  :custom
-  (corfu-cycle t)
-  :init
-  (global-corfu-mode)
-  )
-#+end_src
-
+* Languages
 ** Treesitter
 I am using this strange code snippet that I got online.
 
 #+begin_src emacs-lisp
-(use-package treesit-auto
-  :ensure t
-  :custom
-  (treesit-auto-install t)
+(use-package treesit
   :config
-  (treesit-auto-add-to-auto-mode-alist '(bash c nix))
-  (global-treesit-auto-mode))
+  (setq treesit-font-lock-level 4
+        major-mode-remap-alist
+        '((c-mode          . c-ts-mode)
+          (c++-mode        . c++-ts-mode)
+          (python-mode     . python-ts-mode)
+          (sh-mode         . bash-ts-mode)
+          (js-mode         . js-ts-mode)
+          (json-mode       . json-ts-mode)
+          (css-mode        . css-ts-mode)
+          (typescript-mode . tsx-ts-mode))))
 #+end_src
 ** Eglot
 Eglot calls Flymake by default. Taken from [[https://gluer.org/blog/eglot-keybindings-that-i-use/][gluer]].
@@ -536,8 +520,12 @@ Eglot calls Flymake by default. Taken from [[https://gluer.org/blog/eglot-keybin
 	          ;; sometimes 
 	          ("C-c l R" . eglot-reconnect)))
 #+end_src
-* Languages
-** C
+** Shells
+#+begin_src emacs-lisp
+(use-package fish-mode
+  :ensure t)
+#+end_src
+** C / C++
 #+begin_src emacs-lisp
 (use-package c-ts-mode
   :hook
@@ -545,14 +533,9 @@ Eglot calls Flymake by default. Taken from [[https://gluer.org/blog/eglot-keybin
                  (c-ts-mode-set-style 'k&r)
                  (setq c-ts-mode-indent-offset 4))))
 #+end_src
-** Shells
-#+begin_src emacs-lisp
-(use-package fish-mode
-  :ensure t)
-#+end_src
 ** Nix & Direnv
 #+begin_src emacs-lisp
-(use-package nix-mode
+(use-package nix-ts-mode
   :ensure t
   :mode "\\.nix\\'")
 
@@ -583,9 +566,6 @@ Basic dired setup.
   ;; this command is useful when you want to close the window of `dirvish-side'
   ;; automatically when opening a file
   (put 'dired-find-alternate-file 'disabled nil))
-
-(use-package dired-open-with
-  :ensure t)
 #+end_src
 ** Dirvish
 Enhancing ~dired~ with Dirvish! A huge thank you to [[https://config.phundrak.com/emacs/packages/emacs-builtin.html#dired][phundrak's config]] and the default [[https://github.com/alexluigit/dirvish/blob/main/docs/CUSTOMIZING.org][docs]].

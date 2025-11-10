@@ -11,15 +11,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1762248367,
-        "narHash": "sha256-ZQk2zEfkKtBU2NGorflu5QvHQQVMAT53pJR8sKIbbPk=",
-        "owner": "HeitorAugustoLN",
+        "lastModified": 1762769369,
+        "narHash": "sha256-h1p6IsDIvuvrvMy0WWJtmFZGifKNmPrvPOnySY2I/fk=",
+        "owner": "jrrom",
         "repo": "cosmic-manager",
-        "rev": "b37705a7cce0887437e6459068dc45accaf3e03c",
+        "rev": "260b80dc7087a1f8478fafb21c6c038aa61dfb96",
         "type": "github"
       },
       "original": {
-        "owner": "HeitorAugustoLN",
+        "owner": "jrrom",
+        "ref": "cosmic-panels-margin",
         "repo": "cosmic-manager",
         "type": "github"
       }

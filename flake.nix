@@ -14,7 +14,8 @@
 
     # Cosmic Manager
     cosmic-manager = {
-      url = "github:HeitorAugustoLN/cosmic-manager";
+      url = "github:jrrom/cosmic-manager/cosmic-panels-margin";
+#      url = "github:HeitorAugustoLN/cosmic-manager";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
@@ -45,7 +46,7 @@
     in
     {
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
-
+      
       nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
         inherit system;
 

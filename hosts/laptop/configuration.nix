@@ -37,6 +37,10 @@
   boot.zfs.requestEncryptionCredentials = true;
   boot.supportedFilesystems = [ "zfs" ];
   boot.initrd.supportedFilesystems = [ "zfs" ];
+  services.zfs.autoScrub = {
+    enable = true;
+    interval = "monthly";
+  };
 
   # Impermanence
   fileSystems."/persistence".neededForBoot = true;
@@ -58,6 +62,7 @@
     hideMounts = true;
     directories = [
       "/var/log"
+      "/var/db/sudo"
       "/var/lib/bluetooth"
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
@@ -151,11 +156,20 @@
   virtualisation.docker.enable = true;
 
   # Applications
-  programs.git.enable = true;
-  programs.fish.enable = true;
+  programs.git = {
+    enable = true;
+    config = {
+      user = {
+        email = "77691121+jrrom@users.noreply.github.com";
+        name = "jrrom";
+      };
+    };
+  };
   programs.firefox.enable = true;
   programs.obs-studio.enable = true;
   services.flatpak.enable = true;
+  programs.direnv.enable = true;
+  programs.direnv.enableFishIntegration = true;
 
   # Programs
   environment.systemPackages = with pkgs; [
@@ -166,6 +180,16 @@
     unzip
     xdg-ninja
     gh
+    poppler
+    vips
+    vipsdisp
+    imagemagick
+    ffmpeg
+    trash-cli
+    
+
+    # LSPS
+    nixd
 
     # GUI
     adwaita-qt
@@ -197,7 +221,7 @@
     antialias = true;
     hinting = {
       enable = true;
-      style = "medium";
+      style = "slight";
     };
     subpixel = {
       rgba = "rgb";  # try "rgb" first, or "bgr" if that looks worse

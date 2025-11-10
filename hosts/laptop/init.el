@@ -1,8 +1,5 @@
 (defun jrrom/org-babel-tangle-config ()
-  (when (or (string-equal (buffer-file-name) (expand-file-name "~/dotfiles/Emacs.org"))
-			(string-equal (buffer-file-name) (expand-file-name "~/dotfiles/Programs.org"))
-            (string-equal (buffer-file-name) (expand-file-name "~/dotfiles/Sway.org"))
-            (string-equal (buffer-file-name) (expand-file-name "~/dotfiles/EWW.org")))
+  (when (string-equal (file-name-nondirectory (buffer-file-name)) "emacs.org")
     (org-element-cache-reset)
     (let ((org-confirm-babel-evaluate nil))
       (org-babel-tangle))))
@@ -15,14 +12,6 @@
 
 (setenv "LSP_USE_PLISTS" "true")         ;; Use PLISTS instead of JSON
 (setq pgtk-wait-for-event-timeout nil)   ;; Don't wait for events to complete?
-
-(require 'package)
-(add-to-list
- 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
 
 (use-package emacs
   :custom
@@ -96,12 +85,41 @@
             (with-current-buffer "*scratch*"
               (display-line-numbers-mode -1))))
 
+(use-package gruvbox-theme
+  :ensure t
+  :config (load-theme 'gruvbox-dark-medium t nil))
+
+(use-package text-mode
+  :custom
+  (visual-line-fringe-indicators '(nil right-triangle))
+  :hook
+  (text-mode . visual-line-mode))
+
+(use-package prog-mode
+  :custom
+  (visual-line-fringe-indicators '(nil right-triangle)))
+
+(use-package indent-bars
+  :ensure t
+  :config
+  (setq
+   indent-bars-pattern "."
+   indent-bars-width-frac 0.1
+   indent-bars-pad-frac 0.1
+   indent-bars-highlight-current-depth '(:face default :blend 0.4))
+  :hook ((nix-mode) . indent-bars-mode))
+
+(use-package nerd-icons
+  :ensure t
+  :custom
+  (nerd-icons-font-family "Symbols Nerd Font Mono"))
+
 (when (member "Maple Mono" (font-family-list))
   (set-face-attribute 'default nil :font "Maple Mono-15")
   (set-face-attribute 'fixed-pitch nil :family "Maple Mono"))
 
-(when (member "Noto Sans" (font-family-list))
-  (set-face-attribute 'variable-pitch nil :font "Noto Sans-16"))
+(when (member "Fira Sans" (font-family-list))
+  (set-face-attribute 'variable-pitch nil :font "Fira Sans-16"))
 
 ;; Nerd Icons Setup
 (set-fontset-font t nil (font-spec :family "Symbols Nerd Font Mono") nil 'append)
@@ -113,11 +131,6 @@
   (org-mode . mixed-pitch-mode)
   :custom
   (mixed-pitch-variable-pitch-cursor 'box))
-
-(use-package nerd-icons
-  :ensure t
-  :custom
-  (nerd-icons-font-family "Symbols Nerd Font Mono"))
 
 (use-package ligature
   :ensure t
@@ -142,39 +155,14 @@
      "tt"    "+++"   ":=:"       "all"       ";;"     "=:="       "ell"      ";;;"
      "\\\\"  "\\'"   "\\."       "ill"       ".."     "--"        "ull"      "..."
      "---"   "ll"    ".?"        "<!--"
-     ;; Not using : "}}" "{{", or any text ligatures - "TODO", etc
      ))
   (global-ligature-mode t))
-
-(use-package gruvbox-theme
-  :ensure t
-  :config (load-theme 'gruvbox-dark-medium t nil))
 
 (use-package visual-fill-column
   :ensure t
   :custom
-  (visual-fill-column-width 80)       ;; max width
+  (visual-fill-column-width 180)       ;; max width
   (visual-fill-column-center-text t)) ;; center text
-
-(use-package text-mode
-  :custom
-  (visual-line-fringe-indicators '(nil right-triangle))
-  :hook
-  (text-mode . visual-line-mode))
-
-(use-package prog-mode
-  :custom
-  (visual-line-fringe-indicators '(nil right-triangle)))
-
-(use-package indent-bars
-  :ensure t
-  :config
-  (setq
-   indent-bars-pattern "."
-   indent-bars-width-frac 0.1
-   indent-bars-pad-frac 0.1
-   indent-bars-highlight-current-depth '(:face default :blend 0.4))
-  :hook ((nix-mode) . indent-bars-mode))
 
 (defun jrrom/org-face-sizes ()
   (dolist (face '((org-level-1 . 1.1)
@@ -194,6 +182,7 @@
                       (visual-line-mode 1)
                       (modify-syntax-entry ?< "." org-mode-syntax-table) ;; Please don't match < and )
                       (modify-syntax-entry ?> "." org-mode-syntax-table)
+                      (visual-fill-column-mode)
                       (setq-local electric-pair-inhibit-predicate
                                   (lambda (c) (when (char-equal c ?<) t)))
                       (when (org-before-first-heading-p)
@@ -204,20 +193,8 @@
   (org-src-preserve-indentation t)
   (org-startup-indented t)               ; Needed for org-modern-indent
   (org-edit-src-content-indentation 0)
-  (org-modern-checkbox nil)              ; No fancy unicode checkboxes please
   :config
   (jrrom/org-face-sizes))
-
-;; (use-package org-modern
-;;  :ensure t
-;;  :after org
-;;  :init (with-eval-after-load 'org (global-org-modern-mode)))
-
-;; (use-package org-modern-indent
-;;  :vc (:url "https://github.com/jdtsmith/org-modern-indent.git" :rev :newest)
-;;  :ensure t
-;;  :config ; add late to hook
-;;  (add-hook 'org-mode-hook #'org-modern-indent-mode))
 
 (use-package org-contrib
   :ensure t
@@ -233,15 +210,15 @@
 	 (emacs-lisp . t)
 	 (shell . t))))
 
-(use-package repeat
-  :ensure nil
-  :config
-  (repeat-mode))
-
 (use-package which-key
   :config
   (which-key-setup-side-window-right-bottom)
   (which-key-mode))
+
+(use-package repeat
+  :ensure nil
+  :config
+  (repeat-mode))
 
 (use-package eldoc
   :init
@@ -252,6 +229,14 @@
   :bind
   ("C-h ." . eldoc-box-help-at-point))
 
+(use-package corfu
+  :ensure t
+  :custom
+  (corfu-cycle t)
+  :init
+  (global-corfu-mode)
+  )
+
 (use-package avy
   :ensure t
   :bind
@@ -260,10 +245,6 @@
 ;; For conf-mode (ini/conf files)
 (use-package conf-mode
   :ensure nil   ;; it's built-in
-  :hook (conf-mode . (lambda () (setq indent-tabs-mode t))))
-
-(use-package ebuild-mode
-  :ensure nil
   :hook (conf-mode . (lambda () (setq indent-tabs-mode t))))
 
 ;; For Makefiles (needs tabs)
@@ -412,21 +393,18 @@
    '((file (styles basic partial-completion))))
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
 
-(use-package corfu
-  :ensure t
-  :custom
-  (corfu-cycle t)
-  :init
-  (global-corfu-mode)
-  )
-
-(use-package treesit-auto
-  :ensure t
-  :custom
-  (treesit-auto-install t)
+(use-package treesit
   :config
-  (treesit-auto-add-to-auto-mode-alist '(bash c nix))
-  (global-treesit-auto-mode))
+  (setq treesit-font-lock-level 4
+        major-mode-remap-alist
+        '((c-mode          . c-ts-mode)
+          (c++-mode        . c++-ts-mode)
+          (python-mode     . python-ts-mode)
+          (sh-mode         . bash-ts-mode)
+          (js-mode         . js-ts-mode)
+          (json-mode       . json-ts-mode)
+          (css-mode        . css-ts-mode)
+          (typescript-mode . tsx-ts-mode))))
 
 (use-package eglot
   :ensure nil
@@ -443,7 +421,16 @@
 	          ;; sometimes 
 	          ("C-c l R" . eglot-reconnect)))
 
-(use-package nix-mode
+(use-package fish-mode
+  :ensure t)
+
+(use-package c-ts-mode
+  :hook
+  (c-ts-mode . (lambda ()
+                 (c-ts-mode-set-style 'k&r)
+                 (setq c-ts-mode-indent-offset 4))))
+
+(use-package nix-ts-mode
   :ensure t
   :mode "\\.nix\\'")
 
@@ -453,64 +440,6 @@
 
 (add-to-list 'load-path "/nix/var/nix/profiles/default/bin")
 (add-to-list 'load-path (expand-file-name "~/.nix-profile/bin"))
-
-(use-package c-ts-mode
-  :hook
-  (c-ts-mode . (lambda ()
-                 (c-ts-mode-set-style 'k&r)
-                 (setq c-ts-mode-indent-offset 4))))
-
-(use-package ess
-  :ensure t
-  :custom
-  (ess-style 'RStudio)
-  (ess-indent-offset 2))
-
-(use-package polymode
-  :hook
-  (polymode-init-host  . visual-fill-column-mode)
-  (polymode-init-inner . visual-fill-column-mode)
-  :hook
-  (polymode-init-host  . (lambda () (setq-local font-lock-maximum-decoration 1)))
-  (polymode-init-inner . (lambda () (setq-local font-lock-maximum-decoration 1)))
-  :ensure t)
-
-(use-package poly-R
-  :ensure t)
-
-(use-package poly-markdown
-  :ensure t)
-
-;; For editing markdown code blocks!
-(use-package edit-indirect
-  :ensure t)
-
-(use-package markdown-mode
-  :ensure t
-  :hook
-  (markdown-mode . visual-fill-column-mode)
-  :config
-  (setq markdown-fontify-code-blocks-natively t
-        markdown-code-lang-modes
-        '(("r" . ess-r-mode)
-          (" {r" . ess-r-mode)
-          ("{r"  . ess-r-mode) 
-          ("python" . python-mode)
-          ("bash" . shell-script-mode))))
-
-(use-package fish-mode
-  :ensure t)
-
-(use-package yuck-mode
-  :ensure t
-  :hook
-  (yuck-mode . (lambda () (setq-local lisp-indent-function #'common-lisp-indent-function))))
-
-(use-package clojure-mode
-  :ensure t)
-
-(use-package ebuild-mode
-  :ensure nil) ;; ensure nil
 
 (use-package dired
   :custom
@@ -526,9 +455,6 @@
   ;; this command is useful when you want to close the window of `dirvish-side'
   ;; automatically when opening a file
   (put 'dired-find-alternate-file 'disabled nil))
-
-(use-package dired-open-with
-  :ensure t)
 
 (use-package dirvish
   :ensure t
@@ -578,34 +504,3 @@
   (interactive)
   (select-frame-set-input-focus (make-frame))
   (vterm))
-
-(use-package emms
-  :ensure t
-  :config
-  (require 'emms-player-mpv)
-  (require 'emms-player-mplayer)
-  (emms-all)
-  (setq emms-player-list '(emms-player-mplayer emms-player-mpv)
-        emms-info-functions '(emms-info-exiftool emms-info-native)
-        emms-cache-file "~/.config/emacs/emms/cache")
-  (emms-cache-enable)
-
-  (add-hook 'emms-tag-editor-mode-hook
-            (lambda ()
-              (setq-local face-remapping-alist '((default fixed-pitch))))))
-
-(defun emms-jrrom-player ()
-  "jrrom's music player setup for EMMS"
-  (interactive)
-  (select-frame-set-input-focus
-   (make-frame
-    '((emms-frame . t)))) ;; Setting property
-  (emms)
-  (emms-mark-mode))
-
-(defun emms-jrrom-close ()
-  "Close the current EMMS frame and related buffers"
-  (interactive)
-  (dolist (frame (frame-list))
-    (when (frame-parameter frame 'emms-frame)
-      (delete-frame frame))))
