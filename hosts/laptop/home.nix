@@ -40,12 +40,12 @@
 
   # Cosmic Manager
   # Thank you to https://github.com/HeitorAugustoLN/nix-config/
-  # He is the creator
+  # He is the creator of cosmic-manager
   programs.cosmic-manager.enable = true;
 
   wayland.desktopManager.cosmic = {
     enable = true; # cosmic-manager CLI
-    resetFiles = true; # Keep it impermanent or nah
+    resetFiles = false; # Keep it impermanent or nah
 
     compositor = {
       autotile = true;
