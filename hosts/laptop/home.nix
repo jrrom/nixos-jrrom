@@ -35,9 +35,6 @@
     };
   };
   
-  # Files
-#  home.file.".config/cosmic/com.system76.CosmicComp/v1/autotile".text = "true";
-  
   # Emacs
   home.file.".config/emacs/init.el".source = config.lib.file.mkOutOfStoreSymlink ./init.el;
 
@@ -48,14 +45,17 @@
 
   wayland.desktopManager.cosmic = {
     enable = true; # cosmic-manager CLI
-    resetFiles = false; # Keep it impermanent or nah
+    resetFiles = true; # Keep it impermanent or nah
 
-    compositor.workspaces = {
-      workspace_layout = cosmicLib.cosmic.mkRON "enum" "Horizontal";
-      workspace_mode = cosmicLib.cosmic.mkRON "enum" "OutputBound";
+    compositor = {
       autotile = true;
       autotile_behavior = cosmicLib.cosmic.mkRON "enum" "PerWorkspace";
       focus_follows_cursor = false;
+
+      workspaces = {
+        workspace_layout = cosmicLib.cosmic.mkRON "enum" "Horizontal";
+        workspace_mode   = cosmicLib.cosmic.mkRON "enum" "OutputBound";
+      };
     };
     
     compositor.xkb_config = {
