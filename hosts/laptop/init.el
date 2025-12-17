@@ -107,7 +107,7 @@
    indent-bars-width-frac 0.1
    indent-bars-pad-frac 0.1
    indent-bars-highlight-current-depth '(:face default :blend 0.4))
-  :hook ((nix-mode) . indent-bars-mode))
+  :hook ((nix-ts-mode) . indent-bars-mode))
 
 (use-package nerd-icons
   :ensure t
@@ -400,6 +400,7 @@
         '((c-mode          . c-ts-mode)
           (c++-mode        . c++-ts-mode)
           (python-mode     . python-ts-mode)
+          (ruby-mode       . ruby-ts-mode)
           (sh-mode         . bash-ts-mode)
           (js-mode         . js-ts-mode)
           (json-mode       . json-ts-mode)
@@ -410,6 +411,8 @@
   :ensure nil
   :custom
   (eglot-ignored-server-capabilities '(:documentOnTypeFormattingProvider))
+  :config
+  (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp"))
   :bind (:map eglot-mode-map
               ;; L in namespace stands for LSP
 	          ("C-c l a" . eglot-code-actions)
@@ -430,16 +433,18 @@
                  (c-ts-mode-set-style 'k&r)
                  (setq c-ts-mode-indent-offset 4))))
 
-(use-package nix-ts-mode
-  :ensure t
-  :mode "\\.nix\\'")
-
 (use-package envrc
   :ensure t
   :hook (after-init . envrc-global-mode))
 
 (add-to-list 'load-path "/nix/var/nix/profiles/default/bin")
 (add-to-list 'load-path (expand-file-name "~/.nix-profile/bin"))
+
+(use-package sml-mode
+  :ensure t)
+
+(use-package racket-mode
+  :ensure t)
 
 (use-package dired
   :custom

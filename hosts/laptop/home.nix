@@ -36,7 +36,7 @@
   };
   
   # Emacs
-  home.file.".config/emacs/init.el".source = config.lib.file.mkOutOfStoreSymlink ./init.el;
+  home.file.".config/emacs/init.el".source = config.lib.file.mkOutOfStoreSymlink "/home/jrrom/nixos-jrrom/hosts/laptop/init.el";
 
   # Cosmic Manager
   # Thank you to https://github.com/HeitorAugustoLN/nix-config/
@@ -137,7 +137,7 @@
 
         source = cosmicLib.cosmic.mkRON "enum" {
           variant = "Path";
-          value = [ (builtins.toString ../../wallpapers/blue-lake-1920x1200.png) ];
+          value = [ "/home/jrrom/nixos-jrrom/wallpapers/blue-lake-1920x1200.png" ];
         };
       }
     ];

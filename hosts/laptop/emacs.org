@@ -146,7 +146,7 @@ My Emacs theme!
    indent-bars-width-frac 0.1
    indent-bars-pad-frac 0.1
    indent-bars-highlight-current-depth '(:face default :blend 0.4))
-  :hook ((nix-mode) . indent-bars-mode))
+  :hook ((nix-ts-mode) . indent-bars-mode))
 #+end_src
 ** Fonts & Icons
 Some basic font setup.
@@ -496,6 +496,7 @@ I am using this strange code snippet that I got online.
         '((c-mode          . c-ts-mode)
           (c++-mode        . c++-ts-mode)
           (python-mode     . python-ts-mode)
+          (ruby-mode       . ruby-ts-mode)
           (sh-mode         . bash-ts-mode)
           (js-mode         . js-ts-mode)
           (json-mode       . json-ts-mode)
@@ -509,6 +510,8 @@ Eglot calls Flymake by default. Taken from [[https://gluer.org/blog/eglot-keybin
   :ensure nil
   :custom
   (eglot-ignored-server-capabilities '(:documentOnTypeFormattingProvider))
+  :config
+  (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp"))
   :bind (:map eglot-mode-map
               ;; L in namespace stands for LSP
 	          ("C-c l a" . eglot-code-actions)
@@ -535,10 +538,6 @@ Eglot calls Flymake by default. Taken from [[https://gluer.org/blog/eglot-keybin
 #+end_src
 ** Nix & Direnv
 #+begin_src emacs-lisp
-(use-package nix-ts-mode
-  :ensure t
-  :mode "\\.nix\\'")
-
 (use-package envrc
   :ensure t
   :hook (after-init . envrc-global-mode))
@@ -546,7 +545,16 @@ Eglot calls Flymake by default. Taken from [[https://gluer.org/blog/eglot-keybin
 (add-to-list 'load-path "/nix/var/nix/profiles/default/bin")
 (add-to-list 'load-path (expand-file-name "~/.nix-profile/bin"))
 #+end_src
-
+** ML
+#+begin_src emacs-lisp
+(use-package sml-mode
+  :ensure t)
+#+end_src
+** Racket
+#+begin_src emacs-lisp
+(use-package racket-mode
+  :ensure t)
+#+end_src
 * Functions
 ** File Management
 Basic dired setup.
