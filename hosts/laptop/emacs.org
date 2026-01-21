@@ -181,7 +181,7 @@ Some basic font setup.
   :ensure t
   :config
   (ligature-set-ligatures
-   '(prog-mode org-mode markdown-mode)
+   '(prog-mode org-mode markdown-mode html-mode)
    '("::"    "?."    "<#--"      ":::"       "..<"    "<!---->"   "?:"       "#_"
      ".="    "<->"   ":?"        "<~"        "<-->"   ":?>"       "~>"       "<||"
      "->"    "<:"    "~~"        "<-"        ":>"     "<~>"       "-->"      "</>"
@@ -208,7 +208,7 @@ Some basic font setup.
 (use-package visual-fill-column
   :ensure t
   :custom
-  (visual-fill-column-width 180)       ;; max width
+  (visual-fill-column-width 160)       ;; max width
   (visual-fill-column-center-text t)) ;; center text
 #+end_src
 * Org
@@ -536,6 +536,12 @@ Eglot calls Flymake by default. Taken from [[https://gluer.org/blog/eglot-keybin
                  (c-ts-mode-set-style 'k&r)
                  (setq c-ts-mode-indent-offset 4))))
 #+end_src
+** Web
+#+begin_src emacs-lisp
+(use-package html-mode
+  :custom
+  (sgml-basic-offset 4))
+#+end_src
 ** Nix & Direnv
 #+begin_src emacs-lisp
 (use-package envrc
@@ -548,6 +554,11 @@ Eglot calls Flymake by default. Taken from [[https://gluer.org/blog/eglot-keybin
 ** ML
 #+begin_src emacs-lisp
 (use-package sml-mode
+  :ensure t)
+#+end_src
+** Haskell
+#+begin_src emacs-lisp
+(use-package haskell-mode
   :ensure t)
 #+end_src
 ** Racket

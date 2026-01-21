@@ -109,9 +109,9 @@
     XDG_STATE_HOME = "$HOME/.local/state";
 
     # Ruby
-    BUNDLE_USER_CONFIG ="${XDG_CONFIG_HOME}/bundle"
-    BUNDLE_USER_CACHE  ="${XDG_CACHE_HOME}/bundle"
-    BUNDLE_USER_PLUGIN ="${XDG_DATA_HOME}/bundle"
+    BUNDLE_USER_CONFIG ="${XDG_CONFIG_HOME}/bundle";
+    BUNDLE_USER_CACHE  ="${XDG_CACHE_HOME}/bundle";
+    BUNDLE_USER_PLUGIN ="${XDG_DATA_HOME}/bundle";
       
     _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java";
     HISTFILE = "$HOME/.local/state/bash/history";
@@ -193,7 +193,8 @@
     imagemagick
     ffmpeg
     trash-cli
-    
+    findutils
+    file
 
     # LSPS
     nixd
@@ -204,6 +205,7 @@
     blender
     inkscape
     nicotine-plus
+    qbittorrent
     aseprite
     strawberry
   ] ++ [(

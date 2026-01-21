@@ -136,7 +136,7 @@
   :ensure t
   :config
   (ligature-set-ligatures
-   '(prog-mode org-mode markdown-mode)
+   '(prog-mode org-mode markdown-mode html-mode)
    '("::"    "?."    "<#--"      ":::"       "..<"    "<!---->"   "?:"       "#_"
      ".="    "<->"   ":?"        "<~"        "<-->"   ":?>"       "~>"       "<||"
      "->"    "<:"    "~~"        "<-"        ":>"     "<~>"       "-->"      "</>"
@@ -161,7 +161,7 @@
 (use-package visual-fill-column
   :ensure t
   :custom
-  (visual-fill-column-width 180)       ;; max width
+  (visual-fill-column-width 160)       ;; max width
   (visual-fill-column-center-text t)) ;; center text
 
 (defun jrrom/org-face-sizes ()
@@ -433,6 +433,10 @@
                  (c-ts-mode-set-style 'k&r)
                  (setq c-ts-mode-indent-offset 4))))
 
+(use-package html-mode
+  :custom
+  (sgml-basic-offset 4))
+
 (use-package envrc
   :ensure t
   :hook (after-init . envrc-global-mode))
@@ -441,6 +445,9 @@
 (add-to-list 'load-path (expand-file-name "~/.nix-profile/bin"))
 
 (use-package sml-mode
+  :ensure t)
+
+(use-package haskell-mode
   :ensure t)
 
 (use-package racket-mode
