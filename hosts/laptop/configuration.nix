@@ -174,9 +174,14 @@
   programs.firefox.enable = true;
   programs.obs-studio.enable = true;
   services.flatpak.enable = true;
-  programs.direnv.enable = true;
-  programs.direnv.enableFishIntegration = true;
-  programs.appimage.enable = true;
+  programs.direnv = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
 
   # Programs
   environment.systemPackages = with pkgs; [
