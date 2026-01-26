@@ -182,6 +182,7 @@
     enable = true;
     binfmt = true;
   };
+  programs.kDrive.enable = true;
 
   # Programs
   environment.systemPackages = with pkgs; [

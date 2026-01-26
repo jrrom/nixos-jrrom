@@ -121,6 +121,26 @@
         "type": "github"
       }
     },
+    "kDrive": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1769419350,
+        "narHash": "sha256-LVrC+3wVAonpytIF0eudK182ADiGcEnU7G10cz6aYdg=",
+        "owner": "jrrom",
+        "repo": "desktop-kDrive-flake",
+        "rev": "23fac722a9e04e8f7c50567aa128c206f18b18eb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jrrom",
+        "repo": "desktop-kDrive-flake",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1764517877,
@@ -160,6 +180,7 @@
         "emacs-overlay": "emacs-overlay",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
+        "kDrive": "kDrive",
         "nixpkgs": "nixpkgs"
       }
     }

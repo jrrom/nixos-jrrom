@@ -30,6 +30,12 @@
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # kDrive
+    kDrive = {
+      url = "github:jrrom/desktop-kDrive-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     inputs@{
@@ -57,6 +63,7 @@
           inputs.disko.nixosModules.disko
           impermanence.nixosModules.impermanence
           ./hosts/laptop/configuration.nix
+          inputs.kDrive.nixosModules.default
 
           home-manager.nixosModules.home-manager
           {
