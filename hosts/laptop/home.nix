@@ -2,6 +2,7 @@
   config,
   pkgs,
   cosmicLib,
+  inputs,
   ...
 }:
 
@@ -41,8 +42,6 @@
   # Cosmic Manager
   # Thank you to https://github.com/HeitorAugustoLN/nix-config/
   # He is the creator of cosmic-manager
-  programs.cosmic-manager.enable = true;
-
   wayland.desktopManager.cosmic = {
     enable = true; # cosmic-manager CLI
     resetFiles = false; # Keep it impermanent or nah
@@ -179,5 +178,12 @@
     };
   };
 
+  xdg.autostart = {
+    enable = true;
+    entries = [
+      "${inputs.kDrive.packages.x86_64-linux.default}/share/applications/kDrive.desktop"
+    ];
+  };
+  
   home.stateVersion = "25.05";
 }

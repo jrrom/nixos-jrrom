@@ -71,6 +71,7 @@
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = {
               inherit cosmic-manager; # So much pain to find this...
+              inherit inputs;
             };
             home-manager.users.jrrom = {
               imports = [

@@ -193,6 +193,7 @@
   (org-src-preserve-indentation t)
   (org-startup-indented t)               ; Needed for org-modern-indent
   (org-edit-src-content-indentation 0)
+  (org-log-into-drawer 1)
   :config
   (jrrom/org-face-sizes))
 

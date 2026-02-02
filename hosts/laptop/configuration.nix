@@ -202,6 +202,9 @@
     findutils
     file
 
+    # Emacs Dirvish
+    mediainfo
+
     # LSPS
     nixd
 
@@ -214,6 +217,13 @@
     qbittorrent
     aseprite
     strawberry
+
+    # Life
+    pandoc
+    texliveFull
+    
+    # Maintainer Programs
+    ncgopher
   ] ++ [(
     pkgs.emacsWithPackagesFromUsePackage {
       package = pkgs.emacs-pgtk;
