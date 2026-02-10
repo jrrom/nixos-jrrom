@@ -234,6 +234,9 @@
   :ensure t
   :custom
   (corfu-cycle t)
+  (corfu-auto t)              ;; enable auto popup
+  ;;(corfu-auto-prefix 3)      ;; start after 3 chars
+  (corfu-auto-delay 0.2)     ;; small delay (optional)
   :init
   (global-corfu-mode)
   )
@@ -252,6 +255,8 @@
 (use-package make-mode
   :ensure nil
   :hook (makefile-mode . (lambda () (setq indent-tabs-mode t))))
+
+(keymap-global-set "M-z" #'zap-up-to-char)
 
 (use-package vertico
   :ensure t
@@ -510,10 +515,25 @@
   :ensure t
   :config
   (setq vterm-shell "fish")
-  (global-set-key (kbd "C-x 5 t") 'vterm-other-frame))
+  (keymap-global-set "C-x 5 t" 'vterm-other-frame))
 
 (defun vterm-other-frame ()
   "Create a new frame with vterm inside of it"
   (interactive)
   (select-frame-set-input-focus (make-frame))
   (vterm))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("5a0ddbd75929d24f5ef34944d78789c6c3421aa943c15218bac791c199fc897d"
+     "8363207a952efb78e917230f5a4d3326b2916c63237c1f61d7e5fe07def8d378"
+     default)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

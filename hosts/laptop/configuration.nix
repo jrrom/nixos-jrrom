@@ -202,6 +202,10 @@
     findutils
     file
 
+    # Dev
+    gcc
+    clang-tools
+
     # Emacs Dirvish
     mediainfo
 

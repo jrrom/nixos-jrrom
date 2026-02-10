@@ -302,6 +302,9 @@ Integrates amazingly with Eglot
   :ensure t
   :custom
   (corfu-cycle t)
+  (corfu-auto t)              ;; enable auto popup
+  ;;(corfu-auto-prefix 3)      ;; start after 3 chars
+  (corfu-auto-delay 0.2)     ;; small delay (optional)
   :init
   (global-corfu-mode)
   )
@@ -325,6 +328,10 @@ Somewhat useful
 (use-package make-mode
   :ensure nil
   :hook (makefile-mode . (lambda () (setq indent-tabs-mode t))))
+#+end_src
+** Bindings
+#+begin_src emacs-lisp
+(keymap-global-set "M-z" #'zap-up-to-char)
 #+end_src
 * VEMCO
 ** Vertico
@@ -504,7 +511,7 @@ I am using this strange code snippet that I got online.
           (css-mode        . css-ts-mode)
           (typescript-mode . tsx-ts-mode))))
 #+end_src
-** Eglot
+* Eglot
 Eglot calls Flymake by default. Taken from [[https://gluer.org/blog/eglot-keybindings-that-i-use/][gluer]].
 #+begin_src emacs-lisp
 (use-package eglot
@@ -637,7 +644,7 @@ Note: requires libvterm and libtool to be installed. (!)
   :ensure t
   :config
   (setq vterm-shell "fish")
-  (global-set-key (kbd "C-x 5 t") 'vterm-other-frame))
+  (keymap-global-set "C-x 5 t" 'vterm-other-frame))
 #+end_src
 
 Adding a keybinding to open vterm in a new frame!
