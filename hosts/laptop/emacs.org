@@ -514,6 +514,7 @@ I am using this strange code snippet that I got online.
 ** Other modes
 #+begin_src emacs-lisp
 (use-package purescript-mode
+  :ensure t
   :defer t
   :config
   (defun myhook-purescript-mode ()

@@ -414,6 +414,7 @@
           (typescript-mode . tsx-ts-mode))))
 
 (use-package purescript-mode
+  :ensure t
   :defer t
   :config
   (defun myhook-purescript-mode ()
@@ -530,3 +531,21 @@
   (interactive)
   (select-frame-set-input-focus (make-frame))
   (vterm))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(avy clojure-mode corfu dired-open-with dirvish edit-indirect
+         eldoc-box embark-consult emms envrc fish-mode gruvbox-theme
+         haskell-mode haskell-ts-mode indent-bars ligature marginalia
+         mixed-pitch nerd-icons nix-mode orderless org-contrib poly-R
+         purescript-mode racket-mode sml-mode treesit-auto use-package
+         vertico visual-fill-column vterm yuck-mode)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
