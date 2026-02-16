@@ -511,6 +511,16 @@ I am using this strange code snippet that I got online.
           (css-mode        . css-ts-mode)
           (typescript-mode . tsx-ts-mode))))
 #+end_src
+** Other modes
+#+begin_src emacs-lisp
+(use-package purescript-mode
+  :defer t
+  :config
+  (defun myhook-purescript-mode ()
+    (turn-on-purescript-indentation)
+    (add-hook 'before-save-hook #'purescript-sort-imports nil t))
+  (add-hook 'purescript-mode-hook #'myhook-purescript-mode))
+#+end_src
 * Eglot
 Eglot calls Flymake by default. Taken from [[https://gluer.org/blog/eglot-keybindings-that-i-use/][gluer]].
 #+begin_src emacs-lisp
