@@ -186,46 +186,43 @@
 
   # Programs
   environment.systemPackages = with pkgs; [
-    wget
     curl
-    tree
-    htop
-    unzip
-    xdg-ninja
+    ffmpeg
+    file
+    findutils
     gh
+    htop
+    imagemagick
+    mediainfo
+    pandoc
     poppler
+    texliveFull
+    trash-cli
+    tree
+    unzip
     vips
     vipsdisp
-    imagemagick
-    ffmpeg
-    trash-cli
-    findutils
-    file
+    wget
+    wl-clipboard
+    xdg-ninja
 
     # Dev
-    gcc
     clang-tools
-
-    # Emacs Dirvish
-    mediainfo
-
-    # LSPS
+    gcc
     nixd
 
     # GUI
     adwaita-qt
     adwaita-qt6
+    aseprite
     blender
+    foliate
     inkscape
+    keepassxc
     nicotine-plus
     qbittorrent
-    aseprite
     strawberry
 
-    # Life
-    pandoc
-    texliveFull
-    
     # Maintainer Programs
     ncgopher
   ] ++ [(
