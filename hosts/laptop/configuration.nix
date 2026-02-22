@@ -183,6 +183,10 @@
     binfmt = true;
   };
   programs.kDrive.enable = true;
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+  };
 
   # Programs
   environment.systemPackages = with pkgs; [
