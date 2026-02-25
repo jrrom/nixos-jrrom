@@ -235,8 +235,8 @@
   :custom
   (corfu-cycle t)
   (corfu-auto t)              ;; enable auto popup
-  ;;(corfu-auto-prefix 3)      ;; start after 3 chars
-  (corfu-auto-delay 0.2)     ;; small delay (optional)
+  (corfu-auto-prefix 1)      ;; start after 3 chars
+  (corfu-auto-delay 0.1)     ;; small delay (optional)
   :init
   (global-corfu-mode)
   )
@@ -422,6 +422,10 @@
     (add-hook 'before-save-hook #'purescript-sort-imports nil t))
   (add-hook 'purescript-mode-hook #'myhook-purescript-mode))
 
+(add-hook 'purescript-mode-hook
+  (lambda ()
+    (modify-syntax-entry ?. "." purescript-mode-syntax-table)))
+
 (use-package eglot
   :ensure nil
   :custom
@@ -531,24 +535,3 @@
   (interactive)
   (select-frame-set-input-focus (make-frame))
   (vterm))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("8363207a952efb78e917230f5a4d3326b2916c63237c1f61d7e5fe07def8d378"
-     default))
- '(package-selected-packages
-   '(avy clojure-mode corfu dired-open-with dirvish edit-indirect
-         eldoc-box embark-consult emms envrc fish-mode gruvbox-theme
-         haskell-mode haskell-ts-mode indent-bars ligature marginalia
-         mixed-pitch nerd-icons nix-mode orderless org-contrib poly-R
-         purescript-mode racket-mode sml-mode treesit-auto use-package
-         vertico visual-fill-column vterm yuck-mode)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

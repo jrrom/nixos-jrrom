@@ -303,8 +303,8 @@ Integrates amazingly with Eglot
   :custom
   (corfu-cycle t)
   (corfu-auto t)              ;; enable auto popup
-  ;;(corfu-auto-prefix 3)      ;; start after 3 chars
-  (corfu-auto-delay 0.2)     ;; small delay (optional)
+  (corfu-auto-prefix 1)      ;; start after 3 chars
+  (corfu-auto-delay 0.1)     ;; small delay (optional)
   :init
   (global-corfu-mode)
   )
@@ -511,7 +511,7 @@ I am using this strange code snippet that I got online.
           (css-mode        . css-ts-mode)
           (typescript-mode . tsx-ts-mode))))
 #+end_src
-** Other modes
+** PureScript
 #+begin_src emacs-lisp
 (use-package purescript-mode
   :ensure t
@@ -521,6 +521,10 @@ I am using this strange code snippet that I got online.
     (turn-on-purescript-indentation)
     (add-hook 'before-save-hook #'purescript-sort-imports nil t))
   (add-hook 'purescript-mode-hook #'myhook-purescript-mode))
+
+(add-hook 'purescript-mode-hook
+  (lambda ()
+    (modify-syntax-entry ?. "." purescript-mode-syntax-table)))
 #+end_src
 * Eglot
 Eglot calls Flymake by default. Taken from [[https://gluer.org/blog/eglot-keybindings-that-i-use/][gluer]].

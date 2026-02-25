@@ -64,6 +64,7 @@
       "/var/log"
       "/var/db/sudo"
       "/var/lib/bluetooth"
+      "/var/lib/docker"
       "/var/lib/nixos"
       "/var/lib/flatpak"
       "/var/lib/systemd/coredump"
@@ -118,6 +119,11 @@
 
     QT_QPA_PLATFORM = "wayland";
     _JAVA_AWT_WM_NONREPARENTING = "1";
+  };
+
+  environment.variables = rec {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
   };
 
   # Networking
@@ -187,7 +193,7 @@
     enable = true;
     defaultEditor = true;
   };
-
+  programs.nano.enable = false;
   # Programs
   environment.systemPackages = with pkgs; [
     curl
@@ -222,10 +228,13 @@
     blender
     foliate
     inkscape
+    jetbrains.datagrip
+    jetbrains.idea
     keepassxc
     nicotine-plus
     qbittorrent
     strawberry
+    
 
     # Maintainer Programs
     ncgopher
