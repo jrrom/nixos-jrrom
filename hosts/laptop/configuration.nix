@@ -237,7 +237,7 @@
     jetbrains.idea
     keepassxc
     nicotine-plus
-    positron
+    positron-bin
     qbittorrent
     strawberry
     
