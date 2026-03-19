@@ -239,6 +239,10 @@
   (corfu-auto-delay 0.1)     ;; small delay (optional)
   :init
   (global-corfu-mode)
+  :bind
+  (:map corfu-map
+        ("RET" . nil)
+        ("TAB" . corfu-insert))
   )
 
 (use-package avy
