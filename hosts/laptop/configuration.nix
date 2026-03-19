@@ -195,17 +195,10 @@
     defaultEditor = true;
   };
   programs.nano.enable = false;
-  programs.vscode = {
-    enable = true;
-    package = pkgs.positron-bin;
-    extensions = with pkgs.vscode-extensions; [
-      tuttieee.emacs-mcx
-      jdinhlife.gruvbox
-      myriad-dreamin.tinymist
-    ];
-  };
   # Programs
   environment.systemPackages = with pkgs; [
+
+    # Everyday
     curl
     ffmpeg
     file
@@ -227,11 +220,12 @@
     xdg-ninja
 
     # Dev
-    clang-tools
+    clang-tools # for C
     gcc
     nixd
+    tinymist # for Typst
     typst
-
+    
     # GUI
     adwaita-qt
     adwaita-qt6
@@ -243,12 +237,13 @@
     jetbrains.idea
     keepassxc
     nicotine-plus
+    positron
     qbittorrent
     strawberry
     
-
     # Maintainer Programs
     ncgopher
+    
   ] ++ [(
     pkgs.emacsWithPackagesFromUsePackage {
       package = pkgs.emacs-pgtk;
