@@ -189,11 +189,21 @@
     binfmt = true;
   };
   programs.kDrive.enable = true;
+  # Editors
   programs.neovim = {
     enable = true;
     defaultEditor = true;
   };
   programs.nano.enable = false;
+  programs.vscode = {
+    enable = true;
+    package = pkgs.positron-bin;
+    extensions = with pkgs.vscode-extensions; [
+      tuttieee.emacs-mcx
+      jdinhlife.gruvbox
+      myriad-dreamin.tinymist
+    ];
+  };
   # Programs
   environment.systemPackages = with pkgs; [
     curl
@@ -220,6 +230,7 @@
     clang-tools
     gcc
     nixd
+    typst
 
     # GUI
     adwaita-qt
