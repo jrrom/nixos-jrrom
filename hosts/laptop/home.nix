@@ -15,7 +15,7 @@
     enable = true;
     shellInit = "function fish_greeting\n\nend";
   };
-
+  
   # Cursor
   home.pointerCursor = {
     enable = true;
@@ -38,6 +38,17 @@
   
   # Emacs
   home.file.".config/emacs/init.el".source = config.lib.file.mkOutOfStoreSymlink "/home/jrrom/nixos-jrrom/hosts/laptop/init.el";
+
+  # Positron
+  home.file.".config/Positron/User/settings.json".text = ''
+{
+    "files.associations": {
+        "renv.lock": "json"
+    },
+    "workbench.colorTheme": "Gruvbox Dark Medium",
+    "editor.fontFamily": "'Maple Mono', 'monospace', monospace"
+}
+  '';
 
   # Cosmic Manager
   # Thank you to https://github.com/HeitorAugustoLN/nix-config/

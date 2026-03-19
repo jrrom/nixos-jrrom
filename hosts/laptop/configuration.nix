@@ -194,6 +194,17 @@
     enable = true;
     defaultEditor = true;
   };
+  programs.vscode = {
+    enable = true;
+    package = pkgs.positron-bin.overrideAttrs (old: {
+      executableName = "positron";
+      longName = "Positron";
+    });
+    extensions = with pkgs.vscode-extensions; [
+      jdinhlife.gruvbox
+      tuttieee.emacs-mcx      
+    ];
+  };
   programs.nano.enable = false;
   # Programs
   environment.systemPackages = with pkgs; [
@@ -237,7 +248,6 @@
     jetbrains.idea
     keepassxc
     nicotine-plus
-    positron-bin
     qbittorrent
     strawberry
     
