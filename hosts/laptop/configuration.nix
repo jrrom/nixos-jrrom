@@ -195,6 +195,7 @@
     defaultEditor = true;
   };
   programs.vscode = {
+    # See `home.nix` for settings
     enable = true;
     package = pkgs.positron-bin.overrideAttrs (old: {
       executableName = "positron";
@@ -202,7 +203,9 @@
     });
     extensions = with pkgs.vscode-extensions; [
       jdinhlife.gruvbox
-      tuttieee.emacs-mcx      
+      tuttieee.emacs-mcx
+      myriad-dreamin.tinymist
+      mkhl.direnv
     ];
   };
   programs.nano.enable = false;
@@ -284,6 +287,15 @@
       rgba = "rgb";  # try "rgb" first, or "bgr" if that looks worse
       lcdfilter = "default";
     };
+  };
+
+  # JavaFX compatibility
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      gtk3
+      glib
+    ];
   };
 
   # see https://nixos.org/manual/nixos/stable/#sec-upgrading
