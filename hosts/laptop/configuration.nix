@@ -289,15 +289,6 @@
     };
   };
 
-  # JavaFX compatibility
-  programs.nix-ld = {
-    enable = true;
-    libraries = with pkgs; [
-      gtk3
-      glib
-    ];
-  };
-
   # see https://nixos.org/manual/nixos/stable/#sec-upgrading
   # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
   # and migrated your data accordingly.
