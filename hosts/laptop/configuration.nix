@@ -194,25 +194,29 @@
     enable = true;
     defaultEditor = true;
   };
-  programs.vscode = {
-    # See `home.nix` for settings
-    enable = true;
-    package = pkgs.positron-bin.overrideAttrs (old: {
-      executableName = "positron";
-      longName = "Positron";
-    });
-    extensions = with pkgs.vscode-extensions; [
-      jdinhlife.gruvbox
-      tuttieee.emacs-mcx
-      myriad-dreamin.tinymist
-      mkhl.direnv
-    ];
-  };
+  # programs.vscode = {
+  #   # See `home.nix` for settings
+  #   enable = true;
+  #   # package = pkgs.positron-bin.overrideAttrs (old: {
+  #   #   executableName = "positron";
+  #   #   longName = "Positron";
+  #   # });
+  #   extensions = with pkgs.vscode-extensions; [
+  #     jdinhlife.gruvbox
+  #     tuttieee.emacs-mcx
+  #     myriad-dreamin.tinymist
+  #     mkhl.direnv
+  #   ];
+  # };
   programs.nano.enable = false;
   # Programs
   environment.systemPackages = with pkgs; [
-
+    # for exams
+    man-pages
+    man-pages-posix
+    
     # Everyday
+    aider-chat-full
     curl
     ffmpeg
     file
@@ -239,6 +243,8 @@
     nixd
     tinymist # for Typst
     typst
+    kubernetes
+    (google-cloud-sdk.withExtraComponents [google-cloud-sdk.components.gke-gcloud-auth-plugin])
     
     # GUI
     adwaita-qt
@@ -276,6 +282,7 @@
     maple-mono.truetype
     nerd-fonts.symbols-only
   ];
+  
   fonts.fontconfig = {
     enable = true;
     antialias = true;
@@ -287,6 +294,17 @@
       rgba = "rgb";  # try "rgb" first, or "bgr" if that looks worse
       lcdfilter = "default";
     };
+    localConf = ''
+    <?xml version="1.0"?>
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+    <fontconfig>
+      <match target="pattern">
+         <edit name="dpi" mode="assign">
+            <double>142</double>
+         </edit>
+      </match>
+    </fontconfig>
+    '';
   };
 
   # see https://nixos.org/manual/nixos/stable/#sec-upgrading

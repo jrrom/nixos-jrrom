@@ -15,6 +15,10 @@
     enable = true;
     shellInit = "function fish_greeting\n\nend";
   };
+
+  home.packages = with pkgs; [
+    devenv
+  ];
   
   # Cursor
   home.pointerCursor = {
