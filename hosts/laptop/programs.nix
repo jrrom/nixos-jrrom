@@ -48,10 +48,16 @@
     clang-tools
     curl
     ffmpeg
+    ffmpegthumbnailer
     ghostscript
     mpv
     fd
     file
+    catdoc
+    chafa
+    docx2txt
+    dtach
+    unrtf
     findutils
     foliate
     gcc
