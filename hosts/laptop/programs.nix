@@ -48,6 +48,8 @@
     clang-tools
     curl
     ffmpeg
+    ghostscript
+    mpv
     fd
     file
     findutils
