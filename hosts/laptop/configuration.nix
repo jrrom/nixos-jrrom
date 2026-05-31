@@ -10,6 +10,7 @@
   imports = [
     # Hardware
     ./hardware-configuration.nix
+    ./programs.nix
     ./disko-config.nix
   ];
 
@@ -167,116 +168,6 @@
   programs.virt-manager.enable = true;
   virtualisation.docker.enable = true;
 
-  # Applications
-  programs.git = {
-    enable = true;
-    config = {
-      user = {
-        email = "77691121+jrrom@users.noreply.github.com";
-        name = "jrrom";
-      };
-    };
-  };
-  programs.firefox.enable = true;
-  programs.obs-studio.enable = true;
-  services.flatpak.enable = true;
-  programs.direnv = {
-    enable = true;
-    enableFishIntegration = true;
-  };
-  programs.appimage = {
-    enable = true;
-    binfmt = true;
-  };
-  programs.kDrive.enable = true;
-  # Editors
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-  };
-  # programs.vscode = {
-  #   # See `home.nix` for settings
-  #   enable = true;
-  #   # package = pkgs.positron-bin.overrideAttrs (old: {
-  #   #   executableName = "positron";
-  #   #   longName = "Positron";
-  #   # });
-  #   extensions = with pkgs.vscode-extensions; [
-  #     jdinhlife.gruvbox
-  #     tuttieee.emacs-mcx
-  #     myriad-dreamin.tinymist
-  #     mkhl.direnv
-  #   ];
-  # };
-  programs.nano.enable = false;
-  # Programs
-  environment.systemPackages = with pkgs; [
-    # for exams
-    man-pages
-    man-pages-posix
-    nixfmt-rfc-style
-    
-    # Everyday
-    aider-chat-full
-    curl
-    ffmpeg
-    file
-    findutils
-    gh
-    htop
-    imagemagick
-    mediainfo
-    pandoc
-    poppler
-    texliveFull
-    trash-cli
-    tree
-    unzip
-    vips
-    vipsdisp
-    wget
-    wl-clipboard
-    xdg-ninja
-
-    # Dev
-    clang-tools # for C
-    gcc
-    nixd
-    tinymist # for Typst
-    typst
-    kubernetes
-    (google-cloud-sdk.withExtraComponents [google-cloud-sdk.components.gke-gcloud-auth-plugin])
-    
-    # GUI
-    adwaita-qt
-    adwaita-qt6
-    aseprite
-    blender
-    foliate
-    inkscape
-    jetbrains.datagrip
-    jetbrains.idea
-    keepassxc
-    nicotine-plus
-    qbittorrent
-    strawberry
-    
-    # Maintainer Programs
-    ncgopher
-    
-  ] ++ [(
-    pkgs.emacsWithPackagesFromUsePackage {
-      package = pkgs.emacs-pgtk;
-      config = ./emacs.org;
-      defaultInitFile = false;
-      alwaysTangle = true;
-      extraEmacsPackages = epkgs: [
-        (epkgs.treesit-grammars.with-all-grammars)
-      ];
-    }
-  )];
-  services.emacs.package = pkgs.emacs-unstable;
-  services.emacs.enable = true;
 
   # Appearance
   fonts.packages = with pkgs; [
