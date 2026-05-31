@@ -40,26 +40,40 @@
 
   # System packages
   environment.systemPackages = with pkgs; [
-    # Documentation
-    man-pages
-    man-pages-posix
-    nixfmt-rfc-style
-
-    # Everyday
+    adwaita-qt
+    adwaita-qt6
     aider-chat-full
+    aseprite
+    blender
+    clang-tools
     curl
     ffmpeg
     file
     findutils
+    foliate
+    gcc
     gh
     htop
     imagemagick
+    inkscape
+    jetbrains.datagrip
+    jetbrains.idea
+    keepassxc
+    man-pages
+    man-pages-posix
     mediainfo
+    nicotine-plus
+    nixd
+    nixfmt
     pandoc
     poppler
+    qbittorrent
+    strawberry
     texliveFull
+    tinymist
     trash-cli
     tree
+    typst
     unzip
     vips
     vipsdisp
@@ -67,30 +81,6 @@
     wl-clipboard
     xdg-ninja
 
-    # Dev
-    clang-tools
-    gcc
-    nixd
-    tinymist
-    typst
-    kubernetes
-    (google-cloud-sdk.withExtraComponents [google-cloud-sdk.components.gke-gcloud-auth-plugin])
-
-    # GUI
-    adwaita-qt
-    adwaita-qt6
-    aseprite
-    blender
-    foliate
-    inkscape
-    jetbrains.datagrip
-    jetbrains.idea
-    keepassxc
-    nicotine-plus
-    qbittorrent
-    strawberry
-
-    # Maintainer Programs
     ncgopher
   ] ++ [(
     pkgs.emacsWithPackagesFromUsePackage {
