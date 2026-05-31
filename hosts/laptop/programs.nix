@@ -48,6 +48,7 @@
     clang-tools
     curl
     ffmpeg
+    fd
     file
     findutils
     foliate
