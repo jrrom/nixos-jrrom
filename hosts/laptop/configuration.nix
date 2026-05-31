@@ -214,6 +214,7 @@
     # for exams
     man-pages
     man-pages-posix
+    nixfmt-rfc-style
     
     # Everyday
     aider-chat-full
