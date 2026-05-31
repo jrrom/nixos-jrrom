@@ -14,6 +14,12 @@
     ./disko-config.nix
   ];
 
+  options.boot.zfs.poolName = lib.mkOption {
+    type = lib.types.str;
+    default = "zroot";
+    description = "ZFS pool name used for rollback";
+  };
+
   # Nix
   nix.settings = {
     experimental-features = [
@@ -21,6 +27,7 @@
       "flakes"
       "pipe-operators"
     ];
+    auto-optimise-store = true;
   };
   nixpkgs.config.allowUnfree = true;
   nix.gc = {
@@ -32,9 +39,9 @@
   nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];
 
   # Boot
+  #  boot.zfs.devNodes = "/dev/"; uncomment for VirtIO disk
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  #  boot.zfs.devNodes = "/dev/"; uncomment for VirtIO disk
   boot.zfs.requestEncryptionCredentials = true;
   boot.supportedFilesystems = [ "zfs" ];
   boot.initrd.supportedFilesystems = [ "zfs" ];
@@ -55,7 +62,7 @@
     unitConfig.DefaultDependencies = "no";
     serviceConfig.Type = "oneshot";
     script = ''
-      zfs rollback -r zroot/root@blank && echo "rollback complete"
+      zfs rollback -r ${config.boot.zfs.poolName}/root@blank && echo "rollback complete"
     '';
   };
   environment.persistence."/persistence" = {
@@ -77,6 +84,7 @@
   };
 
   # System
+  services.fwupd.enable = true;
   time.timeZone = "Asia/Kolkata";
   i18n = {
     defaultLocale = "en_IN";
@@ -110,13 +118,8 @@
     XDG_DATA_HOME = "$HOME/.local/share";
     XDG_STATE_HOME = "$HOME/.local/state";
 
-    # Ruby
-    BUNDLE_USER_CONFIG ="${XDG_CONFIG_HOME}/bundle";
-    BUNDLE_USER_CACHE  ="${XDG_CACHE_HOME}/bundle";
-    BUNDLE_USER_PLUGIN ="${XDG_DATA_HOME}/bundle";
-      
-    _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java";
     HISTFILE = "$HOME/.local/state/bash/history";
+    _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java";
 
     QT_QPA_PLATFORM = "wayland";
     _JAVA_AWT_WM_NONREPARENTING = "1";
