@@ -551,6 +551,7 @@ no .gitignore modifications, and no auto-commits."
         dirvish-side-attributes '(vc-state nerd-icons collapse))
   ;; open large directory (over 20000 files) asynchronously with `fd' command
   (setq dirvish-large-directory-threshold 20000)
+  (setq dirvish-input-throttle 1.0)
   (setq dirvish-default-layout '(0 0 0.4))
   :bind ; Bind `dirvish-fd|dirvish-side|dirvish-dwim' as you see fit
   (("C-c f" . dirvish)

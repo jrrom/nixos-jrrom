@@ -49,7 +49,9 @@
     chafa
     clang-tools
     curl
+    devenv
     dtach
+    epub-thumbnailer
     fd
     ffmpeg
     ffmpegthumbnailer

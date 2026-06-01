@@ -15,7 +15,10 @@
     enable = true;
     interactiveShellInit = ''
       set -g fish_greeting
+
+      direnv hook fish | source  
     '';
+    generateCompletions = true;
   };
 
   home.packages = with pkgs; [
