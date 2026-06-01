@@ -10,7 +10,10 @@
     };
 
     # Impermanence
-    impermanence.url = "github:nix-community/impermanence";
+    impermanence = {
+      url = "github:nix-community/impermanence";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Home Manager
     home-manager = {
@@ -53,9 +56,6 @@
       home-manager,
       ...
     }:
-    let
-      system = "x86_64-linux";
-    in
     {
       checks.x86_64-linux = {
         pre-commit-check = pre-commit-hooks.lib.x86_64-linux.run {
@@ -81,8 +81,6 @@
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
       
       nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
-        inherit system;
-
         specialArgs = {
           inputs = inputs;
         };
@@ -98,7 +96,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = {
-              inherit cosmic-manager; # So much pain to find this...
+              inherit cosmic-manager;
               inherit inputs;
             };
             home-manager.users.jrrom = {

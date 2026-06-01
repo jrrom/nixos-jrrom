@@ -13,7 +13,9 @@
   # Programs
   programs.fish = {
     enable = true;
-    shellInit = "function fish_greeting\n\nend";
+    interactiveShellInit = ''
+      set -g fish_greeting
+    '';
   };
 
   home.packages = with pkgs; [

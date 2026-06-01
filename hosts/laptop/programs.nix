@@ -45,44 +45,46 @@
     aider-chat-full
     aseprite
     blender
-    clang-tools
-    curl
-    ffmpeg
-    ffmpegthumbnailer
-    ghostscript
-    mpv
-    fd
-    file
     catdoc
     chafa
-    docx2txt
+    clang-tools
+    curl
     dtach
-    unrtf
+    fd
+    ffmpeg
+    ffmpegthumbnailer
+    file
     findutils
     foliate
     gcc
     gh
+    ghostscript
     htop
     imagemagick
     inkscape
     jetbrains.datagrip
     jetbrains.idea
+    jq
     keepassxc
     man-pages
     man-pages-posix
     mediainfo
+    mpv
     nicotine-plus
     nixd
     nixfmt
     pandoc
     poppler
+    poppler-utils
     qbittorrent
+    ripgrep
     strawberry
     texliveFull
     tinymist
     trash-cli
     tree
     typst
+    unrtf
     unzip
     vips
     vipsdisp

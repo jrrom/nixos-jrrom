@@ -7,18 +7,14 @@
 }:
 
 {
+  nixpkgs.hostPlatform = "x86_64-linux";
+  
   imports = [
     # Hardware
     ./hardware-configuration.nix
     ./programs.nix
     ./disko-config.nix
   ];
-
-  options.boot.zfs.poolName = lib.mkOption {
-    type = lib.types.str;
-    default = "zroot";
-    description = "ZFS pool name used for rollback";
-  };
 
   # Nix
   nix.settings = {
@@ -43,6 +39,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.zfs.requestEncryptionCredentials = true;
+  boot.zfs.forceImportRoot = false;
   boot.supportedFilesystems = [ "zfs" ];
   boot.initrd.supportedFilesystems = [ "zfs" ];
   services.zfs.autoScrub = {
@@ -62,7 +59,7 @@
     unitConfig.DefaultDependencies = "no";
     serviceConfig.Type = "oneshot";
     script = ''
-      zfs rollback -r ${config.boot.zfs.poolName}/root@blank && echo "rollback complete"
+      zfs rollback -r zroot/root@blank && echo "rollback complete"
     '';
   };
   environment.persistence."/persistence" = {

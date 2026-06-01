@@ -235,13 +235,13 @@
   :custom
   (corfu-cycle t)
   (corfu-auto t)              ;; enable auto popup
-  (corfu-auto-prefix 1)      ;; start after 3 chars
+  (corfu-auto-prefix 2)      ;; start after 3 chars
   (corfu-auto-delay 0.1)     ;; small delay (optional)
   :init
   (global-corfu-mode)
   :bind
   (:map corfu-map
-        ("RET" . nil)
+        ("RET" . corfu-insert)
         ("TAB" . corfu-insert))
   )
 
@@ -475,6 +475,49 @@
 
 (use-package racket-mode
   :ensure t)
+
+(use-package aider
+  :ensure t
+  :config
+  (setq aider-args '("--model" "deepseek/deepseek-chat"
+                     "--no-pretty"))
+
+  (add-to-list 'display-buffer-alist
+    '("\\*aider:.*\\*"
+      (display-buffer-in-side-window)
+      (side . right)
+      (window-width . 0.40)))
+
+  (defun my/ensure-deepseek-key (&rest _)
+    "Ensure DEEPSEEK_API_KEY is set before running Aider."
+    (unless (getenv "DEEPSEEK_API_KEY")
+      (setenv "DEEPSEEK_API_KEY"
+              (read-passwd "Enter DeepSeek API Key: "))))
+
+  (advice-add 'aider-run-aider :before #'my/ensure-deepseek-key)
+
+  (defun my/aider-run-temp-session ()
+    "Start an aider session that leaves no traces on disk.
+No .aider.chat.history.md, no .aider.input.history,
+no .gitignore modifications, and no auto-commits."
+    (interactive)
+    (let ((aider-args (append aider-args
+                              '("--no-gitignore"
+                                "--no-auto-commits"
+                                "--chat-history-file" "/dev/null"
+                                "--input-history-file" "/dev/null"
+                                "--no-git"))))
+      (aider-run-aider)))
+
+  ;; Append temp session entry after "a" (Run Aider) in the Aider Process group
+  (transient-append-suffix 'aider-transient-menu "a"
+    '("T" "Run Temp Session" my/aider-run-temp-session))
+
+  ;; Keybindings
+  (global-set-key (kbd "C-c a") 'aider-transient-menu)
+  
+  (aider-magit-setup-transients)
+  (global-auto-revert-mode 1))
 
 (use-package dired
   :custom
