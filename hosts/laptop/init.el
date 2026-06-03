@@ -480,6 +480,9 @@
   :ensure t
   :config
   (setq aider-args '("--model" "deepseek/deepseek-chat"
+                     "--no-attribute-author"
+                     "--no-attribute-committer"
+                     "--no-attribute-co-authored-by"
                      "--no-pretty"))
 
   (add-to-list 'display-buffer-alist
