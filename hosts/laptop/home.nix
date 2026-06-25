@@ -60,6 +60,11 @@
 }
   '';
 
+  # Prismlauncher
+  home.file.".config/PrismLauncher/accounts.json".text = ''
+{"accounts": [{"entitlement": {"canPlayMinecraft": true,"ownsMinecraft": true},"type": "MSA"}],"formatVersion": 3}
+  '';
+
   # Cosmic Manager
   # Thank you to https://github.com/HeitorAugustoLN/nix-config/
   # He is the creator of cosmic-manager

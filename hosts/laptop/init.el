@@ -211,6 +211,24 @@
 	 (emacs-lisp . t)
 	 (shell . t))))
 
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "/path/to/org-files/"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
+
 (use-package which-key
   :config
   (which-key-setup-side-window-right-bottom)
@@ -403,19 +421,31 @@
    '((file (styles basic partial-completion))))
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
 
-(use-package treesit
-  :config
-  (setq treesit-font-lock-level 4
-        major-mode-remap-alist
-        '((c-mode          . c-ts-mode)
-          (c++-mode        . c++-ts-mode)
-          (python-mode     . python-ts-mode)
-          (ruby-mode       . ruby-ts-mode)
-          (sh-mode         . bash-ts-mode)
-          (js-mode         . js-ts-mode)
-          (json-mode       . json-ts-mode)
-          (css-mode        . css-ts-mode)
-          (typescript-mode . tsx-ts-mode))))
+(use-package c-ts-mode
+  :hook
+  (c-ts-mode . (lambda ()
+                 (c-ts-mode-set-style 'k&r)
+                 (setq c-ts-mode-indent-offset 4))))
+
+(use-package haskell-mode
+  :ensure t)
+
+(use-package julia-mode
+  :ensure t)
+
+(use-package julia-snail
+  :ensure t
+  :hook (julia-mode . julia-snail-mode))
+
+(use-package sml-mode
+  :ensure t)
+
+(use-package envrc
+  :ensure t
+  :hook (after-init . envrc-global-mode))
+
+(add-to-list 'load-path "/nix/var/nix/profiles/default/bin")
+(add-to-list 'load-path (expand-file-name "~/.nix-profile/bin"))
 
 (use-package purescript-mode
   :ensure t
@@ -430,51 +460,29 @@
   (lambda ()
     (modify-syntax-entry ?. "." purescript-mode-syntax-table)))
 
-(use-package eglot
-  :ensure nil
-  :custom
-  (eglot-ignored-server-capabilities '(:documentOnTypeFormattingProvider))
-  :config
-  (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp"))
-  :bind (:map eglot-mode-map
-              ;; L in namespace stands for LSP
-	          ("C-c l a" . eglot-code-actions)
-	          ("C-c l r" . eglot-rename)
-	          ("C-c l h" . eldoc)
-	          ("C-c l f" . eglot-format)
-	          ("C-c l F" . eglot-format-buffer)
-	          ("C-c l d" . xref-find-definitions-at-mouse)
-	          ;; sometimes 
-	          ("C-c l R" . eglot-reconnect)))
+(use-package racket-mode
+  :ensure t)
 
 (use-package fish-mode
   :ensure t)
 
-(use-package c-ts-mode
-  :hook
-  (c-ts-mode . (lambda ()
-                 (c-ts-mode-set-style 'k&r)
-                 (setq c-ts-mode-indent-offset 4))))
+(use-package treesit
+  :config
+  (setq treesit-font-lock-level 4
+        major-mode-remap-alist
+        '((c-mode          . c-ts-mode)
+          (c++-mode        . c++-ts-mode)
+          (python-mode     . python-ts-mode)
+          (ruby-mode       . ruby-ts-mode)
+          (sh-mode         . bash-ts-mode)
+          (js-mode         . js-ts-mode)
+          (json-mode       . json-ts-mode)
+          (css-mode        . css-ts-mode)
+          (typescript-mode . tsx-ts-mode))))
 
 (use-package html-mode
   :custom
   (sgml-basic-offset 4))
-
-(use-package envrc
-  :ensure t
-  :hook (after-init . envrc-global-mode))
-
-(add-to-list 'load-path "/nix/var/nix/profiles/default/bin")
-(add-to-list 'load-path (expand-file-name "~/.nix-profile/bin"))
-
-(use-package sml-mode
-  :ensure t)
-
-(use-package haskell-mode
-  :ensure t)
-
-(use-package racket-mode
-  :ensure t)
 
 (use-package aider
   :ensure t

@@ -267,6 +267,26 @@ Huge thanks to [[https://github.com/kwpav/dotfiles/blob/master/emacs.org#org-bab
 	 (emacs-lisp . t)
 	 (shell . t))))
 #+end_src
+** Org Roam
+#+begin_src emacs-lisp
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "/path/to/org-files/"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
+#+end_src
 * Extra
 ** Which Key
 Shows keybindings!
@@ -497,6 +517,67 @@ Regexp and literal matches for things.
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
 #+end_src
 * Languages
+** C / C++
+#+begin_src emacs-lisp
+(use-package c-ts-mode
+  :hook
+  (c-ts-mode . (lambda ()
+                 (c-ts-mode-set-style 'k&r)
+                 (setq c-ts-mode-indent-offset 4))))
+#+end_src
+** Haskell
+#+begin_src emacs-lisp
+(use-package haskell-mode
+  :ensure t)
+#+end_src
+** Julia
+#+begin_src emacs-lisp
+(use-package julia-mode
+  :ensure t)
+
+(use-package julia-snail
+  :ensure t
+  :hook (julia-mode . julia-snail-mode))
+#+end_src
+** ML
+#+begin_src emacs-lisp
+(use-package sml-mode
+  :ensure t)
+#+end_src
+** Nix & Direnv
+#+begin_src emacs-lisp
+(use-package envrc
+  :ensure t
+  :hook (after-init . envrc-global-mode))
+
+(add-to-list 'load-path "/nix/var/nix/profiles/default/bin")
+(add-to-list 'load-path (expand-file-name "~/.nix-profile/bin"))
+#+end_src
+** PureScript
+#+begin_src emacs-lisp
+(use-package purescript-mode
+  :ensure t
+  :defer t
+  :config
+  (defun myhook-purescript-mode ()
+    (turn-on-purescript-indentation)
+    (add-hook 'before-save-hook #'purescript-sort-imports nil t))
+  (add-hook 'purescript-mode-hook #'myhook-purescript-mode))
+
+(add-hook 'purescript-mode-hook
+  (lambda ()
+    (modify-syntax-entry ?. "." purescript-mode-syntax-table)))
+#+end_src
+** Racket
+#+begin_src emacs-lisp
+(use-package racket-mode
+  :ensure t)
+#+end_src
+** Shells
+#+begin_src emacs-lisp
+(use-package fish-mode
+  :ensure t)
+#+end_src
 ** Treesitter
 I am using this strange code snippet that I got online.
 
@@ -515,83 +596,11 @@ I am using this strange code snippet that I got online.
           (css-mode        . css-ts-mode)
           (typescript-mode . tsx-ts-mode))))
 #+end_src
-** PureScript
-#+begin_src emacs-lisp
-(use-package purescript-mode
-  :ensure t
-  :defer t
-  :config
-  (defun myhook-purescript-mode ()
-    (turn-on-purescript-indentation)
-    (add-hook 'before-save-hook #'purescript-sort-imports nil t))
-  (add-hook 'purescript-mode-hook #'myhook-purescript-mode))
-
-(add-hook 'purescript-mode-hook
-  (lambda ()
-    (modify-syntax-entry ?. "." purescript-mode-syntax-table)))
-#+end_src
-* Eglot
-Eglot calls Flymake by default. Taken from [[https://gluer.org/blog/eglot-keybindings-that-i-use/][gluer]].
-#+begin_src emacs-lisp
-(use-package eglot
-  :ensure nil
-  :custom
-  (eglot-ignored-server-capabilities '(:documentOnTypeFormattingProvider))
-  :config
-  (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp"))
-  :bind (:map eglot-mode-map
-              ;; L in namespace stands for LSP
-	          ("C-c l a" . eglot-code-actions)
-	          ("C-c l r" . eglot-rename)
-	          ("C-c l h" . eldoc)
-	          ("C-c l f" . eglot-format)
-	          ("C-c l F" . eglot-format-buffer)
-	          ("C-c l d" . xref-find-definitions-at-mouse)
-	          ;; sometimes 
-	          ("C-c l R" . eglot-reconnect)))
-#+end_src
-** Shells
-#+begin_src emacs-lisp
-(use-package fish-mode
-  :ensure t)
-#+end_src
-** C / C++
-#+begin_src emacs-lisp
-(use-package c-ts-mode
-  :hook
-  (c-ts-mode . (lambda ()
-                 (c-ts-mode-set-style 'k&r)
-                 (setq c-ts-mode-indent-offset 4))))
-#+end_src
 ** Web
 #+begin_src emacs-lisp
 (use-package html-mode
   :custom
   (sgml-basic-offset 4))
-#+end_src
-** Nix & Direnv
-#+begin_src emacs-lisp
-(use-package envrc
-  :ensure t
-  :hook (after-init . envrc-global-mode))
-
-(add-to-list 'load-path "/nix/var/nix/profiles/default/bin")
-(add-to-list 'load-path (expand-file-name "~/.nix-profile/bin"))
-#+end_src
-** ML
-#+begin_src emacs-lisp
-(use-package sml-mode
-  :ensure t)
-#+end_src
-** Haskell
-#+begin_src emacs-lisp
-(use-package haskell-mode
-  :ensure t)
-#+end_src
-** Racket
-#+begin_src emacs-lisp
-(use-package racket-mode
-  :ensure t)
 #+end_src
 * Functions
 ** Aider

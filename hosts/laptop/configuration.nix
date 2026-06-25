@@ -180,6 +180,8 @@
   programs.virt-manager.enable = true;
   virtualisation.docker.enable = true;
 
+  # Flatpak
+  services.flatpak.enable = true;
 
   # Appearance
   fonts.packages = with pkgs; [

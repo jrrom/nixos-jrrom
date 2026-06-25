@@ -80,12 +80,16 @@
     poppler-utils
     qbittorrent
     ripgrep
+    (steam.override {
+      extraPkgs = p: with p; [ libGLU ];
+    }).run
     strawberry
     texliveFull
     tinymist
     trash-cli
     tree
     typst
+    unrar
     unrtf
     unzip
     vips
