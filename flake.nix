@@ -45,6 +45,7 @@
       url = "github:jrrom/desktop-kDrive-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
   };
   outputs =
     inputs@{

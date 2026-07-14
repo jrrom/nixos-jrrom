@@ -24,6 +24,7 @@
       "pipe-operators"
     ];
     auto-optimise-store = true;
+    trusted-users = [ "root" "jrrom" ];
   };
   nixpkgs.config.allowUnfree = true;
   nix.gc = {
@@ -105,6 +106,8 @@
       "pipewire"
       "docker"
       "libvirt"
+      "scanner"
+      "lp"
     ];
   };
 
@@ -213,6 +216,23 @@
     '';
   };
 
+  # Printing & Scanning
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.hplip ];
+  };
+  
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
+
+  hardware.sane = {
+    enable = true;
+    extraBackends = [ pkgs.hplipWithPlugin ];
+  };
+  
   # see https://nixos.org/manual/nixos/stable/#sec-upgrading
   # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
   # and migrated your data accordingly.

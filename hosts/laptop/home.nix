@@ -45,29 +45,12 @@
       name = "Bibata-Modern-Ice";
     };
   };
-  
+
   # Emacs
   home.file.".config/emacs/init.el".source = config.lib.file.mkOutOfStoreSymlink "/home/jrrom/nixos-jrrom/hosts/laptop/init.el";
-
-  # Positron
-  home.file.".config/Positron/User/settings.json".text = ''
-{
-    "files.associations": {
-        "renv.lock": "json"
-    },
-    "workbench.colorTheme": "Gruvbox Dark Medium",
-    "editor.fontFamily": "'Maple Mono', 'monospace', monospace"
-}
-  '';
-
-  # Prismlauncher
-  home.file.".config/PrismLauncher/accounts.json".text = ''
-{"accounts": [{"entitlement": {"canPlayMinecraft": true,"ownsMinecraft": true},"type": "MSA"}],"formatVersion": 3}
-  '';
-
+  
   # Cosmic Manager
-  # Thank you to https://github.com/HeitorAugustoLN/nix-config/
-  # He is the creator of cosmic-manager
+  # Thanks to https://github.com/HeitorAugustoLN/nix-config/
   wayland.desktopManager.cosmic = {
     enable = true; # cosmic-manager CLI
     resetFiles = false; # Keep it impermanent or nah

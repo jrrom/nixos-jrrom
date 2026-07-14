@@ -61,6 +61,7 @@
     gcc
     gh
     ghostscript
+    hledger
     htop
     imagemagick
     inkscape
@@ -80,6 +81,7 @@
     poppler-utils
     qbittorrent
     ripgrep
+    simple-scan
     (steam.override {
       extraPkgs = p: with p; [ libGLU ];
     }).run
@@ -113,4 +115,6 @@
 
   services.emacs.package = pkgs.emacs-unstable;
   services.emacs.enable = true;
+
+  services.teamviewer.enable = true;
 }

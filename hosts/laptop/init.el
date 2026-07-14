@@ -15,14 +15,6 @@
 
 (use-package emacs
   :custom
-  ;; Files
-  (auto-save-default nil)                   ;; Disable auto save and lockfile creation
-  (create-lockfiles nil)
-  (make-backup-files nil)                   ;; Disable creation of backup files
-  (global-auto-revert-non-file-buffers t)   ;; In conjunction with (global-auto-revert-mode 1) allows to keep up-to-date
-  (history-length 200)                      ;; Set the length of the command history.
-  (recentf-max-saved-items 100)             ;; number of files to remember with recentf
-
   ;; Startup
   (inhibit-startup-message t)               ;; Disable the startup message when Emacs launches
   (initial-scratch-message "")              ;; Clear the initial message in the *scratch* buffer
@@ -32,6 +24,14 @@
   (warning-minimum-level :emergency)        ;; Only emergencies here
   (debug-on-error t)
 
+  :init
+  (require 'debug)
+  (auto-revert-mode 1)                      ;; Keeps your Emacs buffers in sync with external changes
+  (recentf-mode 1)                          ;; Keep track of recent files!
+)
+
+(use-package emacs
+  :custom
   ;; Window and movement
   (pixel-scroll-precision-use-momentum nil) ;; Disable momentum scrolling for pixel precision.
   (split-width-threshold 300)               ;; Prevent automatic window splitting if the window width exceeds 300 pixels
@@ -44,60 +44,51 @@
   (tab-always-indent 'complete)             ;; Make the TAB key complete text instead of just indenting.
   (tab-width 4)                             ;; Set the tab width to 4 spaces.
 
-  ;; Vertico
-  (enable-recursive-minibuffers t)
-  ;; Hide commands in M-x which do not work in the current mode.
-  (read-extended-command-predicate #'command-completion-default-include-p)
-  ;; Do not allow the cursor in the minibuffer prompt
-  (minibuffer-prompt-properties
-   '(read-only t cursor-intangible t face minibuffer-prompt))
-)
-
-(use-package emacs
   :init
-  ;; Files
-  (auto-revert-mode 1)                      ;; Keeps your Emacs buffers in sync with external changes
-  (recentf-mode 1)                          ;; Keep track of recent files!
-
-  ;; Window and Movement
   (pixel-scroll-precision-mode t)           ;; Enable precise pixel scrolling.
-
-  ;; Appearance
-  (menu-bar-mode -1)                        ;; Remove menubar
-  (tool-bar-mode -1)                        ;; Remove toolbar
-  (scroll-bar-mode -1)                      ;; Remove scrollbar
-  (global-visual-line-mode 0)               ;; Visual line mode wrapping
-
-  ;; Editing
   (indent-tabs-mode nil)
   (electric-pair-mode 1)
 
-  ;; Vertico
-  (context-menu-mode t) ;; Enable context menu for `vertico-multiform-mode'
   :hook (prog-mode . display-line-numbers-mode)
+
   :config
-  (setq-default indent-tabs-mode nil)       ;; Disable the use of tabs for indentation (use spaces instead).
   (prefer-coding-system 'utf-8)             ;; Only UTF8 here
-  (setq-default cursor-type 'box))
+)
+
+(use-package emacs
+  :custom
+  ;; Files
+  (auto-save-default nil)                   ;; Disable auto save and lockfile creation
+  (create-lockfiles nil)
+  (make-backup-files nil)                   ;; Disable creation of backup files
+  (global-auto-revert-non-file-buffers t)   ;; In conjunction with (global-auto-revert-mode 1) allows to keep up-to-date
+  (history-length 200)                      ;; Set the length of the command history.
+  (recentf-max-saved-items 100)             ;; number of files to remember with recentf
+)
 
 (add-hook 'emacs-startup-hook
           (lambda ()
             (with-current-buffer "*scratch*"
               (display-line-numbers-mode -1))))
 
+(use-package emacs
+  :init
+  (menu-bar-mode -1)                        ;; Remove menubar
+  (tool-bar-mode -1)                        ;; Remove toolbar
+  (scroll-bar-mode -1)                      ;; Remove scrollbar
+
+  :config
+  (setq-default cursor-type 'box))
+
 (use-package gruvbox-theme
   :ensure t
   :config (load-theme 'gruvbox-dark-medium t nil))
 
-(use-package text-mode
-  :custom
-  (visual-line-fringe-indicators '(nil right-triangle))
-  :hook
-  (text-mode . visual-line-mode))
-
-(use-package prog-mode
-  :custom
-  (visual-line-fringe-indicators '(nil right-triangle)))
+(use-package emacs
+  :hook ((text-mode . visual-line-mode)
+         (text-mode . visual-wrap-prefix-mode)) ; aligns wrapped lines with indentation
+  :config
+  (setq-default fill-column 100))
 
 (use-package indent-bars
   :ensure t
@@ -158,49 +149,42 @@
      ))
   (global-ligature-mode t))
 
-(use-package visual-fill-column
-  :ensure t
-  :custom
-  (visual-fill-column-width 160)       ;; max width
-  (visual-fill-column-center-text t)) ;; center text
-
 (defun jrrom/org-face-sizes ()
-  (dolist (face '((org-level-1 . 1.1)
-                  (org-level-2 . 1.05)
-                  (org-level-3 . 1.05)
-                  (org-level-4 . 1.05)
-                  (org-level-5 . 1.05)
-                  (org-level-6 . 1.05)
-                  (org-level-7 . 1.05)
-                  (org-level-8 . 1.05)))
-    (set-face-attribute (car face) nil :inherit 'variable-pitch :weight 'bold :height (cdr face)))
-  (set-face-attribute 'org-document-title nil :inherit 'variable-pitch :weight 'bold :height 1.5))
+  (let ((base 1.0))
+    (set-face-attribute 'org-level-1 nil :height 1.4 :weight 'bold)
+    (set-face-attribute 'org-level-2 nil :height 1.25 :weight 'bold)
+    (set-face-attribute 'org-level-3 nil :height 1.15 :weight 'bold)
+    (set-face-attribute 'org-level-4 nil :height 1.05 :weight 'bold)
+    (set-face-attribute 'org-level-5 nil :height 1.0 :weight 'bold)
+    (set-face-attribute 'org-document-title nil :height 1.7 :weight 'bold :inherit 'variable-pitch)))
 
 (use-package org
-  :defer t
-  :hook (org-mode . (lambda ()
-                      (visual-line-mode 1)
-                      (modify-syntax-entry ?< "." org-mode-syntax-table) ;; Please don't match < and )
-                      (modify-syntax-entry ?> "." org-mode-syntax-table)
-                      (visual-fill-column-mode)
-                      (setq-local electric-pair-inhibit-predicate
-                                  (lambda (c) (when (char-equal c ?<) t)))
-                      (when (org-before-first-heading-p)
-                        (org-content 2))))
+  :ensure t
   :custom
   (org-src-tab-acts-natively t)
   (org-src-fontify-natively  t)
   (org-src-preserve-indentation t)
-  (org-startup-indented t)               ; Needed for org-modern-indent
+  (org-startup-folded 'content)
   (org-edit-src-content-indentation 0)
   (org-log-into-drawer 1)
+  (org-link-frame-setup
+   '((file . find-file)))
+  :hook
+  (org-mode . (lambda ()
+				(setq-local line-spacing 0.3)
+				(add-hook 'window-configuration-change-hook
+                          (lambda ()
+                            (when (derived-mode-p 'org-mode)
+                              (set-window-margins nil 20 20)))
+                          nil t)))
   :config
   (jrrom/org-face-sizes))
 
-(use-package org-contrib
+(use-package org-modern
   :ensure t
-  :defer t
-  :after org)
+  :custom
+  (org-modern-todo nil)
+  :hook (org-mode . org-modern-mode))
 
 (use-package org-babel
   :no-require
@@ -209,12 +193,13 @@
    'org-babel-load-languages
    '((python . t)
 	 (emacs-lisp . t)
+	 (ledger . t)
 	 (shell . t))))
 
 (use-package org-roam
   :ensure t
   :custom
-  (org-roam-directory (file-truename "/path/to/org-files/"))
+  (org-roam-directory (file-truename "/home/jrrom/kDrive/Computer"))
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)
@@ -279,6 +264,19 @@
   :hook (makefile-mode . (lambda () (setq indent-tabs-mode t))))
 
 (keymap-global-set "M-z" #'zap-up-to-char)
+
+(use-package emacs
+  :custom
+   ;; Vertico
+  (enable-recursive-minibuffers t)
+  ;; Hide commands in M-x which do not work in the current mode.
+  (read-extended-command-predicate #'command-completion-default-include-p)
+  ;; Do not allow the cursor in the minibuffer prompt
+  (minibuffer-prompt-properties
+   '(read-only t cursor-intangible t face minibuffer-prompt))
+  
+  :init
+  (context-menu-mode t))
 
 (use-package vertico
   :ensure t
@@ -427,15 +425,32 @@
                  (c-ts-mode-set-style 'k&r)
                  (setq c-ts-mode-indent-offset 4))))
 
+(use-package dart-mode
+  :ensure t)
+
 (use-package haskell-mode
   :ensure t)
 
 (use-package julia-mode
   :ensure t)
 
-(use-package julia-snail
-  :ensure t
-  :hook (julia-mode . julia-snail-mode))
+(use-package ledger-mode
+  :mode ("\\.journal\\'" "\\.ledger\\'")
+  :init
+  (setq ledger-binary-path "hledger")
+  
+  :config
+  (setq ledger-mode-should-check-version nil) ; Skips the strict ledger version check
+  (setq ledger-report-use-native-sorting t)
+  (setq ledger-add-transaction-prompt-for-text nil) ; No 'xact'
+  (setq ledger-use-iso-dates t)
+  
+  (setq ledger-reports
+        '(("bal" "hledger -f %(ledger-file) balance")
+          ("reg" "hledger -f %(ledger-file) register")
+          ("is"  "hledger -f %(ledger-file) incomestatement")
+          ("bs"  "hledger -f %(ledger-file) balancesheet")))
+  )
 
 (use-package sml-mode
   :ensure t)
@@ -530,21 +545,6 @@ no .gitignore modifications, and no auto-commits."
   (aider-magit-setup-transients)
   (global-auto-revert-mode 1))
 
-(use-package dired
-  :custom
-  (dired-dwim-target t)
-  (dired-recursive-copies 'always)  ;; Never ask for confirmation regarding directories
-  (dired-recursive-deletes 'top)    ;; see above
-  (delete-by-moving-to-trash t)
-  (dired-mouse-drag-files t)                   ; Mouse support for dragging and dropping
-  (mouse-drag-and-drop-region-cross-program t) ; added in Emacs 29
-  ;;  (dired-kill-when-opening-new-dired-buffer t)
-  (dired-listing-switches "-l --almost-all --human-readable --group-directories-first --no-group")
-  :config
-  ;; this command is useful when you want to close the window of `dirvish-side'
-  ;; automatically when opening a file
-  (put 'dired-find-alternate-file 'disabled nil))
-
 (use-package dirvish
   :ensure t
   :after dired
@@ -583,6 +583,24 @@ no .gitignore modifications, and no auto-commits."
    ("TAB" . dirvish-subtree-toggle)
    ("M-e" . dirvish-emerge-menu)))
 
+(use-package dired
+  :custom
+  (dired-dwim-target t)
+  (dired-recursive-copies 'always)  ;; Never ask for confirmation regarding directories
+  (dired-recursive-deletes 'top)    ;; see above
+  (delete-by-moving-to-trash t)
+  (dired-mouse-drag-files t)                   ; Mouse support for dragging and dropping
+  (mouse-drag-and-drop-region-cross-program t) ; added in Emacs 29
+  ;;  (dired-kill-when-opening-new-dired-buffer t)
+  (dired-listing-switches "-l --almost-all --human-readable --group-directories-first --no-group")
+  :config
+  ;; this command is useful when you want to close the window of `dirvish-side'
+  ;; automatically when opening a file
+  (put 'dired-find-alternate-file 'disabled nil))
+
+(use-package pdf-tools
+  :ensure t)
+
 (use-package vterm
   :ensure t
   :config
@@ -594,3 +612,16 @@ no .gitignore modifications, and no auto-commits."
   (interactive)
   (select-frame-set-input-focus (make-frame))
   (vterm))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-src-content-indentation 0 nil nil "Customized with use-package org")
+ '(package-selected-packages nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
