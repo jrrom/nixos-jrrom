@@ -9,5 +9,15 @@
     '';
       generateCompletions = true;
     };
+
+    # Environments
+    
+    environment.systemPackages = [ pkgs.devenv ];
+
+    programs.direnv = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+
   };
 }

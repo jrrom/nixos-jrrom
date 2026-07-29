@@ -1,5 +1,5 @@
 { inputs, ... }: {
-  flake.nixosModules.cosmic = { pkgs, ... }: {
+  flake.nixosModules.cosmic = { pkgs, cosmicLib, ... }: {
     # Defaults
     services.displayManager.cosmic-greeter.enable = true;
     services.desktopManager.cosmic.enable = true;
@@ -19,7 +19,13 @@
         name = "Bibata-Modern-Ice";
       };
     };
+  };
 
+  flake.homeModules.cosmic = { pkgs, cosmicLib, ... }: {
+    imports = [
+      inputs.cosmic-manager.homeManagerModules.cosmic-manager
+    ];
+    
     # Cursor
     home.pointerCursor = {
       enable = true;
@@ -61,7 +67,7 @@
 
     wayland.desktopManager.cosmic.appearance = {
       theme = {
-        dark = cosmicLib.cosmic.importRON ../../misc/GruvboxMatDark.ron;
+        dark = cosmicLib.cosmic.importRON ../misc/GruvboxMatDark.ron;
         mode = "dark";
       };
 
@@ -128,7 +134,7 @@
 
         source = cosmicLib.cosmic.mkRON "enum" {
           variant = "Path";
-          value = [ "/home/jrrom/nixos-jrrom/wallpapers/blue-lake-1920x1200.png" ];
+          value = [ ../wallpapers/blue-lake-1920x1200.png ];
         };
       }
     ];

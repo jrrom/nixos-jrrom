@@ -29,7 +29,6 @@
       clang
 
       # Environments
-      devenv
     ]
       ++ ( 
       pkgs.emacsWithPackagesFromUsePackage {
@@ -49,15 +48,8 @@
 
     programs.nano.enable = false;
 
-    # Environment
-    
-    programs.direnv = {
-      enable = true;
-      enableFishIntegration = true;
-    };
-
     # Home
-    home.file.".config/emacs/init.el".source = config.lib.file.mkOutOfStoreSymlink "/home/jrrom/nixos-jrrom/hosts/laptop/init.el";
+    home.file.".config/emacs/init.el".source = inputs.config.lib.file.mkOutOfStoreSymlink "/home/jrrom/nixos-jrrom/hosts/laptop/init.el";
   };
 
   imports = [

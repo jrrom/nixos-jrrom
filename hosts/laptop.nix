@@ -14,15 +14,18 @@
       self.nixosModules.input
       self.nixosModules.shell
       self.nixosModules.xdg
-    ]
+
+      self.nixosModules.laptopModule
+    ];
   };
 
   flake.nixosModules.laptopModule = { pkgs, ... }: {
-    nixpkgs.hostPlatform = "x86_64-linux";
     imports = [
+      inputs.disko.flakeModules.disko
+      
       # Hardware
-      ../parts/hardware-configuration.nix
-      ../parts/disko-config.nix
+      ../parts/hardware-laptop.nix
+      ../parts/disko-laptop.nix
     ];
 
     # System
