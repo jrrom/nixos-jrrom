@@ -1,5 +1,10 @@
+# Defaults for every NixOS
 { inputs, ... }: {
   flake.nixosModules.defaults = { pkgs, ... }: {
+    # System
+    services.fwupd.enable = true;
+    system.stateVersion = "25.05";
+
     nixpkgs.config.allowUnfree = true;
     # Nix
     nix = {

@@ -1,4 +1,3 @@
-# Emacs
 { inputs, ... }: {
   flake.nixosModules.applications = { pkgs, ... }: {
     nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];

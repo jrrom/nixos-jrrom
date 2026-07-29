@@ -55,5 +55,12 @@
       enable = true;
       enableFishIntegration = true;
     };
+
+    # Home
+    home.file.".config/emacs/init.el".source = config.lib.file.mkOutOfStoreSymlink "/home/jrrom/nixos-jrrom/hosts/laptop/init.el";
   };
+
+  imports = [
+    inputs.home-manager.flakeModules.home-manager
+  ];
 }

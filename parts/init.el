@@ -1,13 +1,3 @@
-#+TITLE:jrrom's Emacs Configuration
-#+PROPERTY: header-args:emacs-lisp :tangle ./init.el
-
-General configuration of Emacs. Huge thanks to [[https://github.com/LionyxML/emacs-kick/blob/master/init.el][emacs-kick]].
-
-* Miscellaneous
-** Auto Tangle
-Doing auto-tangle on saving the config file.
-
-#+begin_src emacs-lisp
 (defun jrrom/org-babel-tangle-config ()
   (when (string-equal (file-name-nondirectory (buffer-file-name)) "emacs.org")
     (org-element-cache-reset)
@@ -15,32 +5,14 @@ Doing auto-tangle on saving the config file.
       (org-babel-tangle))))
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'jrrom/org-babel-tangle-config)))
-#+end_src
-** Performance Settings
-Given by [[https://github.com/LionyxML/emacs-kick/blob/master/init.el][emacs-kick]]. Thanks!
 
-#+begin_quote
-Emacs is an Elisp interpreter, and when running programs or packages, it can occasionally experience pauses due to garbage collection.
-By increasing the garbage collection threshold, we reduce these pauses during heavy operations, leading to smoother performance.
-
-Set the maximum output size for reading process output, allowing for larger data transfers.
-#+end_quote
-
-#+begin_src emacs-lisp
 (setq gc-cons-threshold #x40000000)
 
 (setq read-process-output-max (* 1024 1024 4))
-#+end_src
 
-Some other performance settings that I forgot where they came from or if they even work:
-
-#+begin_src emacs-lisp
 (setenv "LSP_USE_PLISTS" "true")         ;; Use PLISTS instead of JSON
 (setq pgtk-wait-for-event-timeout nil)   ;; Don't wait for events to complete?
-#+end_src
-* Emacs
-** Misc
-#+begin_src emacs-lisp
+
 (use-package emacs
   :custom
   ;; Startup
@@ -57,9 +29,7 @@ Some other performance settings that I forgot where they came from or if they ev
   (auto-revert-mode 1)                      ;; Keeps your Emacs buffers in sync with external changes
   (recentf-mode 1)                          ;; Keep track of recent files!
 )
-#+end_src
-** Editing & Movement
-#+begin_src emacs-lisp
+
 (use-package emacs
   :custom
   ;; Window and movement
@@ -84,9 +54,7 @@ Some other performance settings that I forgot where they came from or if they ev
   :config
   (prefer-coding-system 'utf-8)             ;; Only UTF8 here
 )
-  #+end_src
-** Files
-#+begin_src emacs-lisp
+
 (use-package emacs
   :custom
   ;; Files
@@ -97,18 +65,12 @@ Some other performance settings that I forgot where they came from or if they ev
   (history-length 200)                      ;; Set the length of the command history.
   (recentf-max-saved-items 100)             ;; number of files to remember with recentf
 )
-#+end_src
-** Scratch Buffer
-Removing line numbers from the scratch buffer.
-#+begin_src emacs-lisp
+
 (add-hook 'emacs-startup-hook
           (lambda ()
             (with-current-buffer "*scratch*"
               (display-line-numbers-mode -1))))
-#+end_src
-* Appearance
-** Modes
-#+begin_src emacs-lisp
+
 (use-package emacs
   :init
   (menu-bar-mode -1)                        ;; Remove menubar
@@ -117,16 +79,11 @@ Removing line numbers from the scratch buffer.
 
   :config
   (setq-default cursor-type 'box))
-#+end_src
-** Theme
-My Emacs theme!
-#+begin_src emacs-lisp
+
 (use-package gruvbox-theme
   :ensure t
   :config (load-theme 'gruvbox-dark-medium t nil))
-#+end_src
-** Wrapping & Guide
-#+begin_src emacs-lisp
+
 (use-package emacs
   :hook ((text-mode . visual-line-mode)
          (text-mode . visual-wrap-prefix-mode)) ; aligns wrapped lines with indentation
@@ -142,11 +99,7 @@ My Emacs theme!
    indent-bars-pad-frac 0.1
    indent-bars-highlight-current-depth '(:face default :blend 0.4))
   :hook ((nix-ts-mode) . indent-bars-mode))
-#+end_src
-** Fonts & Icons
-Some basic font setup.
 
-#+begin_src emacs-lisp
 (use-package nerd-icons
   :ensure t
   :custom
@@ -169,9 +122,7 @@ Some basic font setup.
   (org-mode . mixed-pitch-mode)
   :custom
   (mixed-pitch-variable-pitch-cursor 'box))
-#+end_src
-** Ligatures
-#+begin_src emacs-lisp
+
 (use-package ligature
   :ensure t
   :config
@@ -197,11 +148,7 @@ Some basic font setup.
      "---"   "ll"    ".?"        "<!--"
      ))
   (global-ligature-mode t))
-#+end_src
-* Org
-** Org
-Making Org look a bit nice. Also making the title large. I set the face sizes and reduce the default indentation of src blocks to 0 to avoid indentation glitches.
-#+begin_src emacs-lisp
+
 (defun jrrom/org-face-sizes ()
   (let ((base 1.0))
     (set-face-attribute 'org-level-1 nil :height 1.4 :weight 'bold)
@@ -238,12 +185,7 @@ Making Org look a bit nice. Also making the title large. I set the face sizes an
   :custom
   (org-modern-todo nil)
   :hook (org-mode . org-modern-mode))
-#+end_src
-** Org Babel
-Adding org-src support to some languages.
-Huge thanks to [[https://github.com/kwpav/dotfiles/blob/master/emacs.org#org-babel][kwpav]] for showing :no-require in the config.
 
-#+begin_src emacs-lisp
 (use-package org-babel
   :no-require
   :config
@@ -253,9 +195,7 @@ Huge thanks to [[https://github.com/kwpav/dotfiles/blob/master/emacs.org#org-bab
 	 (emacs-lisp . t)
 	 (ledger . t)
 	 (shell . t))))
-#+end_src
-** Org Roam
-#+begin_src emacs-lisp
+
 (use-package org-roam
   :ensure t
   :custom
@@ -273,27 +213,17 @@ Huge thanks to [[https://github.com/kwpav/dotfiles/blob/master/emacs.org#org-bab
   (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
-#+end_src
-* Extra
-** Which Key
-Shows keybindings!
-#+begin_src emacs-lisp
+
 (use-package which-key
   :config
   (which-key-setup-side-window-right-bottom)
   (which-key-mode))
-#+end_src
-** Repeat
-Repeat commands by spamming the last key of the command
-#+begin_src emacs-lisp
+
 (use-package repeat
   :ensure nil
   :config
   (repeat-mode))
-#+end_src
-** Eldoc
-Integrates amazingly with Eglot
-#+begin_src emacs-lisp
+
 (use-package eldoc
   :init
   (global-eldoc-mode))
@@ -302,9 +232,7 @@ Integrates amazingly with Eglot
   :ensure t
   :bind
   ("C-h ." . eldoc-box-help-at-point))
-#+end_src
-** Corfu
-#+begin_src emacs-lisp
+
 (use-package corfu
   :ensure t
   :custom
@@ -319,17 +247,12 @@ Integrates amazingly with Eglot
         ("RET" . corfu-insert)
         ("TAB" . corfu-insert))
   )
-#+end_src
-** Avy
-Somewhat useful
-#+begin_src emacs-lisp
+
 (use-package avy
   :ensure t
   :bind
   ("M-j" . avy-goto-char-timer))
-#+end_src
-** Tabs
-#+begin_src emacs-lisp
+
 ;; For conf-mode (ini/conf files)
 (use-package conf-mode
   :ensure nil   ;; it's built-in
@@ -339,15 +262,9 @@ Somewhat useful
 (use-package make-mode
   :ensure nil
   :hook (makefile-mode . (lambda () (setq indent-tabs-mode t))))
-#+end_src
-** Bindings
-#+begin_src emacs-lisp
+
 (keymap-global-set "M-z" #'zap-up-to-char)
-#+end_src
-* VEMCO
-** Vertico
-Autocompletions  
-#+begin_src emacs-lisp
+
 (use-package emacs
   :custom
    ;; Vertico
@@ -370,10 +287,7 @@ Autocompletions  
   (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
   :init
   (vertico-mode))
-#+end_src
-** Embark
-Actions at a point.
-#+begin_src emacs-lisp
+
 (use-package embark
   :ensure t
   :bind
@@ -397,11 +311,7 @@ Actions at a point.
   :ensure t ; only need to install it, embark loads it after consult if found
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
-#+end_src
-** Marginalia
-Provides annotations / marginalia to completion candidates!
 
-#+begin_src emacs-lisp
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
   :ensure t
@@ -418,10 +328,7 @@ Provides annotations / marginalia to completion candidates!
   ;; the mode gets enabled right away. Note that this forces loading the
   ;; package.
   (marginalia-mode))
-#+end_src
-** Consult
-Completing read.
-#+begin_src emacs-lisp
+
 ;; Example configuration for Consult
 (use-package consult
   :ensure t
@@ -503,11 +410,7 @@ Completing read.
   ;; You may want to use `embark-prefix-help-command' or which-key instead.
   ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
 )
-#+end_src
-** Orderless
-Regexp and literal matches for things.
 
-#+begin_src emacs-lisp
 (use-package orderless
   :ensure t
   :custom
@@ -515,33 +418,22 @@ Regexp and literal matches for things.
   (completion-category-overrides
    '((file (styles basic partial-completion))))
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
-#+end_src
-* Languages
-** C / C++
-#+begin_src emacs-lisp
+
 (use-package c-ts-mode
   :hook
   (c-ts-mode . (lambda ()
                  (c-ts-mode-set-style 'k&r)
                  (setq c-ts-mode-indent-offset 4))))
-#+end_src
-** Dart
-#+begin_src emacs-lisp
+
 (use-package dart-mode
   :ensure t)
-#+end_src
-** Haskell
-#+begin_src emacs-lisp
+
 (use-package haskell-mode
   :ensure t)
-#+end_src
-** Julia
-#+begin_src emacs-lisp
+
 (use-package julia-mode
   :ensure t)
-#+end_src
-** Ledger
-#+begin_src emacs-lisp
+
 (use-package ledger-mode
   :mode ("\\.journal\\'" "\\.ledger\\'")
   :init
@@ -559,23 +451,17 @@ Regexp and literal matches for things.
           ("is"  "hledger -f %(ledger-file) incomestatement")
           ("bs"  "hledger -f %(ledger-file) balancesheet")))
   )
-#+end_src
-** ML
-#+begin_src emacs-lisp
+
 (use-package sml-mode
   :ensure t)
-#+end_src
-** Nix & Direnv
-#+begin_src emacs-lisp
+
 (use-package envrc
   :ensure t
   :hook (after-init . envrc-global-mode))
 
 (add-to-list 'load-path "/nix/var/nix/profiles/default/bin")
 (add-to-list 'load-path (expand-file-name "~/.nix-profile/bin"))
-#+end_src
-** PureScript
-#+begin_src emacs-lisp
+
 (use-package purescript-mode
   :ensure t
   :defer t
@@ -588,21 +474,13 @@ Regexp and literal matches for things.
 (add-hook 'purescript-mode-hook
   (lambda ()
     (modify-syntax-entry ?. "." purescript-mode-syntax-table)))
-#+end_src
-** Racket
-#+begin_src emacs-lisp
+
 (use-package racket-mode
   :ensure t)
-#+end_src
-** Shells
-#+begin_src emacs-lisp
+
 (use-package fish-mode
   :ensure t)
-#+end_src
-** Treesitter
-I am using this strange code snippet that I got online.
 
-#+begin_src emacs-lisp
 (use-package treesit
   :config
   (setq treesit-font-lock-level 4
@@ -616,18 +494,11 @@ I am using this strange code snippet that I got online.
           (json-mode       . json-ts-mode)
           (css-mode        . css-ts-mode)
           (typescript-mode . tsx-ts-mode))))
-#+end_src
-** Web
-#+begin_src emacs-lisp
+
 (use-package html-mode
   :custom
   (sgml-basic-offset 4))
-#+end_src
-* Functions
-** Aider
-AI integration into Emacs to increase productivity.
 
-#+begin_src emacs-lisp
 (use-package aider
   :ensure t
   :config
@@ -673,13 +544,7 @@ no .gitignore modifications, and no auto-commits."
   
   (aider-magit-setup-transients)
   (global-auto-revert-mode 1))
-#+end_src
 
-** Dirvish
-Enhancing ~dired~ with Dirvish! A huge thank you to [[https://config.phundrak.com/emacs/packages/emacs-builtin.html#dired][phundrak's config]] and the default [[https://github.com/alexluigit/dirvish/blob/main/docs/CUSTOMIZING.org][docs]].
-Requires ~fd poppler ffmpegthumbnailer mediainfo imagemagick tar unzip 7zip vips and zathura~
-
-#+begin_src emacs-lisp
 (use-package dirvish
   :ensure t
   :after dired
@@ -717,11 +582,7 @@ Requires ~fd poppler ffmpegthumbnailer mediainfo imagemagick tar unzip 7zip vips
    ("^"   . dirvish-history-last)
    ("TAB" . dirvish-subtree-toggle)
    ("M-e" . dirvish-emerge-menu)))
-#+end_src
-** File Management
-Basic dired setup.
 
-#+begin_src emacs-lisp
 (use-package dired
   :custom
   (dired-dwim-target t)
@@ -736,29 +597,18 @@ Basic dired setup.
   ;; this command is useful when you want to close the window of `dirvish-side'
   ;; automatically when opening a file
   (put 'dired-find-alternate-file 'disabled nil))
-#+end_src
-** PDF
-#+begin_src emacs-lisp
+
 (use-package pdf-tools
   :ensure t)
-#+end_src
-** Terminal Emulator
-Note: requires libvterm and libtool to be installed. (!)
 
-#+begin_src emacs-lisp
 (use-package vterm
   :ensure t
   :config
   (setq vterm-shell "fish")
   (keymap-global-set "C-x 5 t" 'vterm-other-frame))
-#+end_src
 
-Adding a keybinding to open vterm in a new frame!
-
-#+begin_src emacs-lisp
 (defun vterm-other-frame ()
   "Create a new frame with vterm inside of it"
   (interactive)
   (select-frame-set-input-focus (make-frame))
   (vterm))
-#+end_src
