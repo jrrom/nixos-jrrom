@@ -7,6 +7,12 @@
     environment.cosmic.excludePackages = with pkgs; [
       cosmic-store
     ];
+  };
+
+  flake.homeModules.cosmic = { pkgs, cosmicLib, ... }: {
+    imports = [
+      inputs.cosmic-manager.homeManagerModules.cosmic-manager
+    ];
 
     # GTK
     gtk = {
@@ -19,12 +25,6 @@
         name = "Bibata-Modern-Ice";
       };
     };
-  };
-
-  flake.homeModules.cosmic = { pkgs, cosmicLib, ... }: {
-    imports = [
-      inputs.cosmic-manager.homeManagerModules.cosmic-manager
-    ];
     
     # Cursor
     home.pointerCursor = {
@@ -186,7 +186,5 @@
 
   };
 
-  imports = [
-    inputs.home-manager.flakeModules.home-manager
-  ];
+  
 }

@@ -1,31 +1,30 @@
 { inputs, self, ... }: {
 
   flake.nixosConfigurations.laptop = inputs.nixpkgs.lib.nixosSystem {
-    modules = [
-      self.nixosModules.applications
-      self.nixosModules.cosmic
-      self.nixosModules.emacs
-      self.nixosModules.impermanence
-      self.nixosModules.printing
-      self.nixosModules.virtualisation
-      self.nixosModules.connection
-      self.nixosModules.defaults
-      self.nixosModules.font
-      self.nixosModules.input
-      self.nixosModules.shell
-      self.nixosModules.xdg
+    modules = with self.nixosModules; [
+      applications
+      connection
+      cosmic
+      defaults
+      diskoLaptop
+      emacs
+      font
+      impermanence
+      input
+      homeManager
+      printing
+      shell
+      virtualisation
+      xdg
 
-      self.nixosModules.laptopModule
+      laptopModule
     ];
   };
 
   flake.nixosModules.laptopModule = { pkgs, ... }: {
     imports = [
-      inputs.disko.flakeModules.disko
-      
       # Hardware
-      ../parts/hardware-laptop.nix
-      ../parts/disko-laptop.nix
+      ../parts/hardwareLaptop.nix
     ];
 
     # System
@@ -58,5 +57,13 @@
     };
 
     system.stateVersion = "25.05";
+  };
+
+  flake.homeConfigurations.jrrom = inputs.home-manager.lib.homeManagerConfiguration {
+    pkgs = import inputs.nixpkgs { system = "x86_64-linux"; };
+    modules = [
+      self.homeModules.emacs
+      self.homeModules.cosmic
+    ];
   };
 }

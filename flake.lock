@@ -188,11 +188,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784745741,
-        "narHash": "sha256-IeHL/arKfjw8QwS0AhTJN0ZHHS7HaXJfh+OvJgNp8Wg=",
+        "lastModified": 1785349249,
+        "narHash": "sha256-rQ4tCmr0K3AtHE+cEeHDnoPtkV62gRtCgLxVFrjHZEs=",
         "owner": "jrrom",
         "repo": "desktop-kDrive-flake",
-        "rev": "c223e987c79824ce96d446b077edd5fe136300da",
+        "rev": "626ea7b2636c65606775284dab6fe3a03d4293a9",
         "type": "github"
       },
       "original": {

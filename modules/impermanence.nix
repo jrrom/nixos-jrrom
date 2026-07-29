@@ -1,5 +1,9 @@
 { inputs, ... }: {
   flake.nixosModules.impermanence = { pkgs, ... }: {
+    imports = [
+      inputs.impermanence.nixosModules.impermanence
+    ];
+    
     # Boot
     #  boot.zfs.devNodes = "/dev/"; uncomment for VirtIO disk
     boot = {
@@ -52,5 +56,6 @@
       ];
     };
 
+    
   };
 }

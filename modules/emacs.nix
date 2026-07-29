@@ -30,7 +30,7 @@
 
       # Environments
     ]
-      ++ ( 
+    ++ [( 
       pkgs.emacsWithPackagesFromUsePackage {
         package = pkgs.emacs-pgtk;
         config = ../parts/emacs.org;
@@ -39,7 +39,7 @@
         extraEmacsPackages = epkgs: [
           (epkgs.treesit-grammars.with-all-grammars)
         ];
-      });
+      })];
 
     environment.sessionVariables = {
       EDITOR = "emacs";
@@ -47,12 +47,9 @@
     };
 
     programs.nano.enable = false;
-
-    # Home
-    home.file.".config/emacs/init.el".source = inputs.config.lib.file.mkOutOfStoreSymlink "/home/jrrom/nixos-jrrom/hosts/laptop/init.el";
   };
 
-  imports = [
-    inputs.home-manager.flakeModules.home-manager
-  ];
+  flake.homeModules.emacs = { pkgs, lib, ... }: {
+    home.file.".config/emacs/init.el".source = lib.file.mkOutOfStoreSymlink "/home/jrrom/nixos-jrrom/hosts/laptop/init.el";
+  };
 }

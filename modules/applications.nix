@@ -1,5 +1,9 @@
 { inputs, ... }: {
   flake.nixosModules.applications = { pkgs, ... }: {
+    imports = [
+      inputs.kDrive.nixosModules.default
+    ];
+    
     nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];
     environment.systemPackages = with pkgs; [
       # Desktop
@@ -14,7 +18,7 @@
       qbittorrent
       strawberry
       tenacity
-      vlc-bin
+      vlc
 
       # CLI
       curl
@@ -48,6 +52,5 @@
         };
       };
     };
-    
   };
 }
