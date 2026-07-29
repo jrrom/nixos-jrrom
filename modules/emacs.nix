@@ -13,5 +13,12 @@
         ];
       }
     ];
+
+    environment.sessionVariables = {
+      EDITOR = "emacs";
+      VISUAL = "emacs";
+    };
+
+    programs.nano.enable = false;
   };
 }
