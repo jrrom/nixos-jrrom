@@ -34,7 +34,6 @@
       # See wiki.nixos.org/wiki/Locales
       extraLocales = [ "en_US.UTF-8/UTF-8" ];
     };
-    users.users.root.hashedPasswordFile = "/persistence/passwords/root";
     users.users.jrrom = {
       hashedPasswordFile = "/persistence/passwords/jrrom";
       isNormalUser = true;

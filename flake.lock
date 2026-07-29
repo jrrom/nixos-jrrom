@@ -52,11 +52,19 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
+<<<<<<< HEAD
         "lastModified": 1785324556,
         "narHash": "sha256-ZACPnsjORPPwUrAOcmANl/nX0I2wsF7rdXY2J9QXvs0=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
         "rev": "693b7dfdabd31b59d447bd0ed6ee329052daffc9",
+=======
+        "lastModified": 1782793307,
+        "narHash": "sha256-EP2UdOswIdQuFVUBvEB4MLazNvGpNbsuNnxldZFgIBY=",
+        "owner": "nix-community",
+        "repo": "emacs-overlay",
+        "rev": "be08305e372d57a1733795945c18e15c37801364",
+>>>>>>> recovered/main
         "type": "github"
       },
       "original": {
@@ -65,6 +73,25 @@
         "type": "github"
       }
     },
+<<<<<<< HEAD
+=======
+    "flake-compat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767039857,
+        "narHash": "sha256-vNpUSpF5Nuw8xvDLj2KCwwksIbjua2LZCqhV1LNRDns=",
+        "owner": "NixOS",
+        "repo": "flake-compat",
+        "rev": "5edf11c44bc78a0d334f6334cdaf7d60d732daab",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
+>>>>>>> recovered/main
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -86,6 +113,7 @@
         "type": "github"
       }
     },
+<<<<<<< HEAD
     "flake-parts_2": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -96,11 +124,30 @@
         "owner": "hercules-ci",
         "repo": "flake-parts",
         "rev": "17c9d6cdfc60c64f4ee8d306f9bc0b4ccb51481e",
+=======
+    "gitignore": {
+      "inputs": {
+        "nixpkgs": [
+          "pre-commit-hooks",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1709087332,
+        "narHash": "sha256-HG2cCnktfHsKV0s4XW83gU3F57gaTljL9KNSuG6bnQs=",
+        "owner": "hercules-ci",
+        "repo": "gitignore.nix",
+        "rev": "637db329424fd7e46cf4185293b9cc8c88c95394",
+>>>>>>> recovered/main
         "type": "github"
       },
       "original": {
         "owner": "hercules-ci",
+<<<<<<< HEAD
         "repo": "flake-parts",
+=======
+        "repo": "gitignore.nix",
+>>>>>>> recovered/main
         "type": "github"
       }
     },
@@ -111,11 +158,19 @@
         ]
       },
       "locked": {
+<<<<<<< HEAD
         "lastModified": 1785306346,
         "narHash": "sha256-DScBkW0fOgpGPK2trNoX3ryLTlaC14+gglFo/BhGJ4g=",
         "owner": "nix-community",
         "repo": "home-manager",
         "rev": "e705714e918c3b11affcdd15db2cbe3a070420a0",
+=======
+        "lastModified": 1782749631,
+        "narHash": "sha256-slFTUgDy0KTPA4LBAmC/9SngDq8GCPdX+ZR0yQHHN1E=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "5d72a29fc36ac21adae6ae35568fe5ee6700850f",
+>>>>>>> recovered/main
         "type": "github"
       },
       "original": {
@@ -166,6 +221,7 @@
         "type": "github"
       }
     },
+<<<<<<< HEAD
     "import-tree": {
       "locked": {
         "lastModified": 1784254960,
@@ -181,6 +237,8 @@
         "type": "github"
       }
     },
+=======
+>>>>>>> recovered/main
     "kDrive": {
       "inputs": {
         "nixpkgs": [
@@ -188,11 +246,19 @@
         ]
       },
       "locked": {
+<<<<<<< HEAD
         "lastModified": 1785349249,
         "narHash": "sha256-rQ4tCmr0K3AtHE+cEeHDnoPtkV62gRtCgLxVFrjHZEs=",
         "owner": "jrrom",
         "repo": "desktop-kDrive-flake",
         "rev": "626ea7b2636c65606775284dab6fe3a03d4293a9",
+=======
+        "lastModified": 1780277366,
+        "narHash": "sha256-FPhCpLQDhMbNO1n1wlvGW+t5TWK7jPF45arsrFKtegA=",
+        "owner": "jrrom",
+        "repo": "desktop-kDrive-flake",
+        "rev": "04ec4faf80f3f562b75575913ec9437da6376c2a",
+>>>>>>> recovered/main
         "type": "github"
       },
       "original": {
@@ -203,11 +269,19 @@
     },
     "nixpkgs": {
       "locked": {
+<<<<<<< HEAD
         "lastModified": 1785090369,
         "narHash": "sha256-m0pDuRJG7EDo9ri+4Ksu83VsI+PlxNC9lNBfydejce4=",
         "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "624af665418d3c65d544145b4d34ad696439570e",
+=======
+        "lastModified": 1782723713,
+        "narHash": "sha256-oPXCU/SSUokcGaJREHibG1CBX3+s/W7orDWQOZDsEeQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+>>>>>>> recovered/main
         "type": "github"
       },
       "original": {
@@ -217,6 +291,7 @@
         "type": "github"
       }
     },
+<<<<<<< HEAD
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1782614948,
@@ -239,6 +314,15 @@
         "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "2f5a153c270b70cb0f8c11f46d96d6d3bc39f4e3",
+=======
+    "nixpkgs-stable": {
+      "locked": {
+        "lastModified": 1782535326,
+        "narHash": "sha256-ZeRxu4yn6shd3SNF5ZUQb4r7BaVo1zBKMjRhfoNSBmw=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "714a5f8c4ead6b31148d829288440ed033ccc041",
+>>>>>>> recovered/main
         "type": "github"
       },
       "original": {
@@ -248,17 +332,50 @@
         "type": "github"
       }
     },
+<<<<<<< HEAD
+=======
+    "pre-commit-hooks": {
+      "inputs": {
+        "flake-compat": "flake-compat",
+        "gitignore": "gitignore",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1781733627,
+        "narHash": "sha256-U3yTuGBnmXvXoQI3qkpfEDsn9RovQPAjN7ndRco+3u0=",
+        "owner": "cachix",
+        "repo": "pre-commit-hooks.nix",
+        "rev": "3bbec39bc90eadfa031e6f3b77272f3f60803e39",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cachix",
+        "repo": "pre-commit-hooks.nix",
+        "type": "github"
+      }
+    },
+>>>>>>> recovered/main
     "root": {
       "inputs": {
         "cosmic-manager": "cosmic-manager",
         "disko": "disko",
         "emacs-overlay": "emacs-overlay",
+<<<<<<< HEAD
         "flake-parts": "flake-parts_2",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "import-tree": "import-tree",
         "kDrive": "kDrive",
         "nixpkgs": "nixpkgs"
+=======
+        "home-manager": "home-manager",
+        "impermanence": "impermanence",
+        "kDrive": "kDrive",
+        "nixpkgs": "nixpkgs",
+        "pre-commit-hooks": "pre-commit-hooks"
+>>>>>>> recovered/main
       }
     }
   },

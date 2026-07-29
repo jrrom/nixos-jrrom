@@ -134,7 +134,7 @@
 
         source = cosmicLib.cosmic.mkRON "enum" {
           variant = "Path";
-          value = [ ../wallpapers/blue-lake-1920x1200.png ];
+          value = [ "/home/jrrom/nixos-jrrom/wallpapers/blue-lake-1920x1200.png" ];
         };
       }
     ];

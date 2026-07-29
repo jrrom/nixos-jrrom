@@ -56,6 +56,6 @@
       ];
     };
 
-    
+    users.users.root.hashedPasswordFile = "/persistence/passwords/root";
   };
 }

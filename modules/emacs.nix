@@ -49,7 +49,7 @@
     programs.nano.enable = false;
   };
 
-  flake.homeModules.emacs = { pkgs, lib, ... }: {
-    home.file.".config/emacs/init.el".source = lib.file.mkOutOfStoreSymlink "/home/jrrom/nixos-jrrom/hosts/laptop/init.el";
+  flake.homeModules.emacs = { pkgs, config, ... }: {
+    home.file.".config/emacs/init.el".source = config.lib.file.mkOutOfStoreSymlink "/home/jrrom/nixos-jrrom/parts/init.el";
   };
 }
