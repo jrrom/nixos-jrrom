@@ -149,71 +149,6 @@
      ))
   (global-ligature-mode t))
 
-(defun jrrom/org-face-sizes ()
-  (let ((base 1.0))
-    (set-face-attribute 'org-level-1 nil :height 1.4 :weight 'bold)
-    (set-face-attribute 'org-level-2 nil :height 1.25 :weight 'bold)
-    (set-face-attribute 'org-level-3 nil :height 1.15 :weight 'bold)
-    (set-face-attribute 'org-level-4 nil :height 1.05 :weight 'bold)
-    (set-face-attribute 'org-level-5 nil :height 1.0 :weight 'bold)
-    (set-face-attribute 'org-document-title nil :height 1.7 :weight 'bold :inherit 'variable-pitch)))
-
-(use-package org
-  :ensure t
-  :custom
-  (org-src-tab-acts-natively t)
-  (org-src-fontify-natively  t)
-  (org-src-preserve-indentation t)
-  (org-startup-folded 'content)
-  (org-edit-src-content-indentation 0)
-  (org-log-into-drawer 1)
-  (org-link-frame-setup
-   '((file . find-file)))
-  :hook
-  (org-mode . (lambda ()
-				(setq-local line-spacing 0.3)
-				(add-hook 'window-configuration-change-hook
-                          (lambda ()
-                            (when (derived-mode-p 'org-mode)
-                              (set-window-margins nil 20 20)))
-                          nil t)))
-  :config
-  (jrrom/org-face-sizes))
-
-(use-package org-modern
-  :ensure t
-  :custom
-  (org-modern-todo nil)
-  :hook (org-mode . org-modern-mode))
-
-(use-package org-babel
-  :no-require
-  :config
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((python . t)
-	 (emacs-lisp . t)
-	 (ledger . t)
-	 (shell . t))))
-
-(use-package org-roam
-  :ensure t
-  :custom
-  (org-roam-directory (file-truename "/home/jrrom/kDrive/Computer"))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n g" . org-roam-graph)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n c" . org-roam-capture)
-         ;; Dailies
-         ("C-c n j" . org-roam-dailies-capture-today))
-  :config
-  ;; If you're using a vertical completion framework, you might want a more informative completion interface
-  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (org-roam-db-autosync-mode)
-  ;; If using org-roam-protocol
-  (require 'org-roam-protocol))
-
 (use-package which-key
   :config
   (which-key-setup-side-window-right-bottom)
@@ -436,6 +371,7 @@
 
 (use-package ledger-mode
   :mode ("\\.journal\\'" "\\.ledger\\'")
+  :ensure t
   :init
   (setq ledger-binary-path "hledger")
   
@@ -454,6 +390,10 @@
 
 (use-package sml-mode
   :ensure t)
+
+(use-package nix-mode
+  :ensure t
+  :mode "\\.nix\\'")
 
 (use-package envrc
   :ensure t
@@ -498,6 +438,74 @@
 (use-package html-mode
   :custom
   (sgml-basic-offset 4))
+
+(defun jrrom/org-face-sizes ()
+  (let ((base 1.0))
+    (set-face-attribute 'org-level-1 nil :height 1.4 :weight 'bold)
+    (set-face-attribute 'org-level-2 nil :height 1.25 :weight 'bold)
+    (set-face-attribute 'org-level-3 nil :height 1.15 :weight 'bold)
+    (set-face-attribute 'org-level-4 nil :height 1.05 :weight 'bold)
+    (set-face-attribute 'org-level-5 nil :height 1.0 :weight 'bold)
+    (set-face-attribute 'org-document-title nil :height 1.7 :weight 'bold :inherit 'variable-pitch)))
+
+(use-package org
+  :ensure t
+  :custom
+  (org-src-tab-acts-natively t)
+  (org-src-fontify-natively  t)
+  (org-src-preserve-indentation t)
+  (org-startup-folded 'content)
+  (org-edit-src-content-indentation 0)
+  (org-log-into-drawer 1)
+  (org-link-frame-setup
+   '((file . find-file)))
+  :hook
+  (org-mode . (lambda ()
+				(setq-local line-spacing 0.3)
+				(add-hook 'window-configuration-change-hook
+                          (lambda ()
+                            (when (derived-mode-p 'org-mode)
+                              (set-window-margins nil 20 20)))
+                          nil t)))
+  :config
+  (jrrom/org-face-sizes))
+
+(use-package org-modern
+  :ensure t
+  :custom
+  (org-modern-todo nil)
+  :hook (org-mode . org-modern-mode))
+
+(use-package org-contrib
+  :ensure t)
+
+(use-package org-babel
+  :no-require
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t)
+	 (emacs-lisp . t)
+	 (ledger . t)
+	 (shell . t))))
+
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "/home/jrrom/kDrive/Computer"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
 
 (use-package aider
   :ensure t

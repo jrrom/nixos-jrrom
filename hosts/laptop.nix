@@ -1,7 +1,7 @@
 { inputs, self, ... }: {
 
   flake.nixosConfigurations.laptop = inputs.nixpkgs.lib.nixosSystem {
-    modules = with self.nixosModules; [
+    modules = (with self.nixosModules; [
       applications
       connection
       cosmic
@@ -9,60 +9,44 @@
       diskoLaptop
       emacs
       font
+      home-manager
       impermanence
       input
-      homeManager
+      lix
       printing
       shell
       virtualisation
       xdg
 
       laptopModule
-    ];
+    ]);
   };
 
   flake.nixosModules.laptopModule = { pkgs, ... }: {
-    imports = [
-      # Hardware
-      ../parts/hardwareLaptop.nix
-    ];
+    imports = [ ../parts/hardwareLaptop.nix ];
 
-    # System
     time.timeZone = "Asia/Kolkata";
     i18n = {
       defaultLocale = "en_IN";
-      # See wiki.nixos.org/wiki/Locales
       extraLocales = [ "en_US.UTF-8/UTF-8" ];
     };
     users.users.jrrom = {
       hashedPasswordFile = "/persistence/passwords/jrrom";
       isNormalUser = true;
       extraGroups = [
-        "wheel"
-        "networkmanager"
-        "floppy"
-        "audio"
-        "cdrom"
-        "video"
-        "usb"
-        "users"
-        "plugdev"
-        "pipewire"
-        "docker"
-        "libvirt"
-        "scanner"
-        "lp"
+        "wheel" "networkmanager" "floppy" "audio" "cdrom" "video"
+        "usb" "users" "plugdev" "pipewire" "docker" "libvirt"
+        "scanner" "lp"
       ];
     };
 
     system.stateVersion = "25.05";
-  };
 
-  flake.homeConfigurations.jrrom = inputs.home-manager.lib.homeManagerConfiguration {
-    pkgs = import inputs.nixpkgs { system = "x86_64-linux"; };
-    modules = [
-      self.homeModules.emacs
-      self.homeModules.cosmic
-    ];
+    home-manager.users.jrrom = {
+      imports = with self.homeModules; [
+        emacs
+        cosmic
+      ];
+    };
   };
 }
