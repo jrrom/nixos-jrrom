@@ -1,10 +1,12 @@
+let
+  XDG_CACHE_HOME  = "$HOME/.cache";
+  XDG_CONFIG_HOME = "$HOME/.config";
+  XDG_DATA_HOME   = "$HOME/.local/share";
+  XDG_STATE_HOME  = "$HOME/.local/state";
+in
 { inputs, ... }: {
   flake.nixosModules.xdg = { pkgs, ... }: {
-    environment.sessionVariables = rec {
-      XDG_CACHE_HOME  = "$HOME/.cache";
-      XDG_CONFIG_HOME = "$HOME/.config";
-      XDG_DATA_HOME   = "$HOME/.local/share";
-      XDG_STATE_HOME  = "$HOME/.local/state";
+    environment.sessionVariables = {
       QT_QPA_PLATFORM = "wayland";
 
       ANDROID_USER_HOME = "${XDG_DATA_HOME}/android";
@@ -23,6 +25,12 @@
       
       AIDER_CONFIG_FILE = "${XDG_CONFIG_HOME}/aider/config.yml";
       AIDER_DARK_MODE   = "true";
+      JULIA_DEPOT_PATH  = "${XDG_DATA_HOME}/julia:$JULIA_DEPOT_PATH";
+    };
+
+    environment.shellAliases = {
+      wget = "wget --hsts-file=${XDG_DATA_HOME}/wget-hsts";
+      ll = "ls -l";
     };
   };
 }

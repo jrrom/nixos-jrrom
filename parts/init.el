@@ -94,6 +94,15 @@
   :custom
   (mixed-pitch-variable-pitch-cursor 'box))
 
+(use-package hideshow
+  :ensure nil
+  :hook ((prog-mode . hs-minor-mode))
+  :bind (:map hs-minor-mode-map
+         ("C-c - -" . hs-toggle-hiding)
+         ("C-c - a" . hs-hide-all)
+         ("C-c - s" . hs-show-all)
+         ("C-c - l" . hs-hide-level)))
+
 (use-package ligature
   :ensure t
   :config
@@ -125,6 +134,7 @@
   (menu-bar-mode -1)                        ;; Remove menubar
   (tool-bar-mode -1)                        ;; Remove toolbar
   (scroll-bar-mode -1)                      ;; Remove scrollbar
+  
 
   :config
   (setq-default cursor-type 'box))
@@ -152,11 +162,13 @@
    indent-bars-pattern "."
    indent-bars-width-frac 0.1
    indent-bars-pad-frac 0.1
+   indent-bars-treesit-support t
+   indent-bars-no-descend-lists t
    indent-bars-highlight-current-depth '(:face default :blend 0.4))
-  :hook ((nix-ts-mode) . indent-bars-mode))
+  :hook ((prog-mode) . indent-bars-mode))
 
 (use-package cape
-  :straight t
+  :ensure t
   :init
   (add-hook 'eglot-managed-mode-hook
             (lambda ()
@@ -314,6 +326,31 @@
    '((file (styles basic partial-completion))))
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
 
+(use-package tempel
+  :ensure t
+  :bind (("M-+" . tempel-complete)   ;; manual trigger
+         ("M-*" . tempel-insert))
+  :init
+  ;; Put tempel ahead of eglot's capf so snippet prefixes win when they match
+  (defun my/tempel-setup-capf ()
+    (setq-local completion-at-point-functions
+                (cons #'tempel-expand
+                      completion-at-point-functions)))
+  (add-hook 'conf-mode-hook #'my/tempel-setup-capf)
+  (add-hook 'prog-mode-hook #'my/tempel-setup-capf)
+  (add-hook 'text-mode-hook #'my/tempel-setup-capf)
+
+  ;; Re-assert tempel's position once eglot has finished setting up.
+  (defun my/tempel-reassert-capf-order ()
+    (setq-local completion-at-point-functions
+                (cons #'tempel-expand
+                      (remove #'tempel-expand completion-at-point-functions))))
+  (add-hook 'eglot-managed-mode-hook #'my/tempel-reassert-capf-order))
+
+(use-package tempel-collection
+  :ensure t
+  :after tempel)   ;; community-contributed starter snippets, closer to yasnippet-snippets in spirit
+
 (use-package emacs
   :custom
    ;; Vertico
@@ -383,8 +420,12 @@
    ("M-e" . dirvish-emerge-menu)))
 
 (use-package eldoc
-  :init
-  (global-eldoc-mode))
+  :ensure nil
+  :config
+  (global-eldoc-mode)
+  (setq eldoc-echo-area-use-multiline-p nil)   ;; never grow past 1 line
+  (setq eldoc-echo-area-display-truncation-message nil)
+  (setq eldoc-idle-delay 0.5))                 ;; wait a bit before showing
 
 (use-package eldoc-box
   :ensure t
@@ -480,7 +521,8 @@
           (typescript-mode . tsx-ts-mode))))
 
 (use-package haskell-mode
-  :ensure t)
+  :ensure t
+  :hook (haskell-mode . (lambda () (indent-bars-mode -1))))
 
 (use-package purescript-mode
   :ensure t
@@ -514,7 +556,7 @@
           ("bs"  "hledger -f %(ledger-file) balancesheet")))
   )
 
-(use-package nix-mode
+(use-package nix-ts-mode
   :ensure t
   :mode "\\.nix\\'")
 
