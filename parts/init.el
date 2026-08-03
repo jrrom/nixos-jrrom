@@ -39,7 +39,7 @@
   ;; Editing
   (ispell-dictionary nil)                   ;; Set the default dictionary for spell checking
   (text-mode-ispell-word-completion nil)
-  (display-line-numbers-type 'relative)     ;; Relative line numbers
+  (global-display-line-numbers-mode nil)
   (ring-bell-function 'ignore)              ;; Disable the audible bell and visible bell
   (tab-always-indent 'complete)             ;; Make the TAB key complete text instead of just indenting.
   (tab-width 4)                             ;; Set the tab width to 4 spaces.
@@ -49,10 +49,9 @@
   (indent-tabs-mode nil)
   (electric-pair-mode 1)
 
-  :hook (prog-mode . display-line-numbers-mode)
-
   :config
   (prefer-coding-system 'utf-8)             ;; Only UTF8 here
+  (setq-default display-line-numbers nil)
 )
 
 (use-package emacs
@@ -70,6 +69,182 @@
           (lambda ()
             (with-current-buffer "*scratch*"
               (display-line-numbers-mode -1))))
+
+;; Example configuration for Consult
+(use-package consult
+  :ensure t
+  ;; Replace bindings. Lazily loaded by `use-package'.
+  :bind (;; C-c bindings in `mode-specific-map'
+         ("C-c M-x" . consult-mode-command)
+         ("C-c h" . consult-history)
+         ("C-c i" . consult-info)
+         ([remap Info-search] . consult-info)
+         ;; C-x bindings in `ctl-x-map'
+         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+         ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
+         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+         ;; Other custom bindings
+         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ;; M-g bindings in `goto-map'
+         
+         ("M-g e" . consult-compile-error)
+         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+         ("M-g g" . consult-goto-line)             ;; orig. goto-line
+         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+        ;; M-s bindings in `search-map'
+         ("M-s g" . consult-ripgrep)
+         ("C-s" . consult-line)                    ;; orig. isearch
+         ;; Isearch integration
+         ("M-s e" . consult-isearch-history)
+         :map isearch-mode-map
+         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)
+         :map minibuffer-local-map
+         ("M-s" . consult-history)
+         ("M-r" . consult-history))            ;; needed by consult-line to detect isearch
+
+  ;; The :init configuration is always executed (Not lazy)
+  :init
+  ;; Tweak the register preview for `consult-register-load',
+  ;; `consult-register-store' and the built-in commands.  This improves the
+  ;; register formatting, adds thin separator lines, register sorting and hides
+  ;; the window mode line.
+  (advice-add #'register-preview :override #'consult-register-window)
+  (setq register-preview-delay 0.5)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  ;; Configure other variables and modes in the :config section,
+  ;; after lazily loading the package.
+  :config
+
+  ;; Optionally configure preview. The default value
+  ;; is 'any, such that any key triggers the preview.
+  ;; (setq consult-preview-key 'any)
+  ;; (setq consult-preview-key "M-.")
+  ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
+  ;; For some commands and buffer sources it is useful to configure the
+  ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep consult-man
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   ;; :preview-key "M-."
+   :preview-key '(:debounce 0.4 any))
+
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well.
+  (setq consult-narrow-key "<") ;; "C-+"
+
+  ;; Optionally make narrowing help available in the minibuffer.
+  ;; You may want to use `embark-prefix-help-command' or which-key instead.
+  ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
+)
+
+(use-package embark
+  :ensure t
+  :bind
+  (("C-." . embark-act)          ;; act on the candidate at point
+   ("C-;" . embark-dwim)         ;; good alternative: M-.
+   ("C-h b" . embark-bindings)   ;; alternative for `describe-bindings'
+   :map minibuffer-local-map
+   ("C-;"     . embark-select)    ;; mark current candidate, move to next
+   ("M-RET"   . embark-act-all))  ;; act on ALL marked candidates
+
+  :init
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+(use-package embark-consult
+  :ensure t
+  :demand t   ;; force it to load now
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
+(use-package lsp-bridge
+  :ensure t
+  :config
+  (setq lsp-bridge-enable-hover-diagnostic t)
+  (setq lsp-bridge-enable-signature-help nil)
+  (setq lsp-bridge-enable-org-babel t)
+  (setq acm-backend-lsp-candidate-min-length 2)
+  :bind (:map lsp-bridge-mode-map
+         ("C-h ." . lsp-bridge-popup-documentation)
+         ("C-h ," . lsp-bridge-show-documentation))
+  :init
+  (global-lsp-bridge-mode))
+
+;; Enable rich annotations using the Marginalia package
+(use-package marginalia
+  :ensure t
+  ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
+  ;; available in the *Completions* buffer, add it to the
+  ;; `completion-list-mode-map'.
+  :bind (:map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+
+  ;; The :init section is always executed.
+  :init
+
+  ;; Marginalia must be activated in the :init section of use-package such that
+  ;; the mode gets enabled right away. Note that this forces loading the
+  ;; package.
+  (marginalia-mode))
+
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides
+   '((file (styles basic partial-completion))))
+  (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
+
+(use-package emacs
+  :custom
+   ;; Vertico
+  (enable-recursive-minibuffers t)
+  ;; Hide commands in M-x which do not work in the current mode.
+  (read-extended-command-predicate #'command-completion-default-include-p)
+  ;; Do not allow the cursor in the minibuffer prompt
+  (minibuffer-prompt-properties
+   '(read-only t cursor-intangible t face minibuffer-prompt))
+  
+  :init
+  (context-menu-mode t))
+
+(use-package vertico
+  :ensure t
+  :custom
+  ;; (vertico-scroll-margin 0) ;; Different scroll margin
+  ;; (vertico-count 20) ;; Show more candidates
+  ;; (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
+  (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+  :init
+  (vertico-mode))
+
+(use-package yasnippet
+  :ensure t
+  :hook (prog-mode . yas-minor-mode))
+
+(use-package yasnippet-snippets   ; optional, ships many built-in snippets
+  :ensure t)
 
 (use-package nerd-icons
   :ensure t
@@ -157,222 +332,18 @@
 
 (use-package indent-bars
   :ensure t
+  :hook ((prog-mode . indent-bars-mode)
+         (lisp-data-mode . (lambda () (indent-bars-mode -1)))
+		 (haskell-mode . (lambda () (indent-bars-mode -1)))
+		 )
   :config
   (setq
    indent-bars-pattern "."
    indent-bars-width-frac 0.1
    indent-bars-pad-frac 0.1
-   indent-bars-treesit-support t
-   indent-bars-no-descend-lists t
-   indent-bars-highlight-current-depth '(:face default :blend 0.4))
-  :hook ((prog-mode) . indent-bars-mode))
-
-(use-package cape
-  :ensure t
-  :init
-  (add-hook 'eglot-managed-mode-hook
-            (lambda ()
-              (setq-local completion-at-point-functions
-                          (list (cape-capf-super
-                                 #'eglot-completion-at-point
-                                 #'cape-dabbrev))))))
-
-;; Example configuration for Consult
-(use-package consult
-  :ensure t
-  ;; Replace bindings. Lazily loaded by `use-package'.
-  :bind (;; C-c bindings in `mode-specific-map'
-         ("C-c M-x" . consult-mode-command)
-         ("C-c h" . consult-history)
-         ("C-c i" . consult-info)
-         ([remap Info-search] . consult-info)
-         ;; C-x bindings in `ctl-x-map'
-         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
-         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
-         ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
-         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
-         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
-         ;; Other custom bindings
-         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
-         ;; M-g bindings in `goto-map'
-         
-         ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
-         ("M-g g" . consult-goto-line)             ;; orig. goto-line
-         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
-         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
-         ;; M-s bindings in `search-map'
-         ("M-s g" . consult-ripgrep)
-         ("C-s" . consult-line)                    ;; orig. isearch
-         ;; Isearch integration
-         ("M-s e" . consult-isearch-history)
-         :map isearch-mode-map
-         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
-         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
-         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
-         ("M-s L" . consult-line-multi)
-         :map minibuffer-local-map
-         ("M-s" . consult-history)
-         ("M-r" . consult-history))            ;; needed by consult-line to detect isearch
-
-  ;; The :init configuration is always executed (Not lazy)
-  :init
-  ;; Tweak the register preview for `consult-register-load',
-  ;; `consult-register-store' and the built-in commands.  This improves the
-  ;; register formatting, adds thin separator lines, register sorting and hides
-  ;; the window mode line.
-  (advice-add #'register-preview :override #'consult-register-window)
-  (setq register-preview-delay 0.5)
-
-  ;; Use Consult to select xref locations with preview
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref)
-
-  ;; Configure other variables and modes in the :config section,
-  ;; after lazily loading the package.
-  :config
-
-  ;; Optionally configure preview. The default value
-  ;; is 'any, such that any key triggers the preview.
-  ;; (setq consult-preview-key 'any)
-  ;; (setq consult-preview-key "M-.")
-  ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
-  ;; For some commands and buffer sources it is useful to configure the
-  ;; :preview-key on a per-command basis using the `consult-customize' macro.
-  (consult-customize
-   consult-theme :preview-key '(:debounce 0.2 any)
-   consult-ripgrep consult-git-grep consult-grep consult-man
-   consult-bookmark consult-recent-file consult-xref
-   consult--source-bookmark consult--source-file-register
-   consult--source-recent-file consult--source-project-recent-file
-   ;; :preview-key "M-."
-   :preview-key '(:debounce 0.4 any))
-
-  ;; Optionally configure the narrowing key.
-  ;; Both < and C-+ work reasonably well.
-  (setq consult-narrow-key "<") ;; "C-+"
-
-  ;; Optionally make narrowing help available in the minibuffer.
-  ;; You may want to use `embark-prefix-help-command' or which-key instead.
-  ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
-)
-
-(use-package corfu
-  :ensure t
-  :custom
-  (corfu-cycle t)
-  (corfu-auto t)              ;; enable auto popup
-  (corfu-auto-prefix 2)      ;; start after 3 chars
-  (corfu-auto-delay 0.1)     ;; small delay (optional)
-  :init
-  (global-corfu-mode)
-  :bind
-  (:map corfu-map
-        ("RET" . corfu-insert)
-        ("TAB" . corfu-insert))
-  )
-
-(use-package embark
-  :ensure t
-  :bind
-  (("C-." . embark-act)          ;; act on the candidate at point
-   ("C-;" . embark-dwim)         ;; good alternative: M-.
-   ("C-h b" . embark-bindings)   ;; alternative for `describe-bindings'
-   :map minibuffer-local-map
-   ("C-;"     . embark-select)    ;; mark current candidate, move to next
-   ("M-RET"   . embark-act-all))  ;; act on ALL marked candidates
-
-  :init
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
-
-  :config
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
-
-(use-package embark-consult
-  :ensure t
-  :demand t   ;; force it to load now
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
-
-;; Enable rich annotations using the Marginalia package
-(use-package marginalia
-  :ensure t
-  ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
-  ;; available in the *Completions* buffer, add it to the
-  ;; `completion-list-mode-map'.
-  :bind (:map minibuffer-local-map
-         ("M-A" . marginalia-cycle))
-
-  ;; The :init section is always executed.
-  :init
-
-  ;; Marginalia must be activated in the :init section of use-package such that
-  ;; the mode gets enabled right away. Note that this forces loading the
-  ;; package.
-  (marginalia-mode))
-
-(use-package orderless
-  :ensure t
-  :custom
-  (completion-styles '(orderless basic))
-  (completion-category-overrides
-   '((file (styles basic partial-completion))))
-  (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
-
-(use-package tempel
-  :ensure t
-  :bind (("M-+" . tempel-complete)   ;; manual trigger
-         ("M-*" . tempel-insert))
-  :init
-  ;; Put tempel ahead of eglot's capf so snippet prefixes win when they match
-  (defun my/tempel-setup-capf ()
-    (setq-local completion-at-point-functions
-                (cons #'tempel-expand
-                      completion-at-point-functions)))
-  (add-hook 'conf-mode-hook #'my/tempel-setup-capf)
-  (add-hook 'prog-mode-hook #'my/tempel-setup-capf)
-  (add-hook 'text-mode-hook #'my/tempel-setup-capf)
-
-  ;; Re-assert tempel's position once eglot has finished setting up.
-  (defun my/tempel-reassert-capf-order ()
-    (setq-local completion-at-point-functions
-                (cons #'tempel-expand
-                      (remove #'tempel-expand completion-at-point-functions))))
-  (add-hook 'eglot-managed-mode-hook #'my/tempel-reassert-capf-order))
-
-(use-package tempel-collection
-  :ensure t
-  :after tempel)   ;; community-contributed starter snippets, closer to yasnippet-snippets in spirit
-
-(use-package emacs
-  :custom
-   ;; Vertico
-  (enable-recursive-minibuffers t)
-  ;; Hide commands in M-x which do not work in the current mode.
-  (read-extended-command-predicate #'command-completion-default-include-p)
-  ;; Do not allow the cursor in the minibuffer prompt
-  (minibuffer-prompt-properties
-   '(read-only t cursor-intangible t face minibuffer-prompt))
-  
-  :init
-  (context-menu-mode t))
-
-(use-package vertico
-  :ensure t
-  :custom
-  ;; (vertico-scroll-margin 0) ;; Different scroll margin
-  ;; (vertico-count 20) ;; Show more candidates
-  ;; (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
-  (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
-  :init
-  (vertico-mode))
+   ;; No heavy features
+   indent-bars-treesit-support nil
+   indent-bars-highlight-current-depth nil))
 
 (use-package avy
   :ensure t
@@ -430,7 +401,9 @@
 (use-package eldoc-box
   :ensure t
   :bind (("C-h ." . eldoc-box-help-at-point)
-         ("C-h ," . eldoc-doc-buffer))) ;; full buffer
+         ("C-h ," . eldoc-doc-buffer))
+  :config
+  (setq eldoc-box-scroll-bars nil))   ; remove the scroll bar
 
 (use-package dired
   :custom
@@ -521,8 +494,7 @@
           (typescript-mode . tsx-ts-mode))))
 
 (use-package haskell-mode
-  :ensure t
-  :hook (haskell-mode . (lambda () (indent-bars-mode -1))))
+  :ensure t)
 
 (use-package purescript-mode
   :ensure t
@@ -564,8 +536,14 @@
   :ensure t
   :hook (after-init . envrc-global-mode))
 
-(add-to-list 'load-path "/nix/var/nix/profiles/default/bin")
-(add-to-list 'load-path (expand-file-name "~/.nix-profile/bin"))
+;;(add-to-list 'load-path "/nix/var/nix/profiles/default/bin")
+;;(add-to-list 'load-path (expand-file-name "~/.nix-profile/bin"))
+(add-to-list 'exec-path "/nix/var/nix/profiles/default/bin")
+(add-to-list 'exec-path (expand-file-name "~/.nix-profile/bin"))
+;; If direnv/nix need PATH updated:
+(setenv "PATH" (concat "/nix/var/nix/profiles/default/bin:"
+                       (expand-file-name "~/.nix-profile/bin")
+                       ":" (getenv "PATH")))
 
 (use-package julia-mode
   :ensure t)
@@ -605,12 +583,7 @@
    '((file . find-file)))
   :hook
   (org-mode . (lambda ()
-				(setq-local line-spacing 0.3)
-				(add-hook 'window-configuration-change-hook
-                          (lambda ()
-                            (when (derived-mode-p 'org-mode)
-                              (set-window-margins nil 20 20)))
-                          nil t)))
+				(setq-local line-spacing 0.3)))
   :config
   (jrrom/org-face-sizes))
 
