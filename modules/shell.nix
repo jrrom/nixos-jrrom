@@ -12,12 +12,44 @@
 
     # Environments
     
-    environment.systemPackages = [ pkgs.devenv ];
+    environment.systemPackages = with pkgs; [
+      # Env
+      devenv
+
+      # Data wrangling
+      miller
+      jq
+      xh
+
+      # Status
+      btop
+      dust
+      procs
+      tldr
+
+      # General
+      bat
+      fd
+      fzf
+      ripgrep
+      zoxide
+
+      # Misc
+      yad
+    ] ++ [
+      # Scripting language for scripts
+      (pkgs.python3.withPackages (python-pkgs: with python-pkgs; [
+        numpy
+        pandas
+        tkinter
+        xlrd
+      ]))
+      ty
+    ];
 
     programs.direnv = {
       enable = true;
       enableFishIntegration = true;
     };
-
   };
 }

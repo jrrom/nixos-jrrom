@@ -3,7 +3,7 @@
 
 General configuration of Emacs. Huge thanks to [[https://github.com/LionyxML/emacs-kick/blob/master/init.el][emacs-kick]].
 
-* Miscellaneous
+* Bootstrap
 ** Auto Tangle
 Doing auto-tangle on saving the config file.
 
@@ -38,8 +38,9 @@ Some other performance settings that I forgot where they came from or if they ev
 (setenv "LSP_USE_PLISTS" "true")         ;; Use PLISTS instead of JSON
 (setq pgtk-wait-for-event-timeout nil)   ;; Don't wait for events to complete?
 #+end_src
-* Emacs
-** Misc
+
+* Core
+** Defaults
 #+begin_src emacs-lisp
 (use-package emacs
   :custom
@@ -95,7 +96,7 @@ Some other performance settings that I forgot where they came from or if they ev
   (make-backup-files nil)                   ;; Disable creation of backup files
   (global-auto-revert-non-file-buffers t)   ;; In conjunction with (global-auto-revert-mode 1) allows to keep up-to-date
   (history-length 200)                      ;; Set the length of the command history.
-  (recentf-max-saved-items 100)             ;; number of files to remember with recentf
+  (recentf-max-saved-items 100)             ;; number of files to remember with hosts/
 )
 #+end_src
 ** Scratch Buffer
@@ -106,43 +107,9 @@ Removing line numbers from the scratch buffer.
             (with-current-buffer "*scratch*"
               (display-line-numbers-mode -1))))
 #+end_src
-* Appearance
-** Modes
-#+begin_src emacs-lisp
-(use-package emacs
-  :init
-  (menu-bar-mode -1)                        ;; Remove menubar
-  (tool-bar-mode -1)                        ;; Remove toolbar
-  (scroll-bar-mode -1)                      ;; Remove scrollbar
 
-  :config
-  (setq-default cursor-type 'box))
-#+end_src
-** Theme
-My Emacs theme!
-#+begin_src emacs-lisp
-(use-package gruvbox-theme
-  :ensure t
-  :config (load-theme 'gruvbox-dark-medium t nil))
-#+end_src
-** Wrapping & Guide
-#+begin_src emacs-lisp
-(use-package emacs
-  :hook ((text-mode . visual-line-mode)
-         (text-mode . visual-wrap-prefix-mode)) ; aligns wrapped lines with indentation
-  :config
-  (setq-default fill-column 100))
 
-(use-package indent-bars
-  :ensure t
-  :config
-  (setq
-   indent-bars-pattern "."
-   indent-bars-width-frac 0.1
-   indent-bars-pad-frac 0.1
-   indent-bars-highlight-current-depth '(:face default :blend 0.4))
-  :hook ((nix-ts-mode) . indent-bars-mode))
-#+end_src
+* UI
 ** Fonts & Icons
 Some basic font setup.
 
@@ -198,151 +165,67 @@ Some basic font setup.
      ))
   (global-ligature-mode t))
 #+end_src
-* Extra
+** Modes
+#+begin_src emacs-lisp
+(use-package emacs
+  :init
+  (menu-bar-mode -1)                        ;; Remove menubar
+  (tool-bar-mode -1)                        ;; Remove toolbar
+  (scroll-bar-mode -1)                      ;; Remove scrollbar
+
+  :config
+  (setq-default cursor-type 'box))
+#+end_src
+** Theme
+My Emacs theme!
+#+begin_src emacs-lisp
+(use-package gruvbox-theme
+  :ensure t
+  :config (load-theme 'gruvbox-dark-medium t nil))
+#+end_src
 ** Which Key
 Shows keybindings!
 #+begin_src emacs-lisp
 (use-package which-key
+  :ensure nil
   :config
   (which-key-setup-side-window-right-bottom)
   (which-key-mode))
 #+end_src
-** Repeat
-Repeat commands by spamming the last key of the command
-#+begin_src emacs-lisp
-(use-package repeat
-  :ensure nil
-  :config
-  (repeat-mode))
-#+end_src
-** Eldoc
-Integrates amazingly with Eglot
-#+begin_src emacs-lisp
-(use-package eldoc
-  :init
-  (global-eldoc-mode))
 
-(use-package eldoc-box
-  :ensure t
-  :bind
-  ("C-h ." . eldoc-box-help-at-point))
-#+end_src
-** Corfu
-#+begin_src emacs-lisp
-(use-package corfu
-  :ensure t
-  :custom
-  (corfu-cycle t)
-  (corfu-auto t)              ;; enable auto popup
-  (corfu-auto-prefix 2)      ;; start after 3 chars
-  (corfu-auto-delay 0.1)     ;; small delay (optional)
-  :init
-  (global-corfu-mode)
-  :bind
-  (:map corfu-map
-        ("RET" . corfu-insert)
-        ("TAB" . corfu-insert))
-  )
-#+end_src
-** Avy
-Somewhat useful
-#+begin_src emacs-lisp
-(use-package avy
-  :ensure t
-  :bind
-  ("M-j" . avy-goto-char-timer))
-#+end_src
-** Tabs
-#+begin_src emacs-lisp
-;; For conf-mode (ini/conf files)
-(use-package conf-mode
-  :ensure nil   ;; it's built-in
-  :hook (conf-mode . (lambda () (setq indent-tabs-mode t))))
-
-;; For Makefiles (needs tabs)
-(use-package make-mode
-  :ensure nil
-  :hook (makefile-mode . (lambda () (setq indent-tabs-mode t))))
-#+end_src
-** Bindings
-#+begin_src emacs-lisp
-(keymap-global-set "M-z" #'zap-up-to-char)
-#+end_src
-* VEMCO
-** Vertico
-Autocompletions  
+** Wrapping & Guide
 #+begin_src emacs-lisp
 (use-package emacs
-  :custom
-   ;; Vertico
-  (enable-recursive-minibuffers t)
-  ;; Hide commands in M-x which do not work in the current mode.
-  (read-extended-command-predicate #'command-completion-default-include-p)
-  ;; Do not allow the cursor in the minibuffer prompt
-  (minibuffer-prompt-properties
-   '(read-only t cursor-intangible t face minibuffer-prompt))
-  
-  :init
-  (context-menu-mode t))
-
-(use-package vertico
-  :ensure t
-  :custom
-  ;; (vertico-scroll-margin 0) ;; Different scroll margin
-  ;; (vertico-count 20) ;; Show more candidates
-  ;; (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
-  (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
-  :init
-  (vertico-mode))
-#+end_src
-** Embark
-Actions at a point.
-#+begin_src emacs-lisp
-(use-package embark
-  :ensure t
-  :bind
-  (("C-." . embark-act)         ;; pick some comfortable binding
-   ("C-;" . embark-dwim)        ;; good alternative: M-.
-   ("C-h b" . embark-bindings)) ;; alternative for `describe-bindings'
-
-  :init
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
-
+  :hook ((text-mode . visual-line-mode)
+         (text-mode . visual-wrap-prefix-mode)) ; aligns wrapped lines with indentation
   :config
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
+  (setq-default fill-column 100))
 
-;; Consult users will also want the embark-consult package.
-(use-package embark-consult
-  :ensure t ; only need to install it, embark loads it after consult if found
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
-#+end_src
-** Marginalia
-Provides annotations / marginalia to completion candidates!
-
-#+begin_src emacs-lisp
-;; Enable rich annotations using the Marginalia package
-(use-package marginalia
+(use-package indent-bars
   :ensure t
-  ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
-  ;; available in the *Completions* buffer, add it to the
-  ;; `completion-list-mode-map'.
-  :bind (:map minibuffer-local-map
-         ("M-A" . marginalia-cycle))
-
-  ;; The :init section is always executed.
-  :init
-
-  ;; Marginalia must be activated in the :init section of use-package such that
-  ;; the mode gets enabled right away. Note that this forces loading the
-  ;; package.
-  (marginalia-mode))
+  :config
+  (setq
+   indent-bars-pattern "."
+   indent-bars-width-frac 0.1
+   indent-bars-pad-frac 0.1
+   indent-bars-highlight-current-depth '(:face default :blend 0.4))
+  :hook ((nix-ts-mode) . indent-bars-mode))
 #+end_src
+
+* Completion
+** Cape
+#+begin_src emacs-lisp
+(use-package cape
+  :straight t
+  :init
+  (add-hook 'eglot-managed-mode-hook
+            (lambda ()
+              (setq-local completion-at-point-functions
+                          (list (cape-capf-super
+                                 #'eglot-completion-at-point
+                                 #'cape-dabbrev))))))
+#+end_src
+
 ** Consult
 Completing read.
 #+begin_src emacs-lisp
@@ -428,6 +311,74 @@ Completing read.
   ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
 )
 #+end_src
+** Corfu
+#+begin_src emacs-lisp
+(use-package corfu
+  :ensure t
+  :custom
+  (corfu-cycle t)
+  (corfu-auto t)              ;; enable auto popup
+  (corfu-auto-prefix 2)      ;; start after 3 chars
+  (corfu-auto-delay 0.1)     ;; small delay (optional)
+  :init
+  (global-corfu-mode)
+  :bind
+  (:map corfu-map
+        ("RET" . corfu-insert)
+        ("TAB" . corfu-insert))
+  )
+#+end_src
+** Embark
+Actions at a point.
+#+begin_src emacs-lisp
+(use-package embark
+  :ensure t
+  :bind
+  (("C-." . embark-act)          ;; act on the candidate at point
+   ("C-;" . embark-dwim)         ;; good alternative: M-.
+   ("C-h b" . embark-bindings)   ;; alternative for `describe-bindings'
+   :map minibuffer-local-map
+   ("C-;"     . embark-select)    ;; mark current candidate, move to next
+   ("M-RET"   . embark-act-all))  ;; act on ALL marked candidates
+
+  :init
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+(use-package embark-consult
+  :ensure t
+  :demand t   ;; force it to load now
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+#+end_src
+** Marginalia
+Provides annotations / marginalia to completion candidates!
+
+#+begin_src emacs-lisp
+;; Enable rich annotations using the Marginalia package
+(use-package marginalia
+  :ensure t
+  ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
+  ;; available in the *Completions* buffer, add it to the
+  ;; `completion-list-mode-map'.
+  :bind (:map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+
+  ;; The :init section is always executed.
+  :init
+
+  ;; Marginalia must be activated in the :init section of use-package such that
+  ;; the mode gets enabled right away. Note that this forces loading the
+  ;; package.
+  (marginalia-mode))
+#+end_src
 ** Orderless
 Regexp and literal matches for things.
 
@@ -440,29 +391,237 @@ Regexp and literal matches for things.
    '((file (styles basic partial-completion))))
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
 #+end_src
-* Languages
-** C / C++
+** Vertico
+Autocompletions  
 #+begin_src emacs-lisp
-(use-package c-ts-mode
-  :hook
-  (c-ts-mode . (lambda ()
-                 (c-ts-mode-set-style 'k&r)
-                 (setq c-ts-mode-indent-offset 4))))
+(use-package emacs
+  :custom
+   ;; Vertico
+  (enable-recursive-minibuffers t)
+  ;; Hide commands in M-x which do not work in the current mode.
+  (read-extended-command-predicate #'command-completion-default-include-p)
+  ;; Do not allow the cursor in the minibuffer prompt
+  (minibuffer-prompt-properties
+   '(read-only t cursor-intangible t face minibuffer-prompt))
+  
+  :init
+  (context-menu-mode t))
+
+(use-package vertico
+  :ensure t
+  :custom
+  ;; (vertico-scroll-margin 0) ;; Different scroll margin
+  ;; (vertico-count 20) ;; Show more candidates
+  ;; (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
+  (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+  :init
+  (vertico-mode))
 #+end_src
-** Dart
+
+* Tools
+** Avy
+Somewhat useful
 #+begin_src emacs-lisp
-(use-package dart-mode
+(use-package avy
+  :ensure t
+  :bind
+  ("M-j" . avy-goto-char-timer))
+#+end_src
+** Bindings
+#+begin_src emacs-lisp
+(keymap-global-set "M-z" #'zap-up-to-char)
+#+end_src
+
+** Dirvish
+Enhancing ~dired~ with Dirvish! A huge thank you to [[https://config.phundrak.com/emacs/packages/emacs-builtin.html#dired][phundrak's config]] and the default [[https://github.com/alexluigit/dirvish/blob/main/docs/CUSTOMIZING.org][docs]].
+Requires ~fd poppler ffmpegthumbnailer mediainfo imagemagick tar unzip 7zip vips and zathura~
+
+#+begin_src emacs-lisp
+(use-package dirvish
+  :ensure t
+  :after dired
+  :init (dirvish-override-dired-mode)
+  :custom
+  (dirvish-quick-access-entries ; It's a custom option, `setq' won't work
+   '(("h" "~/"                          "Home")
+     ("d" "~/Downloads/"                "Downloads")
+	 ("p" "~/Projects/"                 "Projects")))
+  :config
+  (dirvish-peek-mode 0)              ; Preview files in minibuffer
+  (dirvish-side-follow-mode)       ; similar to `treemacs-follow-mode'
+  ;; Order matters in attributes
+  (setq dirvish-attributes '(vc-state subtree-state nerd-icons collapse git-msg file-time file-size file-modes)
+        dirvish-side-attributes '(vc-state nerd-icons collapse))
+  ;; open large directory (over 20000 files) asynchronously with `fd' command
+  (setq dirvish-large-directory-threshold 20000)
+  (setq dirvish-input-throttle 1.0)
+  (setq dirvish-default-layout '(0 0 0.4))
+  :bind ; Bind `dirvish-fd|dirvish-side|dirvish-dwim' as you see fit
+  (("C-c f" . dirvish)
+   ("C-c t" . dirvish-side)
+   :map dirvish-mode-map               ; Dirvish inherits `dired-mode-map'
+   (";"   . dired-up-directory)        ; So you can adjust `dired' bindings here
+   ("?"   . dirvish-dispatch)          ; [?] a helpful cheatsheet
+   ("a"   . dirvish-setup-menu)        ; [a]ttributes settings:`t' toggles mtime, `f' toggles fullframe, etc.
+   ("f"   . dirvish-file-info-menu)    ; [f]ile info
+   ("o"   . dirvish-quick-access)      ; [o]pen `dirvish-quick-access-entries'
+   ("s"   . dirvish-quicksort)         ; [s]ort flie list
+   ("r"   . dirvish-history-jump)      ; [r]ecent visited
+   ("l"   . dirvish-ls-switches-menu)  ; [l]s command flags
+   ("*"   . dirvish-mark-menu)
+   ("y"   . dirvish-yank-menu)
+   ("N"   . dirvish-narrow)
+   ("^"   . dirvish-history-last)
+   ("TAB" . dirvish-subtree-toggle)
+   ("M-e" . dirvish-emerge-menu)))
+#+end_src
+** Eldoc
+Integrates amazingly with Eglot
+#+begin_src emacs-lisp
+(use-package eldoc
+  :init
+  (global-eldoc-mode))
+
+(use-package eldoc-box
+  :ensure t
+  :bind (("C-h ." . eldoc-box-help-at-point)
+         ("C-h ," . eldoc-doc-buffer))) ;; full buffer
+#+end_src
+** File Management
+Basic dired setup.
+
+#+begin_src emacs-lisp
+(use-package dired
+  :custom
+  (dired-dwim-target t)
+  (dired-recursive-copies 'always)  ;; Never ask for confirmation regarding directories
+  (dired-recursive-deletes 'top)    ;; see above
+  (delete-by-moving-to-trash t)
+  (dired-mouse-drag-files t)                   ; Mouse support for dragging and dropping
+  (mouse-drag-and-drop-region-cross-program t) ; added in Emacs 29
+  ;;  (dired-kill-when-opening-new-dired-buffer t)
+  (dired-listing-switches "-l --almost-all --human-readable --group-directories-first --no-group")
+  :config
+  ;; this command is useful when you want to close the window of `dirvish-side'
+  ;; automatically when opening a file
+  (put 'dired-find-alternate-file 'disabled nil))
+#+end_src
+** GPTEL
+#+begin_src emacs-lisp
+(defconst my/deepseek-key-file
+  (expand-file-name "deepseek-key" user-emacs-directory))
+
+(defun my/deepseek-api-key ()
+  "Return the DeepSeek API key, prompting and saving it if necessary."
+  (if (file-exists-p my/deepseek-key-file)
+      (string-trim
+       (with-temp-buffer
+         (insert-file-contents my/deepseek-key-file)
+         (buffer-string)))
+    (let ((key (read-passwd "DeepSeek API key: ")))
+      (make-directory (file-name-directory my/deepseek-key-file) t)
+      (with-temp-file my/deepseek-key-file
+        (insert key))
+      (set-file-modes my/deepseek-key-file #o600)
+      key)))
+
+(use-package gptel
+  :ensure t
+  :bind (("C-c g" . gptel)
+         ("C-c RET" . gptel-send)
+         ("C-c G" . gptel-menu))
+  :config
+  (setq gptel-backend
+        (gptel-make-deepseek
+         "DeepSeek"
+         :stream t
+         :key #'my/deepseek-api-key)))
+#+end_src
+
+** PDF
+#+begin_src emacs-lisp
+(use-package pdf-tools
   :ensure t)
 #+end_src
-** Haskell
+** Repeat
+Repeat commands by spamming the last key of the command
+#+begin_src emacs-lisp
+(use-package repeat
+  :ensure nil
+  :config
+  (repeat-mode))
+#+end_src
+** Tabs
+#+begin_src emacs-lisp
+;; For conf-mode (ini/conf files)
+(use-package conf-mode
+  :ensure nil   ;; it's built-in
+  :hook (conf-mode . (lambda () (setq indent-tabs-mode t))))
+
+;; For Makefiles (needs tabs)
+(use-package make-mode
+  :ensure nil
+  :hook (makefile-mode . (lambda () (setq indent-tabs-mode t))))
+#+end_src
+** Terminal Emulator
+Note: requires libvterm and libtool to be installed. (!)
+
+#+begin_src emacs-lisp
+(use-package vterm
+  :ensure t
+  :config
+  (setq vterm-shell "fish")
+  (keymap-global-set "C-x 5 t" 'vterm-other-frame))
+#+end_src
+
+Adding a keybinding to open vterm in a new frame!
+
+#+begin_src emacs-lisp
+(defun vterm-other-frame ()
+  "Create a new frame with vterm inside of it"
+  (interactive)
+  (select-frame-set-input-focus (make-frame))
+  (vterm))
+#+end_src
+
+** Treesitter
+I am using this strange code snippet that I got online.
+
+#+begin_src emacs-lisp
+(use-package treesit
+  :config
+  (setq treesit-font-lock-level 4
+        major-mode-remap-alist
+        '((c-mode          . c-ts-mode)
+          (c++-mode        . c++-ts-mode)
+          (python-mode     . python-ts-mode)
+          (ruby-mode       . ruby-ts-mode)
+          (sh-mode         . bash-ts-mode)
+          (js-mode         . js-ts-mode)
+          (json-mode       . json-ts-mode)
+          (css-mode        . css-ts-mode)
+          (typescript-mode . tsx-ts-mode))))
+#+end_src
+
+
+* Languages
+** Functional
 #+begin_src emacs-lisp
 (use-package haskell-mode
   :ensure t)
-#+end_src
-** Julia
-#+begin_src emacs-lisp
-(use-package julia-mode
-  :ensure t)
+
+(use-package purescript-mode
+  :ensure t
+  :defer t
+  :config
+  (defun myhook-purescript-mode ()
+    (turn-on-purescript-indentation)
+    (add-hook 'before-save-hook #'purescript-sort-imports nil t))
+  (add-hook 'purescript-mode-hook #'myhook-purescript-mode))
+
+(add-hook 'purescript-mode-hook
+  (lambda ()
+    (modify-syntax-entry ?. "." purescript-mode-syntax-table)))
 #+end_src
 ** Ledger
 #+begin_src emacs-lisp
@@ -485,11 +644,6 @@ Regexp and literal matches for things.
           ("bs"  "hledger -f %(ledger-file) balancesheet")))
   )
 #+end_src
-** ML
-#+begin_src emacs-lisp
-(use-package sml-mode
-  :ensure t)
-#+end_src
 ** Nix & Direnv
 #+begin_src emacs-lisp
 (use-package nix-mode
@@ -503,24 +657,9 @@ Regexp and literal matches for things.
 (add-to-list 'load-path "/nix/var/nix/profiles/default/bin")
 (add-to-list 'load-path (expand-file-name "~/.nix-profile/bin"))
 #+end_src
-** PureScript
+** Science
 #+begin_src emacs-lisp
-(use-package purescript-mode
-  :ensure t
-  :defer t
-  :config
-  (defun myhook-purescript-mode ()
-    (turn-on-purescript-indentation)
-    (add-hook 'before-save-hook #'purescript-sort-imports nil t))
-  (add-hook 'purescript-mode-hook #'myhook-purescript-mode))
-
-(add-hook 'purescript-mode-hook
-  (lambda ()
-    (modify-syntax-entry ?. "." purescript-mode-syntax-table)))
-#+end_src
-** Racket
-#+begin_src emacs-lisp
-(use-package racket-mode
+(use-package julia-mode
   :ensure t)
 #+end_src
 ** Shells
@@ -528,23 +667,13 @@ Regexp and literal matches for things.
 (use-package fish-mode
   :ensure t)
 #+end_src
-** Treesitter
-I am using this strange code snippet that I got online.
-
+** Systems
 #+begin_src emacs-lisp
-(use-package treesit
-  :config
-  (setq treesit-font-lock-level 4
-        major-mode-remap-alist
-        '((c-mode          . c-ts-mode)
-          (c++-mode        . c++-ts-mode)
-          (python-mode     . python-ts-mode)
-          (ruby-mode       . ruby-ts-mode)
-          (sh-mode         . bash-ts-mode)
-          (js-mode         . js-ts-mode)
-          (json-mode       . json-ts-mode)
-          (css-mode        . css-ts-mode)
-          (typescript-mode . tsx-ts-mode))))
+(use-package c-ts-mode
+  :hook
+  (c-ts-mode . (lambda ()
+                 (c-ts-mode-set-style 'k&r)
+                 (setq c-ts-mode-indent-offset 4))))
 #+end_src
 ** Web
 #+begin_src emacs-lisp
@@ -552,6 +681,8 @@ I am using this strange code snippet that I got online.
   :custom
   (sgml-basic-offset 4))
 #+end_src
+
+
 * Org
 ** Org
 Making Org look a bit nice. Also making the title large. I set the face sizes and reduce the default indentation of src blocks to 0 to avoid indentation glitches.
@@ -605,6 +736,8 @@ Huge thanks to [[https://github.com/kwpav/dotfiles/blob/master/emacs.org#org-bab
 #+begin_src emacs-lisp
 (use-package org-babel
   :no-require
+  :custom
+  (org-confirm-babel-evaluate nil)
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -634,142 +767,4 @@ Huge thanks to [[https://github.com/kwpav/dotfiles/blob/master/emacs.org#org-bab
   (require 'org-roam-protocol))
 #+end_src
 
-* Functions
-** Aider
-AI integration into Emacs to increase productivity.
 
-#+begin_src emacs-lisp
-(use-package aider
-  :ensure t
-  :config
-  (setq aider-args '("--model" "deepseek/deepseek-chat"
-                     "--no-attribute-author"
-                     "--no-attribute-committer"
-                     "--no-attribute-co-authored-by"
-                     "--no-pretty"))
-
-  (add-to-list 'display-buffer-alist
-    '("\\*aider:.*\\*"
-      (display-buffer-in-side-window)
-      (side . right)
-      (window-width . 0.40)))
-
-  (defun my/ensure-deepseek-key (&rest _)
-    "Ensure DEEPSEEK_API_KEY is set before running Aider."
-    (unless (getenv "DEEPSEEK_API_KEY")
-      (setenv "DEEPSEEK_API_KEY"
-              (read-passwd "Enter DeepSeek API Key: "))))
-
-  (advice-add 'aider-run-aider :before #'my/ensure-deepseek-key)
-
-  (defun my/aider-run-temp-session ()
-    "Start an aider session that leaves no traces on disk.
-No .aider.chat.history.md, no .aider.input.history,
-no .gitignore modifications, and no auto-commits."
-    (interactive)
-    (let ((aider-args (append aider-args
-                              '("--no-gitignore"
-                                "--no-auto-commits"
-                                "--chat-history-file" "/dev/null"
-                                "--input-history-file" "/dev/null"
-                                "--no-git"))))
-      (aider-run-aider)))
-
-  ;; Append temp session entry after "a" (Run Aider) in the Aider Process group
-  (transient-append-suffix 'aider-transient-menu "a"
-    '("T" "Run Temp Session" my/aider-run-temp-session))
-
-  ;; Keybindings
-  (global-set-key (kbd "C-c a") 'aider-transient-menu)
-  
-  (aider-magit-setup-transients)
-  (global-auto-revert-mode 1))
-#+end_src
-
-** Dirvish
-Enhancing ~dired~ with Dirvish! A huge thank you to [[https://config.phundrak.com/emacs/packages/emacs-builtin.html#dired][phundrak's config]] and the default [[https://github.com/alexluigit/dirvish/blob/main/docs/CUSTOMIZING.org][docs]].
-Requires ~fd poppler ffmpegthumbnailer mediainfo imagemagick tar unzip 7zip vips and zathura~
-
-#+begin_src emacs-lisp
-(use-package dirvish
-  :ensure t
-  :after dired
-  :init (dirvish-override-dired-mode)
-  :custom
-  (dirvish-quick-access-entries ; It's a custom option, `setq' won't work
-   '(("h" "~/"                          "Home")
-     ("d" "~/Downloads/"                "Downloads")
-	 ("p" "~/Projects/"                 "Projects")))
-  :config
-  (dirvish-peek-mode 0)              ; Preview files in minibuffer
-  (dirvish-side-follow-mode)       ; similar to `treemacs-follow-mode'
-  ;; Order matters in attributes
-  (setq dirvish-attributes '(vc-state subtree-state nerd-icons collapse git-msg file-time file-size file-modes)
-        dirvish-side-attributes '(vc-state nerd-icons collapse))
-  ;; open large directory (over 20000 files) asynchronously with `fd' command
-  (setq dirvish-large-directory-threshold 20000)
-  (setq dirvish-input-throttle 1.0)
-  (setq dirvish-default-layout '(0 0 0.4))
-  :bind ; Bind `dirvish-fd|dirvish-side|dirvish-dwim' as you see fit
-  (("C-c f" . dirvish)
-   ("C-c t" . dirvish-side)
-   :map dirvish-mode-map               ; Dirvish inherits `dired-mode-map'
-   (";"   . dired-up-directory)        ; So you can adjust `dired' bindings here
-   ("?"   . dirvish-dispatch)          ; [?] a helpful cheatsheet
-   ("a"   . dirvish-setup-menu)        ; [a]ttributes settings:`t' toggles mtime, `f' toggles fullframe, etc.
-   ("f"   . dirvish-file-info-menu)    ; [f]ile info
-   ("o"   . dirvish-quick-access)      ; [o]pen `dirvish-quick-access-entries'
-   ("s"   . dirvish-quicksort)         ; [s]ort flie list
-   ("r"   . dirvish-history-jump)      ; [r]ecent visited
-   ("l"   . dirvish-ls-switches-menu)  ; [l]s command flags
-   ("*"   . dirvish-mark-menu)
-   ("y"   . dirvish-yank-menu)
-   ("N"   . dirvish-narrow)
-   ("^"   . dirvish-history-last)
-   ("TAB" . dirvish-subtree-toggle)
-   ("M-e" . dirvish-emerge-menu)))
-#+end_src
-** File Management
-Basic dired setup.
-
-#+begin_src emacs-lisp
-(use-package dired
-  :custom
-  (dired-dwim-target t)
-  (dired-recursive-copies 'always)  ;; Never ask for confirmation regarding directories
-  (dired-recursive-deletes 'top)    ;; see above
-  (delete-by-moving-to-trash t)
-  (dired-mouse-drag-files t)                   ; Mouse support for dragging and dropping
-  (mouse-drag-and-drop-region-cross-program t) ; added in Emacs 29
-  ;;  (dired-kill-when-opening-new-dired-buffer t)
-  (dired-listing-switches "-l --almost-all --human-readable --group-directories-first --no-group")
-  :config
-  ;; this command is useful when you want to close the window of `dirvish-side'
-  ;; automatically when opening a file
-  (put 'dired-find-alternate-file 'disabled nil))
-#+end_src
-** PDF
-#+begin_src emacs-lisp
-(use-package pdf-tools
-  :ensure t)
-#+end_src
-** Terminal Emulator
-Note: requires libvterm and libtool to be installed. (!)
-
-#+begin_src emacs-lisp
-(use-package vterm
-  :ensure t
-  :config
-  (setq vterm-shell "fish")
-  (keymap-global-set "C-x 5 t" 'vterm-other-frame))
-#+end_src
-
-Adding a keybinding to open vterm in a new frame!
-
-#+begin_src emacs-lisp
-(defun vterm-other-frame ()
-  "Create a new frame with vterm inside of it"
-  (interactive)
-  (select-frame-set-input-focus (make-frame))
-  (vterm))
-#+end_src
