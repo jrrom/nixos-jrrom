@@ -47,7 +47,6 @@
   :init
   (pixel-scroll-precision-mode t)           ;; Enable precise pixel scrolling.
   (indent-tabs-mode nil)
-  (electric-pair-mode -1)
 
   :config
   (prefer-coding-system 'utf-8)             ;; Only UTF8 here
@@ -177,6 +176,26 @@
   :demand t   ;; force it to load now
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
+
+(use-package paredit
+  :ensure t
+  :hook ((emacs-lisp-mode
+          lisp-mode
+          lisp-interaction-mode
+          scheme-mode)
+         . jrrom/enable-paredit))
+
+(defun jrrom/enable-paredit ()
+  (paredit-mode 1)
+  ;; No interference
+  (electric-pair-local-mode -1))
+
+(use-package elec-pair
+  :hook (after-init . electric-pair-mode)
+  :custom
+  (electric-pair-preserve-balance t) ;; Don't pair when constituent
+  (electric-pair-delete-adjacent-pairs t) ;; Delete together
+  (electric-pair-skip-self t)) ;; Skip over closing
 
 (use-package lsp-bridge
   :ensure t
@@ -354,9 +373,9 @@
    indent-bars-pattern "."
    indent-bars-width-frac 0.1
    indent-bars-pad-frac 0.1
-   ;; No heavy features
-   indent-bars-treesit-support nil
-   indent-bars-highlight-current-depth nil))
+   indent-bars-treesit-support t)
+  (setq indent-bars-highlight-current-depth
+		'(default :width 0.3 :blend 0.35)))
 
 (use-package avy
   :ensure t
@@ -365,8 +384,33 @@
 
 (keymap-global-set "M-z" #'zap-up-to-char)
 
+(use-package auth-source
+  :ensure nil
+  :custom
+  (auth-sources '("~/.authinfo.gpg")))
+
 (use-package circe
-  :ensure t)
+  :ensure t
+  :after auth-source
+  :config
+  (let* ((auth (car (auth-source-search
+                     :host "irc.libera.chat"
+                     :require '(:user :secret)
+                     :create t)))
+         (save (plist-get auth :save-function)))
+
+    ;; Save newly-created credentials.
+    (when save
+      (funcall save))
+
+    (setq circe-network-options
+          `(("Libera Chat"
+             :host "irc.libera.chat"
+             :port 6697
+             :tls t
+             :nick ,(plist-get auth :user)
+             :sasl-username ,(plist-get auth :user)
+             :pass ,(auth-info-password auth))))))
 
 (use-package dirvish
   :ensure t
@@ -469,6 +513,10 @@
          :stream t
          :key #'my/deepseek-api-key)))
 
+(use-package magit
+  :ensure t
+  :bind ("C-c g" . magit-status))
+
 (use-package pdf-tools
   :ensure t)
 
@@ -548,7 +596,7 @@
           ("bs"  "hledger -f %(ledger-file) balancesheet")))
   )
 
-(use-package nix-ts-mode
+(use-package nix-mode
   :ensure t
   :mode "\\.nix\\'")
 

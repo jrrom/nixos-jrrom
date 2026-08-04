@@ -3,6 +3,7 @@
   flake.nixosConfigurations.laptop = inputs.nixpkgs.lib.nixosSystem {
     modules = (with self.nixosModules; [
       applications
+      auth
       connection
       cosmic
       defaults

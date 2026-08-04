@@ -80,7 +80,6 @@ Some other performance settings that I forgot where they came from or if they ev
   :init
   (pixel-scroll-precision-mode t)           ;; Enable precise pixel scrolling.
   (indent-tabs-mode nil)
-  (electric-pair-mode -1)
 
   :config
   (prefer-coding-system 'utf-8)             ;; Only UTF8 here
@@ -226,6 +225,28 @@ Actions at a point.
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
+** Pairs
+#+begin_src emacs-lisp
+(use-package paredit
+  :ensure t
+  :hook ((emacs-lisp-mode
+          lisp-mode
+          lisp-interaction-mode
+          scheme-mode)
+         . jrrom/enable-paredit))
+
+(defun jrrom/enable-paredit ()
+  (paredit-mode 1)
+  ;; No interference
+  (electric-pair-local-mode -1))
+
+(use-package elec-pair
+  :hook (after-init . electric-pair-mode)
+  :custom
+  (electric-pair-preserve-balance t) ;; Don't pair when constituent
+  (electric-pair-delete-adjacent-pairs t) ;; Delete together
+  (electric-pair-skip-self t)) ;; Skip over closing
+#+end_src
 ** LSP Bridge
 #+begin_src emacs-lisp
 (use-package lsp-bridge
@@ -262,6 +283,7 @@ Provides annotations / marginalia to completion candidates!
   ;; package.
   (marginalia-mode))
 #+end_src
+
 ** Orderless
 Regexp and literal matches for things.
 
@@ -445,9 +467,9 @@ Shows keybindings!
    indent-bars-pattern "."
    indent-bars-width-frac 0.1
    indent-bars-pad-frac 0.1
-   ;; No heavy features
-   indent-bars-treesit-support nil
-   indent-bars-highlight-current-depth nil))
+   indent-bars-treesit-support t)
+  (setq indent-bars-highlight-current-depth
+		'(default :width 0.3 :blend 0.35)))
 #+end_src
 
 
@@ -467,9 +489,37 @@ Somewhat useful
 
 ** Circe
 #+begin_src emacs-lisp
+(use-package auth-source
+  :ensure nil
+  :custom
+  (auth-sources '("~/.authinfo.gpg")))
+
 (use-package circe
-  :ensure t)
+  :ensure t
+  :after auth-source
+  :config
+  (let* ((auth (car (auth-source-search
+                     :host "irc.libera.chat"
+                     :require '(:user :secret)
+                     :create t)))
+         (save (plist-get auth :save-function)))
+
+    ;; Save newly-created credentials.
+    (when save
+      (funcall save))
+
+    (setq circe-network-options
+          `(("Libera Chat"
+             :host "irc.libera.chat"
+             :port 6697
+             :tls t
+             :nick ,(plist-get auth :user)
+             :sasl-username ,(plist-get auth :user)
+             :pass ,(auth-info-password auth))))))
 #+end_src
+
+#+RESULTS:
+
 ** Dirvish
 Enhancing ~dired~ with Dirvish! A huge thank you to [[https://config.phundrak.com/emacs/packages/emacs-builtin.html#dired][phundrak's config]] and the default [[https://github.com/alexluigit/dirvish/blob/main/docs/CUSTOMIZING.org][docs]].
 Requires ~fd poppler ffmpegthumbnailer mediainfo imagemagick tar unzip 7zip vips and zathura~
@@ -588,6 +638,12 @@ Basic dired setup.
          :stream t
          :key #'my/deepseek-api-key)))
 #+end_src
+** Magit
+#+begin_src emacs-lisp
+(use-package magit
+  :ensure t
+  :bind ("C-c g" . magit-status))
+#+end_src
 ** PDF
 #+begin_src emacs-lisp
 (use-package pdf-tools
@@ -696,7 +752,7 @@ I am using this strange code snippet that I got online.
 #+end_src
 ** Nix & Direnv
 #+begin_src emacs-lisp
-(use-package nix-ts-mode
+(use-package nix-mode
   :ensure t
   :mode "\\.nix\\'")
 
@@ -713,6 +769,7 @@ I am using this strange code snippet that I got online.
                        (expand-file-name "~/.nix-profile/bin")
                        ":" (getenv "PATH")))
 #+end_src
+
 ** Science
 #+begin_src emacs-lisp
 (use-package julia-mode
