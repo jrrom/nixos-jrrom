@@ -1,3 +1,4 @@
+
 #+TITLE:jrrom's Emacs Configuration
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el
 
@@ -273,18 +274,6 @@ Regexp and literal matches for things.
    '((file (styles basic partial-completion))))
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
 #+end_src
-** Puni (Balancing)
-#+begin_src emacs-lisp
-;; Use puni-mode globally and disable it for term-mode.
-(use-package puni
-  :defer t
-  :init
-  ;; The autoloads of Puni are set up so you can enable `puni-mode` or
-  ;; `puni-global-mode` before `puni` is actually loaded. Only after you press
-  ;; any key that calls Puni commands, it's loaded.
-  (puni-global-mode)
-  (add-hook 'term-mode-hook #'puni-disable-puni-mode))
-#+end_src
 ** Vertico
 Autocompletions  
 #+begin_src emacs-lisp
@@ -402,6 +391,14 @@ Some basic font setup.
   :config
   (setq-default cursor-type 'box))
 #+end_src
+** Paren
+#+begin_src emacs-lisp
+(use-package emacs
+  :init
+  (show-paren-mode 1)
+  :config
+  (setq show-paren-style 'mixed))
+#+end_src
 ** Theme
 My Emacs theme!
 #+begin_src emacs-lisp
@@ -515,6 +512,12 @@ Requires ~fd poppler ffmpegthumbnailer mediainfo imagemagick tar unzip 7zip vips
    ("^"   . dirvish-history-last)
    ("TAB" . dirvish-subtree-toggle)
    ("M-e" . dirvish-emerge-menu)))
+#+end_src
+** Editorconfig
+#+begin_src emacs-lisp
+(use-package editorconfig
+  :ensure t
+  :config (editorconfig-mode 1))
 #+end_src
 ** Eldoc
 Integrates amazingly with Eglot
@@ -829,5 +832,4 @@ Huge thanks to [[https://github.com/kwpav/dotfiles/blob/master/emacs.org#org-bab
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
 #+end_src
-
 

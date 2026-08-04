@@ -216,16 +216,6 @@
    '((file (styles basic partial-completion))))
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
 
-;; Use puni-mode globally and disable it for term-mode.
-(use-package puni
-  :defer t
-  :init
-  ;; The autoloads of Puni are set up so you can enable `puni-mode` or
-  ;; `puni-global-mode` before `puni` is actually loaded. Only after you press
-  ;; any key that calls Puni commands, it's loaded.
-  (puni-global-mode)
-  (add-hook 'term-mode-hook #'puni-disable-puni-mode))
-
 (use-package emacs
   :custom
    ;; Vertico
@@ -324,6 +314,12 @@
   :config
   (setq-default cursor-type 'box))
 
+(use-package emacs
+  :init
+  (show-paren-mode 1)
+  :config
+  (setq show-paren-style 'mixed))
+
 (use-package gruvbox-theme
   :ensure t
   :config (load-theme 'gruvbox-dark-medium t nil))
@@ -409,6 +405,10 @@
    ("^"   . dirvish-history-last)
    ("TAB" . dirvish-subtree-toggle)
    ("M-e" . dirvish-emerge-menu)))
+
+(use-package editorconfig
+  :ensure t
+  :config (editorconfig-mode 1))
 
 (use-package eldoc
   :ensure nil

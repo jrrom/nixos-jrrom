@@ -53,15 +53,7 @@
           workspace_mode   = cosmicLib.cosmic.mkRON "enum" "OutputBound";
         };
 
-        xkb_config = {
-          layout = "us";
-          model = "pc104";
-          repeat_delay = 500;
-          repeat_rate = 25;
-          rules = "";
-          variant = "";
-          options = cosmicLib.cosmic.mkRON "optional" "ctrl:swapcaps";
-        };
+
       };
     };
 
