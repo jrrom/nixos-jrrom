@@ -22,6 +22,7 @@
 
       # CLI
       curl
+	  exercism # for practice and stuff
       ffmpeg
       gh
       jq

@@ -47,7 +47,7 @@
   :init
   (pixel-scroll-precision-mode t)           ;; Enable precise pixel scrolling.
   (indent-tabs-mode nil)
-  (electric-pair-mode 1)
+  (electric-pair-mode -1)
 
   :config
   (prefer-coding-system 'utf-8)             ;; Only UTF8 here
@@ -216,6 +216,16 @@
    '((file (styles basic partial-completion))))
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
 
+;; Use puni-mode globally and disable it for term-mode.
+(use-package puni
+  :defer t
+  :init
+  ;; The autoloads of Puni are set up so you can enable `puni-mode` or
+  ;; `puni-global-mode` before `puni` is actually loaded. Only after you press
+  ;; any key that calls Puni commands, it's loaded.
+  (puni-global-mode)
+  (add-hook 'term-mode-hook #'puni-disable-puni-mode))
+
 (use-package emacs
   :custom
    ;; Vertico
@@ -328,7 +338,14 @@
   :hook ((text-mode . visual-line-mode)
          (text-mode . visual-wrap-prefix-mode)) ; aligns wrapped lines with indentation
   :config
-  (setq-default fill-column 100))
+  (setq-default fill-column 140))
+
+(use-package visual-fill-column
+  :ensure t
+  :hook (visual-line-mode . visual-fill-column-mode)
+  :init
+  (setq-default visual-fill-column-center-text t)
+  (setq-default visual-fill-column-fringes-outside-margins nil)) ;; Fix fill column for Org mode
 
 (use-package indent-bars
   :ensure t
@@ -351,6 +368,9 @@
   ("M-j" . avy-goto-char-timer))
 
 (keymap-global-set "M-z" #'zap-up-to-char)
+
+(use-package circe
+  :ensure t)
 
 (use-package dirvish
   :ensure t
@@ -591,6 +611,7 @@
   :ensure t
   :custom
   (org-modern-todo nil)
+  (org-modern-block-fringe 2)
   :hook (org-mode . org-modern-mode))
 
 (use-package org-contrib
