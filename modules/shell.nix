@@ -20,41 +20,37 @@
     # Environments
     
     environment.systemPackages = with pkgs; [
-      # Env
-      devenv
-
-      # Data wrangling
-      miller # structured data editing
-      jq # json
-      xh # curl replacement
-
-      # Status
       btop # top replacement
-      dust # disk usage
-      procs # ps replacement, see processes
-      tldr # short man
-
-      # General
+      curl
       delta # better diffs
+      dust # disk usage
       fd # better find
+      ffmpeg
+      jq
+      jq # json
+      man-pages
+      man-pages-posix
+      ncgopher
       ouch # compression and decompression
+      procs # ps replacement, see processes
       ripgrep # better grep
+      texliveFull
+      tldr # short man
+      tree
+      unrar
+      unrtf
+      unzip
+      wget
+      wl-clipboard
+      xdg-ninja
+      xh # curl replacement
+      yad
       zoxide # better cd
 
-      # Languages (other than Python)
-      d2 # Diagrams
-      
-      # Misc
-      yad
-    ] ++ [
-      # Scripting language for scripts
-      (pkgs.python3.withPackages (python-pkgs: with python-pkgs; [
-        numpy
-        pandas
-        tkinter
-        xlrd # .xls old format
-      ]))
-      basedpyright
+      # Cloud stuff
+      oci-cli
+      gh
+      exercism # for practice and stuff
     ];
 
     programs.direnv = {
@@ -69,6 +65,16 @@
 
     programs.bat = {
       enable = true;
+    };
+
+    programs.git = {
+      enable = true;
+      config = {
+        user = {
+          email = "77691121+jrrom@users.noreply.github.com";
+          name = "jrrom";
+        };
+      };
     };
   };
 }

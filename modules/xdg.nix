@@ -14,7 +14,6 @@ in
       HISTFILE          = "$HOME/.local/state/bash/history";
       PYTHON_HISTORY    = "${XDG_STATE_HOME}/python_history";
       
-      _JAVA_OPTIONS     = "-Djava.util.prefs.userRoot=${XDG_CONFIG_HOME}/java -Djavafx.cachedir=${XDG_CACHE_HOME}/openjfx";
       _JAVA_AWT_WM_NONREPARENTING = "1";
       GRADLE_USER_HOME="${XDG_DATA_HOME}/gradle";
 

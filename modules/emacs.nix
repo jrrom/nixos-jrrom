@@ -3,6 +3,7 @@
   flake.nixosModules.emacs = { pkgs, ... }: {
     nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];
     environment.systemPackages = with pkgs; [
+      # Dependencies
       catdoc # Display Word files
       dtach # "Concurrency" for those programmes below
       epub-thumbnailer # Get ePub thumbnails
@@ -19,6 +20,10 @@
       trash-cli # Garbage
       vips
       vipsdisp # Image processing
+      pandoc
+
+      # Environment
+      devenv
 
       # For Nix editing
       nixd
@@ -28,7 +33,16 @@
       clang-tools
       clang
 
-      # Environments
+      # Graphs
+      plantuml-c4
+      graphviz # Dependency for plantuml rendering
+
+      # Structured data editing
+      miller
+
+      # Cloud
+      opentofu
+      opentofu-ls # ??? dunno
     ]
     ++ [( 
       pkgs.emacsWithPackagesFromUsePackage {
@@ -39,7 +53,16 @@
         extraEmacsPackages = epkgs: [
           (epkgs.treesit-grammars.with-all-grammars)
         ];
-      })];
+      })] ++ [
+        # Scripting language for scripts
+        (pkgs.python3.withPackages (python-pkgs: with python-pkgs; [
+          numpy
+          pandas
+          tkinter
+          xlrd # .xls old format
+        ]))
+        basedpyright
+      ];
 
     environment.sessionVariables = {
       EDITOR = "emacs";

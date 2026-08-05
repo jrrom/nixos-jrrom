@@ -566,6 +566,20 @@
           (css-mode        . css-ts-mode)
           (typescript-mode . tsx-ts-mode))))
 
+(use-package terraform-mode
+  :ensure t
+  :custom (terraform-indent-level 4)
+  :config
+  (defun my-terraform-mode-init ()
+    (outline-minor-mode 1))
+  (add-hook 'terraform-mode-hook 'my-terraform-mode-init))
+
+(use-package plantuml-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode))
+  (setq plantuml-default-exec-mode 'executable))
+
 (use-package haskell-mode
   :ensure t)
 
