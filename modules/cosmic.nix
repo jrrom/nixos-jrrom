@@ -171,6 +171,7 @@
       enable = true;
       entries = [
         "${inputs.kDrive.packages.x86_64-linux.default}/share/applications/kDrive.desktop"
+        "${pkgs.emacs}/share/applications/emacs.desktop"
       ];
     };
     

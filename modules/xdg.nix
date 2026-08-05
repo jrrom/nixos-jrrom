@@ -30,7 +30,6 @@ in
 
     environment.shellAliases = {
       wget = "wget --hsts-file=${XDG_DATA_HOME}/wget-hsts";
-      ll = "ls -l";
     };
   };
 }

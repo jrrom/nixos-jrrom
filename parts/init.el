@@ -64,11 +64,6 @@
   (recentf-max-saved-items 100)             ;; number of files to remember with hosts/
 )
 
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (with-current-buffer "*scratch*"
-              (display-line-numbers-mode -1))))
-
 ;; Example configuration for Consult
 (use-package consult
   :ensure t
@@ -197,18 +192,24 @@
   (electric-pair-delete-adjacent-pairs t) ;; Delete together
   (electric-pair-skip-self t)) ;; Skip over closing
 
+(with-eval-after-load 'paredit
+  (define-key paredit-mode-map (kbd "RET")
+    (lambda ()
+      (interactive)
+      (if (bound-and-true-p acm-mode)
+          (call-interactively (lookup-key acm-mode-map (kbd "RET")))
+        (paredit-newline)))))
+
 (use-package lsp-bridge
   :ensure t
   :config
   (setq lsp-bridge-enable-hover-diagnostic t)
   (setq lsp-bridge-enable-signature-help nil)
-  (setq lsp-bridge-enable-org-babel t)
+  (setq lsp-bridge-enable-org-babel nil)
   (setq acm-backend-lsp-candidate-min-length 2)
   :bind (:map lsp-bridge-mode-map
          ("C-h ." . lsp-bridge-popup-documentation)
-         ("C-h ," . lsp-bridge-show-documentation))
-  :init
-  (global-lsp-bridge-mode))
+         ("C-h ," . lsp-bridge-show-documentation)))
 
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
@@ -364,10 +365,11 @@
 
 (use-package indent-bars
   :ensure t
-  :hook ((prog-mode . indent-bars-mode)
+  :hook ((prog-mode . (lambda ()
+                        (when buffer-file-name
+                          (indent-bars-mode 1))))
          (lisp-data-mode . (lambda () (indent-bars-mode -1)))
-		 (haskell-mode . (lambda () (indent-bars-mode -1)))
-		 )
+         (haskell-mode . (lambda () (indent-bars-mode -1))))
   :config
   (setq
    indent-bars-pattern "."
@@ -639,7 +641,7 @@
     (set-face-attribute 'org-document-title nil :height 1.7 :weight 'bold :inherit 'variable-pitch)))
 
 (use-package org
-  :ensure t
+  :ensure nil
   :custom
   (org-src-tab-acts-natively t)
   (org-src-fontify-natively  t)
@@ -647,6 +649,7 @@
   (org-startup-folded 'content)
   (org-edit-src-content-indentation 0)
   (org-log-into-drawer 1)
+  (org-src-window-setup 'current-window)
   (org-link-frame-setup
    '((file . find-file)))
   :hook
@@ -670,6 +673,8 @@
   :custom
   (org-confirm-babel-evaluate nil)
   :config
+  (setq-default enable-local-variables :all
+				enable-local-eval t)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((python . t)
@@ -679,8 +684,6 @@
 
 (use-package org-roam
   :ensure t
-  :custom
-  (org-roam-directory (file-truename "/home/jrrom/kDrive/Computer"))
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)
@@ -691,6 +694,8 @@
   :config
   ;; If you're using a vertical completion framework, you might want a more informative completion interface
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (setq org-roam-directory
+      (expand-file-name "~/kDrive/Computer"))
   (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))

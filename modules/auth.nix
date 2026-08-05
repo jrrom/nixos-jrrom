@@ -1,8 +1,8 @@
 { inputs, ... }: {
   flake.nixosModules.auth = { pkgs, ... }: {
-    programs.gnupg = {
+    programs.gnupg.agent = {
       enable = true;
-      agent = pkgs.pinentry-gtk2;
+      pinentryPackage = pkgs.pinentry-gtk2;
     };
   };
 }

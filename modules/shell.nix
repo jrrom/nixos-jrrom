@@ -8,6 +8,13 @@
       direnv hook fish | source  
     '';
       generateCompletions = true;
+      shellAliases = {
+        cat  = "bat";
+        diff = "delta";
+        find = "fd";
+        ps   = "procs";
+        z    = "zoxide";
+      };
     };
 
     # Environments
@@ -17,23 +24,26 @@
       devenv
 
       # Data wrangling
-      miller
-      jq
-      xh
+      miller # structured data editing
+      jq # json
+      xh # curl replacement
 
       # Status
-      btop
-      dust
-      procs
-      tldr
+      btop # top replacement
+      dust # disk usage
+      procs # ps replacement, see processes
+      tldr # short man
 
       # General
-      bat
-      fd
-      fzf
-      ripgrep
-      zoxide
+      delta # better diffs
+      fd # better find
+      ouch # compression and decompression
+      ripgrep # better grep
+      zoxide # better cd
 
+      # Languages (other than Python)
+      d2 # Diagrams
+      
       # Misc
       yad
     ] ++ [
@@ -42,14 +52,23 @@
         numpy
         pandas
         tkinter
-        xlrd
+        xlrd # .xls old format
       ]))
-      ty
+      basedpyright
     ];
 
     programs.direnv = {
       enable = true;
       enableFishIntegration = true;
+    };
+
+    programs.zoxide = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+
+    programs.bat = {
+      enable = true;
     };
   };
 }
