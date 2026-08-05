@@ -26,8 +26,6 @@
 
   flake.nixosModules.laptopModule = { pkgs, ... }: {
     imports = [ ../parts/hardwareLaptop.nix ];
-
-    boot.kernelPackages = pkgs.linuxPackages_lts;
     
     time.timeZone = "Asia/Kolkata";
     i18n = {
