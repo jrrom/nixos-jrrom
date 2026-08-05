@@ -13,7 +13,7 @@
       home-manager
       impermanence
       input
-	  keyd
+	    keyd
       lix
       printing
       shell

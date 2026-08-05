@@ -205,11 +205,13 @@
   :config
   (setq lsp-bridge-enable-hover-diagnostic t)
   (setq lsp-bridge-enable-signature-help nil)
-  (setq lsp-bridge-enable-org-babel nil)
+  (setq lsp-bridge-enable-org-babel t)
   (setq acm-backend-lsp-candidate-min-length 2)
   :bind (:map lsp-bridge-mode-map
          ("C-h ." . lsp-bridge-popup-documentation)
-         ("C-h ," . lsp-bridge-show-documentation)))
+         ("C-h ," . lsp-bridge-show-documentation))
+  :init
+  (global-lsp-bridge-mode))
 
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
@@ -368,6 +370,7 @@
   :hook ((prog-mode . (lambda ()
                         (when buffer-file-name
                           (indent-bars-mode 1))))
+		 (org-src-mode . (lambda () (indent-bars-mode 1)))
          (lisp-data-mode . (lambda () (indent-bars-mode -1)))
          (haskell-mode . (lambda () (indent-bars-mode -1))))
   :config
@@ -606,8 +609,6 @@
   :ensure t
   :hook (after-init . envrc-global-mode))
 
-;;(add-to-list 'load-path "/nix/var/nix/profiles/default/bin")
-;;(add-to-list 'load-path (expand-file-name "~/.nix-profile/bin"))
 (add-to-list 'exec-path "/nix/var/nix/profiles/default/bin")
 (add-to-list 'exec-path (expand-file-name "~/.nix-profile/bin"))
 ;; If direnv/nix need PATH updated:
