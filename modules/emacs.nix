@@ -42,7 +42,7 @@
 
       # Cloud
       opentofu
-      opentofu-ls # ??? dunno
+      tofu-ls # ??? dunno
     ]
     ++ [( 
       pkgs.emacsWithPackagesFromUsePackage {

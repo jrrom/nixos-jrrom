@@ -99,8 +99,10 @@ Some other performance settings that I forgot where they came from or if they ev
   (recentf-max-saved-items 100)             ;; number of files to remember with hosts/
 )
 #+end_src
-** Home Org
-Removing line numbers from the scratch buffer.
+** Home File
+#+begin_src emacs-lisp
+(setq initial-buffer-choice "~/kDrive/Computer/all.org")
+#+end_src
 
 
 * Completion
@@ -729,7 +731,11 @@ I am using this strange code snippet that I got online.
   :ensure t
   :config
   (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode))
-  (setq plantuml-default-exec-mode 'executable))
+  (setq plantuml-default-exec-mode 'executable)
+  (setq plantuml-executable-args '("-headless" "-darkmode"))
+  (setq org-plantuml-exec-mode 'plantuml) ;; Executable
+  (setq org-plantuml-args '("-headless" "-darkmode"))
+  (setq plantuml-output-type "svg"))
 #+end_src
 
 ** Functional
@@ -872,16 +878,17 @@ Making Org look a bit nice. Also making the title large. I set the face sizes an
 (use-package org-contrib
   :ensure t)
 #+end_src
-** Org Babel
+** Org Babel (ob)
 Adding org-src support to some languages.
 Huge thanks to [[https://github.com/kwpav/dotfiles/blob/master/emacs.org#org-babel][kwpav]] for showing :no-require in the config.
 
 #+begin_src emacs-lisp
-(use-package org-babel
-  :no-require
+(use-package ob
+  :ensure nil
   :custom
   (org-confirm-babel-evaluate nil)
   :config
+  (setq org-startup-with-inline-images t) ;; We need images for PlantUML!
   (setq-default enable-local-variables :all
 				enable-local-eval t)
   (org-babel-do-load-languages
@@ -889,8 +896,12 @@ Huge thanks to [[https://github.com/kwpav/dotfiles/blob/master/emacs.org#org-bab
    '((python . t)
 	 (emacs-lisp . t)
 	 (ledger . t)
-	 (shell . t))))
+	 (shell . t)
+	 (plantuml . t))))
+
+(add-hook 'org-babel-after-execute-hook 'org-link-preview-refresh)
 #+end_src
+
 ** Org Roam
 #+begin_src emacs-lisp
 (use-package org-roam

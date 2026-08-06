@@ -64,6 +64,8 @@
   (recentf-max-saved-items 100)             ;; number of files to remember with hosts/
 )
 
+(setq initial-buffer-choice "~/kDrive/Computer/all.org")
+
 ;; Example configuration for Consult
 (use-package consult
   :ensure t
@@ -578,7 +580,11 @@
   :ensure t
   :config
   (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode))
-  (setq plantuml-default-exec-mode 'executable))
+  (setq plantuml-default-exec-mode 'executable)
+  (setq plantuml-executable-args '("-headless" "-darkmode"))
+  (setq org-plantuml-exec-mode 'plantuml) ;; Executable
+  (setq org-plantuml-args '("-headless" "-darkmode"))
+  (setq plantuml-output-type "svg"))
 
 (use-package haskell-mode
   :ensure t)
@@ -683,11 +689,12 @@
 (use-package org-contrib
   :ensure t)
 
-(use-package org-babel
-  :no-require
+(use-package ob
+  :ensure nil
   :custom
   (org-confirm-babel-evaluate nil)
   :config
+  (setq org-startup-with-inline-images t) ;; We need images for PlantUML!
   (setq-default enable-local-variables :all
 				enable-local-eval t)
   (org-babel-do-load-languages
@@ -695,7 +702,10 @@
    '((python . t)
 	 (emacs-lisp . t)
 	 (ledger . t)
-	 (shell . t))))
+	 (shell . t)
+	 (plantuml . t))))
+
+(add-hook 'org-babel-after-execute-hook 'org-link-preview-refresh)
 
 (use-package org-roam
   :ensure t
