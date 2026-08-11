@@ -33,9 +33,13 @@
       clang-tools
       clang
 
-      # Graphs
+      # Graphs & Papers
+      ghostscript
       plantuml-c4
       graphviz # Dependency for plantuml rendering
+      texliveFull
+      texlab
+      epstool
 
       # Structured data editing
       miller

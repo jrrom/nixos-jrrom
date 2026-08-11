@@ -20,13 +20,13 @@
     # Environments
     
     environment.systemPackages = with pkgs; [
+      bats # bash testing
       btop # top replacement
       curl
       delta # better diffs
       dust # disk usage
       fd # better find
       ffmpeg
-      jq
       jq # json
       man-pages
       man-pages-posix
@@ -34,7 +34,6 @@
       ouch # compression and decompression
       procs # ps replacement, see processes
       ripgrep # better grep
-      texliveFull
       tldr # short man
       tree
       unrar

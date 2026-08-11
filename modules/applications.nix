@@ -18,6 +18,7 @@
       strawberry
       tenacity
       vlc
+      zathura
     ];
 
     programs.firefox.enable = true;

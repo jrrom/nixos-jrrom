@@ -18,7 +18,6 @@
 
     # Utilities
     environment.systemPackages = with pkgs; [
-      ghostscript
       simple-scan
     ];
   };

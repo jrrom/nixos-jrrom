@@ -352,7 +352,7 @@ Some basic font setup.
   (set-face-attribute 'fixed-pitch nil :family "Maple Mono"))
 
 (when (member "Fira Sans" (font-family-list))
-  (set-face-attribute 'variable-pitch nil :font "Fira Sans-16"))
+  (set-face-attribute 'variable-pitch nil :font "Fira Sans-17"))
 
 ;; Nerd Icons Setup
 (set-fontset-font t nil (font-spec :family "Symbols Nerd Font Mono") nil 'append)
@@ -360,8 +360,8 @@ Some basic font setup.
 ;; Mixed pitch mode
 (use-package mixed-pitch
   :ensure t
-  :hook
-  (org-mode . mixed-pitch-mode)
+  :hook (org-mode . mixed-pitch-mode)
+  :hook (LaTex-mode . mixed-pitch-mode)
   :custom
   (mixed-pitch-variable-pitch-cursor 'box))
 #+end_src
@@ -756,6 +756,15 @@ I am using this strange code snippet that I got online.
   (lambda ()
     (modify-syntax-entry ?. "." purescript-mode-syntax-table)))
 #+end_src
+** jq
+#+begin_src emacs-lisp
+(use-package jq-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.jq$" . jq-mode))
+  (with-eval-after-load "json-mode"
+	(define-key json-mode-map (kbd "C-c C-j") #'jq-interactively)))
+#+end_src
 ** Ledger
 #+begin_src emacs-lisp
 (use-package ledger-mode
@@ -825,6 +834,7 @@ I am using this strange code snippet that I got online.
   (add-hook 'LaTeX-mode-hook #'turn-on-reftex) ; optional: RefTeX support
   (add-hook 'LaTeX-mode-hook #'visual-line-mode) ; soft wrap long lines
   (add-hook 'LaTeX-mode-hook #'flyspell-mode)   ; spell-check comments/strings
+  (setq-default line-spacing 0.2)   ; extra space between lines
   (setq TeX-PDF-mode t))      ; default to PDF output
 #+end_src
 ** Web
@@ -897,7 +907,8 @@ Huge thanks to [[https://github.com/kwpav/dotfiles/blob/master/emacs.org#org-bab
 	 (emacs-lisp . t)
 	 (ledger . t)
 	 (shell . t)
-	 (plantuml . t))))
+	 (plantuml . t)
+	 (jq . t))))
 
 (add-hook 'org-babel-after-execute-hook 'org-link-preview-refresh)
 #+end_src

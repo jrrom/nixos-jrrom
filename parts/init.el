@@ -280,7 +280,7 @@
   (set-face-attribute 'fixed-pitch nil :family "Maple Mono"))
 
 (when (member "Fira Sans" (font-family-list))
-  (set-face-attribute 'variable-pitch nil :font "Fira Sans-16"))
+  (set-face-attribute 'variable-pitch nil :font "Fira Sans-17"))
 
 ;; Nerd Icons Setup
 (set-fontset-font t nil (font-spec :family "Symbols Nerd Font Mono") nil 'append)
@@ -288,8 +288,8 @@
 ;; Mixed pitch mode
 (use-package mixed-pitch
   :ensure t
-  :hook
-  (org-mode . mixed-pitch-mode)
+  :hook (org-mode . mixed-pitch-mode)
+  :hook (LaTex-mode . mixed-pitch-mode)
   :custom
   (mixed-pitch-variable-pitch-cursor 'box))
 
@@ -602,6 +602,13 @@
   (lambda ()
     (modify-syntax-entry ?. "." purescript-mode-syntax-table)))
 
+(use-package jq-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.jq$" . jq-mode))
+  (with-eval-after-load "json-mode"
+	(define-key json-mode-map (kbd "C-c C-j") #'jq-interactively)))
+
 (use-package ledger-mode
   :mode ("\\.journal\\'" "\\.ledger\\'")
   :ensure t
@@ -703,7 +710,8 @@
 	 (emacs-lisp . t)
 	 (ledger . t)
 	 (shell . t)
-	 (plantuml . t))))
+	 (plantuml . t)
+	 (jq . t))))
 
 (add-hook 'org-babel-after-execute-hook 'org-link-preview-refresh)
 
