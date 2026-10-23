@@ -14,12 +14,18 @@
         find = "fd";
         ps   = "procs";
         z    = "zoxide";
+        bb   = "busybox";
+        terraform-ls = "tofu-ls";
       };
     };
 
     # Environments
     
     environment.systemPackages = with pkgs; [
+<<<<<<< HEAD
+=======
+      busybox
+>>>>>>> 09d5942d (Syncing again)
       bats # bash testing
       btop # top replacement
       curl
@@ -51,6 +57,10 @@
       gh
       exercism # for practice and stuff
     ];
+
+    services.tailscale = {
+      enable =  true;
+    };
 
     programs.direnv = {
       enable = true;

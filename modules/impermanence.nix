@@ -50,6 +50,8 @@
         "/var/lib/flatpak"
         "/var/lib/systemd/coredump"
         "/etc/NetworkManager/system-connections"
+        "/var/lib/tailscale"
+        "/etc/claude-code/"
       ];
       files = [
         "/etc/machine-id"

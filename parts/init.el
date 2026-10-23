@@ -43,15 +43,14 @@
   (ring-bell-function 'ignore)              ;; Disable the audible bell and visible bell
   (tab-always-indent 'complete)             ;; Make the TAB key complete text instead of just indenting.
   (tab-width 4)                             ;; Set the tab width to 4 spaces.
+  (indent-tabs-mode nil)
 
   :init
   (pixel-scroll-precision-mode t)           ;; Enable precise pixel scrolling.
-  (indent-tabs-mode nil)
 
   :config
   (prefer-coding-system 'utf-8)             ;; Only UTF8 here
-  (setq-default display-line-numbers nil)
-)
+  (setq-default display-line-numbers nil))
 
 (use-package emacs
   :custom
@@ -64,7 +63,7 @@
   (recentf-max-saved-items 100)             ;; number of files to remember with hosts/
 )
 
-(setq initial-buffer-choice "~/kDrive/Computer/all.org")
+(setq initial-buffer-choice "~/kDrive/jrrom/all.org")
 
 ;; Example configuration for Consult
 (use-package consult
@@ -203,16 +202,20 @@
         (paredit-newline)))))
 
 (use-package lsp-bridge
-  :ensure t
+  :load-path (lambda () (list "~/Public/lsp-bridge" "~/Public/lsp-bridge/acm"))
+  :demand t
+  :custom
+  (lsp-bridge-typescript-lsp-server "typescript-go")
+  (lsp-bridge-typescript-react-lsp-server "typescript-go-react")
   :config
   (setq lsp-bridge-enable-hover-diagnostic t)
   (setq lsp-bridge-enable-signature-help nil)
   (setq lsp-bridge-enable-org-babel t)
-  (setq acm-backend-lsp-candidate-min-length 2)
+  (setq acm-backend-lsp-candidate-min-length 0) ;; 0 for now
   :bind (:map lsp-bridge-mode-map
-         ("C-h ." . lsp-bridge-popup-documentation)
-         ("C-h ," . lsp-bridge-show-documentation))
-  :init
+              ("C-h ." . lsp-bridge-popup-documentation)
+              ("C-h ," . lsp-bridge-show-documentation))
+  :config
   (global-lsp-bridge-mode))
 
 ;; Enable rich annotations using the Marginalia package
@@ -356,14 +359,16 @@
 
 (use-package emacs
   :hook ((text-mode . visual-line-mode)
-         (text-mode . visual-wrap-prefix-mode)) ; aligns wrapped lines with indentation
-  :config
-  (setq-default fill-column 140))
+         (text-mode . visual-wrap-prefix-mode)
+		 (outline-mode . visual-line-mode)
+		 (outline-mode . visual-wrap-prefix-mode)))
 
 (use-package visual-fill-column
   :ensure t
   :hook (visual-line-mode . visual-fill-column-mode)
+
   :init
+  (setq-default visual-fill-column-width 140)
   (setq-default visual-fill-column-center-text t)
   (setq-default visual-fill-column-fringes-outside-margins nil)) ;; Fix fill column for Org mode
 
@@ -390,34 +395,6 @@
   ("M-j" . avy-goto-char-timer))
 
 (keymap-global-set "M-z" #'zap-up-to-char)
-
-(use-package auth-source
-  :ensure nil
-  :custom
-  (auth-sources '("~/.authinfo.gpg")))
-
-(use-package circe
-  :ensure t
-  :after auth-source
-  :config
-  (let* ((auth (car (auth-source-search
-                     :host "irc.libera.chat"
-                     :require '(:user :secret)
-                     :create t)))
-         (save (plist-get auth :save-function)))
-
-    ;; Save newly-created credentials.
-    (when save
-      (funcall save))
-
-    (setq circe-network-options
-          `(("Libera Chat"
-             :host "irc.libera.chat"
-             :port 6697
-             :tls t
-             :nick ,(plist-get auth :user)
-             :sasl-username ,(plist-get auth :user)
-             :pass ,(auth-info-password auth))))))
 
 (use-package dirvish
   :ensure t
@@ -458,7 +435,7 @@
    ("M-e" . dirvish-emerge-menu)))
 
 (use-package editorconfig
-  :ensure t
+  :ensure nil
   :config (editorconfig-mode 1))
 
 (use-package eldoc
@@ -564,17 +541,21 @@
           (ruby-mode       . ruby-ts-mode)
           (sh-mode         . bash-ts-mode)
           (js-mode         . js-ts-mode)
-          (json-mode       . json-ts-mode)
+          (js-json-mode    . json-ts-mode)
           (css-mode        . css-ts-mode)
           (typescript-mode . tsx-ts-mode))))
 
 (use-package terraform-mode
   :ensure t
-  :custom (terraform-indent-level 4)
+  :custom (terraform-indent-level 2)
   :config
   (defun my-terraform-mode-init ()
     (outline-minor-mode 1))
   (add-hook 'terraform-mode-hook 'my-terraform-mode-init))
+
+(use-package yaml-ts-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode)))
 
 (use-package plantuml-mode
   :ensure t
@@ -602,8 +583,18 @@
   (lambda ()
     (modify-syntax-entry ?. "." purescript-mode-syntax-table)))
 
+<<<<<<< HEAD
 (use-package jq-mode
   :ensure t
+=======
+(use-package just-mode
+  :ensure t)
+
+(use-package jq-mode
+  :vc (:url "https://github.com/jrrom/jq-mode.git"
+       :branch "indent-fix"
+       :rev :newest)
+>>>>>>> 09d5942d (Syncing again)
   :config
   (add-to-list 'auto-mode-alist '("\\.jq$" . jq-mode))
   (with-eval-after-load "json-mode"
@@ -646,6 +637,9 @@
 (use-package julia-mode
   :ensure t)
 
+(use-package snakemake-mode
+  :ensure t)
+
 (use-package fish-mode
   :ensure t)
 
@@ -658,6 +652,18 @@
 (use-package html-mode
   :custom
   (sgml-basic-offset 4))
+
+(use-package markdown-mode
+  :ensure t)
+
+(use-package json-ts-mode
+  :config
+  (setq json-ts-mode-indent-offset 2))
+
+(use-package typescript-ts-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode)))
 
 (defun jrrom/org-face-sizes ()
   (let ((base 1.0))
@@ -682,7 +688,8 @@
    '((file . find-file)))
   :hook
   (org-mode . (lambda ()
-				(setq-local line-spacing 0.3)))
+				(setq-local line-spacing 0.3)
+				(setq-local fill-column 90)))
   :config
   (jrrom/org-face-sizes))
 
@@ -695,6 +702,13 @@
 
 (use-package org-contrib
   :ensure t)
+
+;; (use-package org-link-beautify
+;;   :ensure t
+;;   :config
+;;   (setq org-link-beautify-async-preview t)
+;;   (setq org-element-use-cache t)
+;;   :hook (org-mode . org-link-beautify-mode))
 
 (use-package ob
   :ensure nil
@@ -711,6 +725,10 @@
 	 (ledger . t)
 	 (shell . t)
 	 (plantuml . t)
+<<<<<<< HEAD
+=======
+     (js . t)
+>>>>>>> 09d5942d (Syncing again)
 	 (jq . t))))
 
 (add-hook 'org-babel-after-execute-hook 'org-link-preview-refresh)
@@ -732,3 +750,100 @@
   (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
+
+(defun my/org-animate-all-inline-images ()
+  (interactive)
+  (dolist (ov (overlays-in (point-min) (point-max)))
+    (let ((img (overlay-get ov 'display)))
+      (when (and (consp img) (eq (car img) 'image))
+        (image-animate img nil t)))))
+
+(defun my/org-animate-after-babel ()
+  (run-at-time 0 nil #'my/org-animate-all-inline-images))
+
+(add-hook 'org-babel-after-execute-hook #'my/org-animate-after-babel)
+
+(defconst my/org-notes-font-lock
+  '((my/org-notes-matcher
+     (0 '(face nil invisible org-notes) t))))
+
+(defun my/org-notes-matcher (limit)
+  (when (re-search-forward "^:NOTES:.*$" limit t)
+    (let ((beg (match-beginning 0)))
+      (when (re-search-forward "^:END:.*\n?" nil t)
+        (set-match-data (list beg (match-end 0)))
+        t))))
+
+(defun my/org-hide-notes ()
+  (interactive)
+  (my/org-animate-all-inline-images)
+  (org-babel-map-src-blocks nil (org-babel-remove-result))
+  (org-fold-show-all '(drawers))
+  (add-to-invisibility-spec '(org-notes))
+  (font-lock-add-keywords nil my/org-notes-font-lock 'prepend)
+  (font-lock-flush)
+  (font-lock-ensure))
+
+(defun my/org-show-notes ()
+  (interactive)
+  (my/org-animate-all-inline-images)
+  (font-lock-remove-keywords nil my/org-notes-font-lock)
+  (remove-from-invisibility-spec '(org-notes))
+  (font-lock-flush)
+  (font-lock-ensure))
+
+(use-package org-tree-slide
+  :ensure t
+  :hook ((org-tree-slide-play . my/org-hide-notes)
+         (org-tree-slide-stop . my/org-show-notes))
+  :config
+  (with-eval-after-load "org-tree-slide"
+    (define-key org-tree-slide-mode-map
+                (kbd "<f9>") #'org-tree-slide-move-previous-tree)
+    (define-key org-tree-slide-mode-map
+                (kbd "<f10>") #'org-tree-slide-move-next-tree)))
+
+(defun my/org-regenerate-doc-list ()
+  "Regenerate the \"* List\" subtree in this Org file from the files
+found in the same directory as this file (skipping the file itself).
+Leaves the rest of the buffer untouched."
+  (interactive)
+  (unless (buffer-file-name)
+    (error "Buffer is not visiting a file"))
+  (let* ((base (file-name-directory (buffer-file-name)))
+         (doc-file (file-name-nondirectory (buffer-file-name))))
+    (save-excursion
+      (goto-char (point-min))
+      (unless (re-search-forward "^\\* List[ \t]*$" nil t)
+        (error "No \"* List\" heading found"))
+      (forward-line 1)
+      (let ((body-start (point))
+            (body-end (if (re-search-forward "^\\* " nil t)
+                          (match-beginning 0)
+                        (point-max))))
+        (delete-region body-start body-end)
+        (goto-char body-start)
+        (my/org-walk-list base 2 base doc-file t)))))
+
+(defun my/org-walk-list (dir level base doc-file &optional top-level)
+  "Recursively insert headings/links for DIR's contents at heading LEVEL.
+When TOP-LEVEL is non-nil, loose files (not just subdirectories) also
+get their own heading, so they don't get glued onto whichever heading
+happens to precede them alphabetically."
+  (dolist (f (sort (directory-files dir t "^[^.]") #'string<))
+    (let ((name (file-name-nondirectory f)))
+      (unless (and (string= dir base) (string= name doc-file))
+        (cond
+         ((file-directory-p f)
+          (insert (make-string level ?*) " "
+                  (replace-regexp-in-string "[-_]" " " name)
+                  "\n")
+          (my/org-walk-list f (1+ level) base doc-file)
+          (insert "\n"))
+         (top-level
+          (insert (make-string level ?*) " "
+                  (replace-regexp-in-string
+                   "[-_]" " " (file-name-sans-extension name))
+                  "\n[[file:" (file-relative-name f base) "]]\n\n"))
+         (t
+          (insert "[[file:" (file-relative-name f base) "]]\n")))))))

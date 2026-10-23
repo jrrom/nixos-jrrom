@@ -7,6 +7,11 @@
     environment.cosmic.excludePackages = with pkgs; [
       cosmic-store
     ];
+
+    # Fixes for bleeding
+    environment.sessionVariables = {
+      COSMIC_DISABLE_OVERLAY_SCANOUT = "y";
+    };
   };
 
   flake.homeModules.cosmic = { pkgs, cosmicLib, ... }: {
@@ -172,6 +177,7 @@
       entries = [
         "${inputs.kDrive.packages.x86_64-linux.default}/share/applications/kDrive.desktop"
         "${pkgs.emacs}/share/applications/emacs.desktop"
+        "${pkgs.zulip}/share/applications/zulip.desktop"
       ];
     };
     

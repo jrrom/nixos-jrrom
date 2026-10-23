@@ -27,7 +27,7 @@
   flake.nixosModules.laptopModule = { pkgs, ... }: {
     imports = [ ../parts/hardwareLaptop.nix ];
     
-    time.timeZone = "Asia/Kolkata";
+    time.timeZone = "Europe/Paris";
     i18n = {
       defaultLocale = "en_IN";
       extraLocales = [ "en_US.UTF-8/UTF-8" ];
@@ -48,6 +48,7 @@
       imports = with self.homeModules; [
         emacs
         cosmic
+        cc
       ];
     };
   };

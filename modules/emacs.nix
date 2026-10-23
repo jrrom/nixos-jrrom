@@ -21,9 +21,13 @@
       vips
       vipsdisp # Image processing
       pandoc
+      pdf2svg
+      audiowaveform
 
       # Environment
       devenv
+      quickjs
+      nodejs
 
       # For Nix editing
       nixd
@@ -47,6 +51,14 @@
       # Cloud
       opentofu
       tofu-ls # ??? dunno
+      yaml-language-server
+      (pkgs.symlinkJoin {
+        name = "tofu-ls-terraform-ls-compat";
+        paths = [ pkgs.tofu-ls ];
+        postBuild = ''
+          ln -s $out/bin/tofu-ls $out/bin/terraform-ls
+        '';
+      })
     ]
     ++ [( 
       pkgs.emacsWithPackagesFromUsePackage {
@@ -64,6 +76,18 @@
           pandas
           tkinter
           xlrd # .xls old format
+
+          epc
+          orjson
+          sexpdata
+          six
+          paramiko
+          rapidfuzz
+          watchdog
+          packaging
+          setuptools
+          pillow
+          ffmpeg-python
         ]))
         basedpyright
       ];

@@ -25,6 +25,7 @@ in
       AIDER_CONFIG_FILE = "${XDG_CONFIG_HOME}/aider/config.yml";
       AIDER_DARK_MODE   = "true";
       JULIA_DEPOT_PATH  = "${XDG_DATA_HOME}/julia:$JULIA_DEPOT_PATH";
+      NODE_REPL_HISTORY = "${XDG_STATE_HOME}/node_repl_history";
     };
 
     environment.shellAliases = {

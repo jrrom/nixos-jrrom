@@ -5,8 +5,13 @@
     programs.virt-manager.enable = true;
     virtualisation.docker.enable = true;
 
+    # XFCE
+    services.xserver.enable = true;
+    services.xserver.desktopManager.xfce.enable = true;
+    services.xserver.displayManager.startx.enable = true;
+      
     # Flatpak
-    services.flatpak.enable = true;
+    # services.flatpak.enable = true;
 
     # AppImage
     programs.appimage = {

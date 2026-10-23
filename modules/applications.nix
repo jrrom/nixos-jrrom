@@ -9,6 +9,7 @@
       aseprite
       blender
       foliate
+      godot
       jetbrains.datagrip
       jetbrains.idea
       keepassxc
@@ -19,6 +20,11 @@
       tenacity
       vlc
       zathura
+<<<<<<< HEAD
+=======
+      zulip
+      libreoffice
+>>>>>>> 09d5942d (Syncing again)
     ];
 
     programs.firefox.enable = true;
