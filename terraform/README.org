@@ -1,0 +1,65 @@
+#+TITLE: Oracle Cloud
+
+* Initial Steps
+- Create an Oracle Cloud account, do the setup and all that
+- Generated =oracle.tf=
+- Signed in with OCI, config to /home/<user>/.oci
+- Tofu init, plan and apply
+
+** Note
+We can use =tofu output= to get the public ip.
+
+* File
+
+#+begin_src :tangle terraform.tfvars
+compartment_ocid = "Enter here"
+ssh_public_key = "Enter here"
+#+end_src
+
+* nixos-anywhere
+
+#+begin_src bash
+nix run github:nix-community/nixos-anywhere -- \
+  --flake .#oracle \
+  --build-on remote \
+  --generate-hardware-config nixos-generate-config ../parts/hardwareOracle.nix \
+  --target-host ubuntu@$(tofu output -raw public_ip)
+#+end_src
+
+#+begin_src bash
+# Remove the stale entry so that ssh doesn't complain about MITM
+ssh-keygen -R <id>
+#+end_src
+
+* Couldn't access root password
+I ended up re-doing nixos-anywhere after a weird error occurred and made my progress get wiped completely.
+
+#+begin_src bash
+# Step 1 - Get instance OCID, compartment OCID from website or OCI
+oci compute instance-console-connection create --instance-id "$INSTANCE_OCID" --debug --ssh-public-key-file ~/.ssh/oci-console.pub
+# Step 2 - Get connection command
+oci compute instance-console-connection list --compartment-id "$COMPARTMENT_OCID" --instance-id "$INSTANCE_OCID"
+# Step 3 - SSH
+ssh -i ~/.ssh/oci-console -o ProxyCommand="ssh -i ~/.ssh/oci-console -W %h:%p -p 443 xyz.oci.oraclecloud.com" xyz
+# Step 4 - Do some bs
+# While booting, hit 'e' on NixOS and add this to the end
+single systemd.setenv=SYSTEMD_SULOGIN_FORCE=1
+#+end_src
+
+* Update the remote config
+We don't use root because root doesn't have access to my local .ssh keyfiles.
+
+#+begin_src bash
+nixos-rebuild switch --flake .#oracle \
+              --elevate=sudo \
+              --build-host <user>@<SERVER_IP> \
+              --target-host <user>@<SERVER_IP>
+#+end_src
+
+* Tailscale Setup
+
+#+begin_src bash
+sudo tailscale up
+#+end_src
+
+And then continue and finalise the setup.
