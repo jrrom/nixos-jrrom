@@ -1,9 +1,15 @@
 {
   inputs = {
-    cosmic-manager.inputs.home-manager.follows = "home-manager";
-    cosmic-manager.inputs.nixpkgs.follows = "nixpkgs";
-    cosmic-manager.url = "github:HeitorAugustoLN/cosmic-manager";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     
+    # --- Noctalia Project ---
+    noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
+    noctalia-greeter.inputs.nixpkgs.follows = "nixpkgs";
+    umbriel.url = "github:noctalia-dev/umbriel";
+    noctalia.url = "github:noctalia-dev/noctalia";
+    noctalia.inputs.nixpkgs.follows = "nixpkgs";
+    
+    # --- Normal ---
     disko.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
     
@@ -19,14 +25,19 @@
     impermanence.url = "github:nix-community/impermanence";
     
     import-tree.url = "github:vic/import-tree";
-    
+
+    nur.url = "github:nix-community/NUR";
+    nur.inputs.nixpkgs.follows = "nixpkgs";
+
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Applications
     kDrive.inputs.nixpkgs.follows = "nixpkgs";
     kDrive.url = "github:jrrom/desktop-kDrive-flake";
-    
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   };
 
   outputs = inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; }
-      (inputs.import-tree [ ./modules ./hosts ./server ]);
+      (inputs.import-tree [ ./modules ]);
 }

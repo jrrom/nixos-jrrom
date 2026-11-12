@@ -1,0 +1,33 @@
+{ pkgs, ... }: {
+  environment.systemPackages = with pkgs; [
+    bats
+    busybox
+    curl
+    delta
+    dust 
+    exercism
+    exiftool
+    fd
+    ffmpeg
+    gh
+    jq
+    man-pages
+    man-pages-posix
+    ncgopher
+    oci-cli
+    ouch
+    procs
+    timg
+    tldr
+    tree
+    unrar
+    unrtf
+    unzip
+    wget
+    wl-clipboard
+    xdg-ninja
+    xh
+    yad
+    zoxide
+  ];
+}
