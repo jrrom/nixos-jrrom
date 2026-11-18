@@ -1,23 +1,42 @@
 { pkgs, ... }: {
   environment.systemPackages = with pkgs; [
-    clang
-    clang-tools
+    # Misc
     devenv
     epstool
+    hledger
+    miller
+
+    # C
+    clang
+    clang-tools
+    
+    # Documents
+    plantuml-c4
     ghostscript
     graphviz
-    nixd
-    nixfmt
-    nodejs
-    plantuml-c4
-    quickjs
     texlab
     texliveFull
-    miller
-    hledger
+    typst
+    tinymist
+
+    # NixOS
+    nixd
+    nixfmt
+
+    # JavaScript
+    nodejs
+    quickjs
+
+    # Terraform
     opentofu
     tofu-ls
+
+    # Related
     yaml-language-server
     vscode-langservers-extracted
+
+    # Python
+    python3
+    basedpyright
   ];
 }

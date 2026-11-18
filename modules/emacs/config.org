@@ -679,6 +679,14 @@ I am using this strange code snippet that I got online.
           (lambda ()
             (modify-syntax-entry ?. "." purescript-mode-syntax-table)))
 #+end_src
+** Typst
+#+begin_src emacs-lisp
+(use-package typst-ts-mode
+  :ensure t)
+
+(use-package typst-preview
+  :ensure t)
+#+end_src
 ** Helpers
 #+begin_src emacs-lisp
 (use-package just-mode
