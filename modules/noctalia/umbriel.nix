@@ -11,7 +11,7 @@
     programs.umbriel.enable = true;
     programs.umbriel.settings = {
       general = {
-        autostart = [ "emacs" ];
+        autostart = [ "firefox" "strawberry" "keepassxc" "kDrive"];
         xwayland  = true;
         xwayland_native_resolution = true;
         xwayland_xsettings = true; # Umbriel manages X

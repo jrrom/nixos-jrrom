@@ -2,6 +2,7 @@
   environment.systemPackages = with pkgs; [
     aseprite
     blender
+    strawberry
     foliate
     godot
     jetbrains.datagrip
@@ -9,7 +10,6 @@
     keepassxc
     libreoffice
     logisim-evolution
-    rhythmbox
     simple-scan
     tenacity
     vlc

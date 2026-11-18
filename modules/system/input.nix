@@ -6,8 +6,10 @@
     
     services.libinput.enable = true; # Touchpad
     
-    services.xserver = {
-      xkb.layout = "us";
+    services.xserver.xkb = {
+      layout = "us";
+      variant = "altgr-intl";
+      options = "compose:ralt";
     };
   };
 }

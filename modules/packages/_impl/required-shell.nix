@@ -20,6 +20,7 @@
     timg
     tldr
     tree
+    typst
     unrar
     unrtf
     unzip
